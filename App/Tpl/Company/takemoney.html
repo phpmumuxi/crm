@@ -1,0 +1,483 @@
+<include file="Public:header" />
+
+<script src="__PUBLIC__/js/layer/layer.js" type="text/javascript" charset="utf-8"></script>
+<script src="/Public/js/PCASClass.js" type="text/javascript"></script>
+<script type="text/javascript" src="/Public/js/jquery.validate.min.js" charset="UTF-8"></script>
+<script type="text/javascript" src="/Public/js/formValidatorRegex.js" charset="UTF-8"></script>
+<script type="text/javascript" src="/Public/js/mapv2.js"></script>
+<script>
+$(function(){
+    imgcode()
+	
+})
+function imgcode(){
+	$.ajax({
+        url:"http://aps.eachonline.com:8002/manager/account/getVCodeUrl",
+        type:'GET',
+        dataType:'json',
+        async:false,
+        success:function(result) {
+        	$(".imgcodeurl img").attr("src",result.data.imgeUrl);
+        },
+        error:function(msg){
+        }
+    })
+}
+</script>
+<link rel="stylesheet" href="__PUBLIC__/css/base.css" type="text/css" />
+
+<style type="text/css">
+    .datetime{width: 86px;}
+    .datemoney{width: 70px;}
+    #allmap{width:100%;height:600px;overflow:hidden;}
+    img{
+        /* 防止bootstrap 与 百度地图样式冲突，设置max-width为200%*/
+        max-width:200%;
+    }
+    .BMap_shadow img{
+        max-width:none;
+    }
+    .tangram-suggestion-main{
+        z-index: 9999;
+    }
+    .ulstree{margin-left: 0px;width: 220px;background-color:#eeeeee;}
+    ul li{
+        list-style: none;
+    }
+    .listree{
+        cursor: pointer;
+        font-size: 16px;
+        color:#999;
+        padding: 3px;
+    }
+    .bankdivclass{
+    	width:50%;
+    	border:1px solid #ddd;
+    	border-radius:4px;
+    	visibility: visible;
+    	top: 0px; 
+    	color:#169BD5;
+    	transform-origin:243.5px 23px 0px;
+    }
+</style>
+<div class="container">
+    <div class="page-header">
+        <h4>账号管理</h4>
+    </div>
+    <include file="Public:alert" />
+    <div class="row">
+        <div class="span2 knowledgecate">
+           <include file="Public:companynav" />
+        </div>
+        <div class="span10" style="margin-bottom: 100px;">
+           
+      	<div class="beforediv" ><!-- before -->
+	            <div>
+	            
+		            <div style="display:inline-block;"><h4>提现至银行卡</h4></div>
+		            <div style="color:#169BD5;display:inline-block;margin-left:450px">
+			             <a href="{:U('Company/addbankcard')}">
+				            <div style="display:inline-block;">
+					            <span style="font-size:36px;">＋ </span>
+					           <span style= "font-size:18px;">添加银行卡</span>
+				            </div>
+			            </a>
+			             <a href="{:U('Company/recordlist')}">
+			            	<div style="margin-left:30px;display:inline-block;">
+				            	<span  style="font-size:18px;">提现记录</span>
+			            	</div>
+		            	</a>
+		            </div>
+		            </div>
+	   
+	          
+	         
+	          
+		            <table class="table" width="95%" border="0" cellspacing="0" cellpadding="0">
+		                <tr>
+		                    <td class="tdleft" width="15%">余额:</td>
+		                    <td width="35%"><font color="red">{$turnover.userBalance}元</font></td>
+		                </tr>
+		               
+		               <tr>
+		                    <td class="tdleft" width="15%">可提现金额:</td>
+		                    <td width="35%" style="color:red"><span class="unFreezeMoney">{$turnover.unFreezeMoney}</span>元</td>
+		                </tr>
+		           <!-- 此处为没有银行卡的时候 -->
+		           <switch name="type">
+			           <case value="1">
+			                <tr>
+			                    <td class="tdleft" width="15%">请选择银行卡:</td>
+			                    <td width="35%">
+				                    <div style="width:50%;border:1px solid #ddd;border-radius:4px;visibility: visible; top: 0px; color:#169BD5;transform-origin: 243.5px 23px 0px;">
+				                    	<p style="font-size:36px;">
+				                    		<span>＋ </span>
+				                    		<a href="{:U('Company/addbankcard')}"><span style="font-size:18px;">添加银行卡</span></a>
+				                    	</p>
+				                    </div> 
+			                    </td>
+			                </tr>
+			                
+			         	</case>
+			         	<case value="2">
+			         	 <!-- 此处为有银行卡的时候 -->
+			                 <tr>
+			                    <td class="tdleft" width="15%">请选择银行卡:</td>
+			                    <td width="35%" class="banktd">
+			                    <div class="achive">
+				                    <div class="bankdivclass" data-cardid={$bankcardList[0]['sid']}>
+				                    	<p class="banklist" style="margin-top:3%">
+				                    		<span class="banklog"><img width="8%" height="8%" src="{$bankcardList[0]['logourl']}"> </span>
+				                    		<span class="bankFourNum" style="font-size:18px;">{$bankcardList[0]['bankname']}（<?php echo substr($bankcardList[0]['cardNo'],-4) ?>）</span>
+				                    		<span ><img onclick="allbank()" class="allbank" style="margin-left:20%;transform:rotate(90deg);" src="__PUBLIC__/img/u254.png"> </span>
+				                    	</p>
+				                    </div>
+				                   </div>
+				                  <div class="achiveNo" style="display:none">
+				                  <volist name="bankcardList" id="cardInfo">
+				                  	<div class="bankdivclass" >
+				                    	<p class="banklist" style="margin-top:3%" >
+											<span class="banklog"><img width="8%" height="8%" src="{$cardInfo['logourl']}"> </span>
+											<span class="bankFourNum" style="font-size:18px;">{$cardInfo['bankname']}（<?php echo substr($cardInfo['cardNo'],-4) ?>）</span>
+											<span class="bankxz"><a data-username="{$cardInfo['userRealName']}" data-logourl="{$cardInfo['logourl']}" data-cardid="{$cardInfo['sid']}" onclick="choicebank(this)" style="margin-left:20%;">选择</a></span>
+										</p>
+				                    </div>
+				      			 </volist>
+				                  </div>
+			                    </td>
+			                </tr>
+			            
+			               <tr >
+			                    <td class="tdleft" width="15%">提现金额:</td>
+			                    <td   width="35%">
+				                    <div><input class="outFreeMoney" type="text" /><span style="margin-left:5px;color:red"></span></div>
+				                   	<div>手续费<span class="serviceMoney">0</span>元, 实际到账金额<span class="realMoney">?</span>元</div>
+			                    </td>
+			                </tr>
+			                
+			                 <tr>
+			                    <td class="tdleft" width="15%">手机号码:</td>
+			                    <td width="35%"><span class="bankTelephone">13861048971</span></td>
+			                </tr>
+			        		<tr>
+			                    <td class="tdleft" width="15%">图片验证码:</td>
+			                    <td width="20%"><input type="text"  name="imgcode" class="imgcode" required/> &nbsp;  <span style="margin-left:30px;height:30px" class="imgcodeurl"><img width="15%" class="imgurl" src="" /></span><span></span></td>
+			                </tr>        
+			                <tr>
+			                    <td class="tdleft" width="15%">验证码:</td>
+			                    <td width="20%"><input type="text" class="telcode" name="code"  required/> &nbsp;  <div style="display:inline-block;" ></div><div  style="padding:0" class="btn  "><input style="margin:0" class="btn btn-primary "  id="btnSendCode" type="button" value="发送验证码" onclick="sendMessage()" /></div><span style="padding-left:20px" class="telCodeError"></span></td>
+			                </tr>
+			                
+			                 
+			                
+			                 <tr>
+			                <td class="tdleft" width="15%"></td>
+			                    <td colspan="2" >
+			                      <div class="btn btn-primary next"  style="width:100px" >下一步</div>
+			                      <div class="btn btn-primary xiayibu"  style="width:100px" >下一步2</div>
+			                    </td>
+			                </tr>
+			              
+			              </case>
+			              
+		              </switch>
+		            </table>
+		      
+	            </div>
+	           
+	  <!-- next -->
+	            <div class="nextdiv" style="display:none">
+	            <div style="display:inline-block;"><h4>确认提现信息</h4></div>
+	            <table class="table" width="95%" border="0" cellspacing="0" cellpadding="0">
+	                <tr>
+	                    <td class="tdleft" width="15%">提现金额:</td>
+	                    <td width="35%"><font color="red"><sapn class="twooutFreeMoney" >1</sapn>元</font>（含手续费<span class="serviceMoney"></span>元，实际到账金额<sapn class="realMoney"></sapn>元）</td>
+	                </tr>
+	               
+
+	                 <tr>
+	                    <td class="tdleft" width="15%">银行卡信息:</td>
+	                    <td width="35%" class="bankspan">
+		                    	<p class="banklist" data-cardid="{$bankcardList[0]['sid']}">
+		                    		<span style=" margin:8px"  class="bankusername">{$bankcardList[0]['userRealName']}</span>
+		                    		<span class="banklog"><img width="5%" height="5%" src="{$bankcardList[0]['logourl']}"> </span>
+		                    		<span class="bankFourNum" style="font-size:18px;">{$cardInfo['bankname']}（<?php echo substr($cardInfo['cardNo'],-4) ?>）</span>
+		                    	</p>
+		                
+		             
+	                    </td>
+	                </tr>
+	            
+	               <tr>
+	                    <td class="tdleft" width="15%">到账时间:</td>
+	                    <td width="35%">2017-07-05 17：30前到账</td>
+	                </tr>
+	                
+	                
+	                <tr>
+	                    <td class="tdleft" width="15%">支付密码:</td>
+	                    <td width="20%"><input type="text"  class="bankpasswd" name="code"  required/> &nbsp;  <div style="display:inline-block;" ></div><div class="btn" ><a href="#">忘记密码?</a></div></td>
+	                </tr>
+	                 <tr>
+	                <td class="tdleft" width="15%"></td>
+	                    <td colspan="2" >
+	                      <button class="btn btn-primary"  onclick="takeMoney()" style="width:100px" >确认提现</button>
+	                      <a style="padding:20px;" href="#" class="backdiv">返回上一步</a>
+	                    </td>
+	                </tr>
+	              
+	               </if>
+	            </table>
+	            
+        	</div>
+        </div>
+    </div>
+</div>
+
+<script>
+var rate = 0;//费率可以改
+var yesorno = true;//判断输入金额是否合法
+var InterValObj; //timer变量，控制时间
+var curCount = 60;//当前剩余秒数
+//获取所有银行卡列表
+function allbank(){
+	$(".achiveNo").toggle();
+}
+
+
+
+/*
+ * 发送验证码计时器
+ */
+function SetRemainTime() {
+    if (curCount == 0) {                
+        window.clearInterval(InterValObj);//停止计时器
+        $("#btnSendCode").removeAttr("disabled");//启用按钮
+        $("#btnSendCode").val("重新发送验证码");
+    }
+    else {
+        curCount--;
+        $("#btnSendCode").val("请在" + curCount + "秒内输入验证码");
+    }
+}
+
+/*
+ * 选择银行卡
+ */
+function choicebank(a){
+	var cardId = $(a).data('cardid');
+	var bankFourNum =  $(a).parent().prev().html();
+	var username = $(a).data('username');
+	var logourl = $(a).data('logourl');
+	//alert(bankFourNum);
+	var bankdiv = '<div class="bankdivclass " data-cardid='+cardId+' >'+
+					  	'<p style="margin-top:3%">'+
+							'<span class="banklog"><img width="8%" height="8%" src="'+logourl+'"> </span>'+
+							'<span class="bankFourNum" style="font-size:18px;">'+bankFourNum+'</span>'+
+							'<span ><img onclick="allbank()" class="allbank" style="margin-left:20%;transform:rotate(90deg);" src="__PUBLIC__/img/u254.png"> </span>'+
+						'</p>'+
+					'</div>';
+	
+		var bankspan = 	'<p class="bankinfo"  data-cardid='+cardId+'>'+
+						'<span style=" margin:8px" class="bankusername">'+username+'</span>'+
+						'<span class="banklog"><img width="5%" height="5%" src="'+logourl+'"> </span>'+
+						'<span class="bankFourNum" style="font-size:18px;">'+bankFourNum+'</span>'+
+					'</p>';
+
+	$(".banktd .achive").html(bankdiv);
+	$(".bankspan").html(bankspan);
+	$(".achiveNo").hide();
+	
+}
+
+//图形验证码/更换验证码aps.eachonline.com  ==180.76.140.84
+$(".imgurl").click(function(){
+	$.ajax({
+    url:"http://aps.eachonline.com:8002/manager/account/getVCodeUrl",
+    type:'GET',
+    dataType:'json',
+    async:false,
+    success:function(result) {
+    	$(".imgurl").attr("src",result.data.imgeUrl);
+    },
+    error:function(msg){
+    }
+})
+})
+	
+/*
+ * 获取短信验证码
+ */
+
+function sendMessage(){
+	 
+	   var vCode = $(".imgcode").val();
+	   if(vCode == "" || vCode == 'undefined' || vCode == null){
+		   console.log(vCode);
+		   $(".imgurl").parent().next().html("<font color='red'>请填写图形验证码</font>");
+		   return;
+	   }
+
+	  
+	   var telephone = $(".bankTelephone").html();
+			$.post(
+					"http://aps.eachonline.com:8002/manager/account/sendCode",
+					{"vCode":vCode,"telephone":telephone},
+					function(result){
+			   			if(result.success){
+								$('.telCodeError').html("<font color='green'>验证码发送成功</font>");
+								 	$("#btnSendCode").attr("disabled", "true");
+							     	$("#btnSendCode").val("请在" + curCount + "秒内输入验证码");
+							     	InterValObj = window.setInterval(SetRemainTime, 1000); //启动计时器，1秒执行一次
+				  		 }else{
+				  				$('.telCodeError').html("<font color='red'>"+result.message+"</font>");
+				   			}
+	   			})
+
+   }
+
+$(function (){
+	//添加表单验证方法
+		jQuery.validator.addMethod("ispassword",
+			function(value, element) {
+			    var password = /^\d{6}$/;
+			    return this.optional(element) || (password.test(value));
+			}
+		,"! 请正确填写6位数交易密码");
+	
+/*
+*点击下一步的数据判断和验证
+*/
+	$(".next").click(function(){
+
+		 var bankdivclassnum = $(".banktd .bankdivclass")//查看有多少个银行卡div
+		 var cardid = $(".achive .bankdivclass ").data("cardid");
+		if(cardid == "" || cardid == 'undefined' || cardid == null){
+			alert("请选择银行卡"+bankdivclassnum.length);
+			return
+		}
+		var outFreeMoney = $(".outFreeMoney").val();//余额不能为空
+		if(outFreeMoney == "" || outFreeMoney == 'undefined' || outFreeMoney == null){
+			$(".outFreeMoney").next().html("请填写提现金额");
+			return;
+		}
+		if(yesorno){
+			var bankTelephone = $(".bankTelephone").html();
+			var imgcode = $(".imgcode").val();
+			var telcode = $(".telcode").val();
+			if(imgcode == "" || imgcode == 'undefined' || imgcode == null){
+				$(".imgurl").parent().next().html("<font color='red'>请填写验证图形码</font>");
+				return;
+			}else{
+				$(".imgurl").parent().next().html("");
+			}
+			if(telcode == "" || telcode == 'undefined' || telcode == null){
+				$('.telCodeError').html("<font color='red'>短信验证码不能为空</font>");
+				return;
+			}else{
+				$('.telCodeError').html("");
+			}
+			 $(".twooutFreeMoney").html(outFreeMoney);
+			 $.ajax({
+				url:"http://aps.eachonline.com:8002/manager/account/checkCode",
+				type:'POST',
+				dataType:'json',
+				data:{telephone:bankTelephone,verificationCode:telcode},
+				success:function(re){
+					if(re.success){
+						$(".beforediv").hide();
+						$(".nextdiv").show();
+					}else{
+						$('.telCodeError').html("<font color='red'>"+re.message+"</font>");
+					}
+					
+				},
+				error:function(re){
+					alert("网络异常!"); 
+				}
+			});
+			
+		}else{
+			return; 
+		} 
+	})
+	 
+	/*
+	*返回上一步
+	*/
+	$(".backdiv").click(function(){
+		$(".beforediv").show();
+		$(".nextdiv").hide();
+	})
+	
+	/*
+	*确认提现
+	*/
+	function takeMoney(){
+		//验证密码
+		var bankpasswd = $(".bankpasswd").val();
+		var money = $(".twooutFreeMoney").html();
+		var cardId =$(".bankspan .banklist").data('cardid');
+		$.ajax({
+			url:'{$urlHttps}/appserver/wallet/validateTradePassword',
+			type:'POST',
+			data:{tradePassword:bankpasswd},
+			datatype:'json',
+			success:function(res){
+				if(res.success){
+					$.ajax({
+						url:'{$urlHttps}/appserver/wallet/transferBalance',
+						type:'POST',
+						data:{money:money,cardId:cardId},
+						datatype:'json',
+						success:function(re){
+							if(re.success){
+								location.href ='{:U("Company/takemoney",["name"=>"john","time"=>"2pm"])}';
+							}else{
+								alert(res.message);history.back();
+							}
+						},
+						error:function(re){
+							alert("网络异常!"); 
+						}
+					})
+					
+				}else{
+					alert(res.message);history.back();
+				}
+			},
+			error:function(res){
+				alert("网络异常!"); 
+			}
+		})
+	}
+
+	/*
+	* 判断可提现金额
+	*/
+	$(".outFreeMoney").change(function(){
+		var outFreeMoney = $(this).val();
+		var regPos = /^\d+(\.\d+)?$/;
+		var unFreezeMoney = $('.unFreezeMoney').html();//可提现金额
+		if(regPos.test(outFreeMoney)){
+			if(parseFloat(outFreeMoney) > parseFloat(unFreezeMoney)){
+				$(this).next().html("超过可提现金额");
+				yesorno = false;
+			}else{
+				$(this).next().html("");
+				var serviceMoney = parseFloat(outFreeMoney)*rate; //手续费，费率可以改
+				serviceMoney = serviceMoney.toFixed(2);
+			/* 	if(serviceMoney < 0.1){
+					serviceMoney = 0.1;
+				} */
+				$(".serviceMoney").html(serviceMoney);
+				$(".realMoney").html(parseFloat(outFreeMoney)-serviceMoney);
+			}	
+		}else{
+			$(this).next().html("请输入正确的数值");
+			yesorno = false;
+		}
+	})  
+});    
+</script>
+<include file="Public:footer" />		

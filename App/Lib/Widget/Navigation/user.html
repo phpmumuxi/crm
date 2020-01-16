@@ -1,0 +1,10 @@
+<ul class="dropdown-menu">
+							<li><a href="{:U('dynamic/index')}">动态信息</a></li>
+							<volist name="user" id="vo">
+								<if condition="$vo.title neq ''">
+								<li><a href="{$vo.url}">{$vo.title}</a></li>
+								</if>
+							</volist>
+							<li class="divider"></li>
+							<li><a href="{:U('user/logout')}">{:L('EXIT')}</a></li>
+						</ul>

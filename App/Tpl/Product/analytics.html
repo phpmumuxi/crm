@@ -1,0 +1,346 @@
+<include file="Public:header" />
+<if condition="$total_report.add_count gt 0">
+	<script src="__PUBLIC__/js/chart/highcharts.js"></script>
+	<script src="__PUBLIC__/js/chart/modules/exporting.js"></script>
+</if>
+<div class="container">
+	<div class="page-header" style="border:none; font-size:14px;">
+		<ul class="nav nav-tabs">
+			<if condition="$Think.session.position_id eq '19' OR $Think.session.position_id eq '20' OR $Think.session.position_id eq '16'">
+				<li><a  href="{:U('product/index')}"><img src="__PUBLIC__/img/caigou.png"/>&nbsp;服务</a></li>
+				<else />
+				<li><a  href="{:U('product/index')}"><img src="__PUBLIC__/img/caigou.png"/>&nbsp;产品</a></li>
+			</if>
+			<li class="active"><a href="{:U('product/analytics')}"><img src="__PUBLIC__/img/tongji.png"/> &nbsp;统计</a></li>
+			<if condition="session('position_id') == 19 || session('position_id') == 20 || session('position_id') == 16 || session('position_id') == 14 || session('position_id') == 1">
+			<li class=""><a href="{:U('product/manager')}"><img src="__PUBLIC__/img/tongji.png"/> &nbsp;优惠打折</a></li>
+				</if>
+		</ul>
+	</div>
+	<include file="Public:alert" />
+	<div class="row">
+		<div class="span12">
+			<ul class="nav pull-left">
+				<li class="pull-left">
+					<form class="form-inline" id="searchForm" onsubmit="return checkSearchForm();" action="" method="get">
+						<ul class="nav pull-left">
+							<if condition="$Think.session.position_id eq '14'">
+								<li class="pull-left">
+									选择特许经营商
+									&nbsp; <select style="width:auto" name="" onchange="" id="">
+									<option class="" value="all"><?php echo session('name')?></option>
+								</select>&nbsp;&nbsp;
+								</li>
+								<li class="pull-left">
+									选择企业管家
+									&nbsp; <select style="width:auto" class = "tradeagent" name="tradeagent" onchange="ontradeagent();" id="tradeagent">
+									<option class="all" value="all">全部</option>
+									<volist name="tradeagent" id="vo">
+										<option value="{$vo.user_id}">{$vo.name}</option>
+									</volist>
+								</select>&nbsp;&nbsp;
+								</li>
+								<li class="pull-left">
+									选择社区店铺区域
+									&nbsp; <select style="width:auto" name="shopsagent" onchange="onshopsagent();" id="shopsagent">
+									<option class="all" value="all">全部</option>
+									<volist name="shopsagent" id="vo">
+										<option value="{$vo.user_id}">{$vo.name}</option>
+									</volist>
+								</select>&nbsp;&nbsp;
+								</li>
+
+								<li class="pull-left">
+									选择公司&nbsp; <select style="width:auto" name="company" id="company" >
+									<option class="all" value="all">全部</option>
+								</select>&nbsp;&nbsp;
+								</li>
+<!-- 								<li class="pull-left">
+									选择员工&nbsp; <select style="width:auto" name="role" id="companyuser">
+									<option class="all" value="all">{:L('ALL')}</option>
+								</select>&nbsp;&nbsp;
+								</li> -->
+								<elseif condition="$Think.session.position_id eq '15' "/>
+								<li class="pull-left">
+									特许经营商&nbsp; <select style="width:auto" name="" onchange="" id="">
+									<option class="" value="all">{$gAgent}</option>
+								</select>&nbsp;&nbsp;
+								</li>
+								<li class="pull-left">
+									企业管家&nbsp; <select style="width:auto" name="" onchange="" id="">
+									<option class="all" value="all"><?php echo session('name');?></option>
+								</select>&nbsp;&nbsp;
+								</li>
+
+								<li class="pull-left">
+									公司&nbsp; <select style="width:auto" name="company"  id="company" >
+									<option class="all" value="all">{:L('ALL')}</option>
+									<volist name="company" id="vo">
+										<option class="" value="{$vo.user_id}">{$vo.company}</option>
+									</volist>
+								</select>&nbsp;&nbsp;
+								</li>
+<!-- 								<li class="pull-left">
+									员工&nbsp; <select style="width:auto" name="role" id="companyuser">
+									<option class="all" value="all">{:L('ALL')}</option>
+								</select>&nbsp;&nbsp;
+								</li> -->
+								<elseif condition=" $Think.session.position_id eq '16' "/>
+								<li class="pull-left">
+									特许经营商
+									&nbsp; <select style="width:auto" name="" onchange="" id="">
+									<option class="" value="all">{$gAgent}</option>
+								</select>&nbsp;&nbsp;
+								</li>
+								<li class="pull-left">
+									社区店铺区域
+									&nbsp; <select style="width:auto" name="shopsagent" id="shopsagent">
+									<option class="" value="all">{$shopagent}</option>
+								</select>&nbsp;&nbsp;
+								</li>
+
+								<li class="pull-left">
+									选择公司&nbsp; <select style="width:auto" name="company" id="company" >
+									<option class="all" value="all">{:L('ALL')}</option>
+									<volist name="company" id="vo">
+										<option class="" value="{$vo.user_id}">{$vo.company}</option>
+									</volist>
+								</select>&nbsp;&nbsp;
+								</li>
+<!-- 								<li class="pull-left">
+									选择员工&nbsp; <select style="width:auto" name="role" id="companyuser">
+									<option class="all" value="all">{:L('ALL')}</option>
+								</select>&nbsp;&nbsp;
+								</li> -->
+								<elseif condition=" $Think.session.position_id eq '19' OR $Think.session.position_id eq '20' "/>
+								<li class="pull-left">
+									选择特许经营商
+									&nbsp; <select style="width:auto" name="" onchange="" id="">
+									<option class="" value="all">{$gAgent}</option>
+								</select>&nbsp;&nbsp;
+								</li>
+								<li class="pull-left">
+									社区店铺区域
+									&nbsp; <select style="width:auto" name="shopsagent" id="shopsagent">
+									<option class="" value="all">{$shopagent}</option>
+								</select>&nbsp;&nbsp;
+								</li>
+
+								<li class="pull-left">
+									选择公司&nbsp; <select style="width:auto" name="company" id="company" >
+									<option class="all" value="all"><?php echo session('company');?></option>
+								</select>&nbsp;&nbsp;
+								</li>
+<!-- 								<li class="pull-left">
+									选择员工&nbsp; <select style="width:auto" name="role" id="companyuser">
+									<option class="all" value="all">{:L('ALL')}</option>
+									<volist name="roleList" id="vo">
+										<option value="{$vo.role_id}">{$vo.user_name}</option>
+									</volist>
+								</select>&nbsp;&nbsp;
+								</li> -->
+								<elseif condition="$Think.session.position_id eq 17 OR $Think.session.position_id eq 18"/>
+								<li class="pull-left">
+									选择特许经营商&nbsp; <select style="width:auto" name="" onchange="" id="">
+									<option class="" value="all">{$gAgent}</option>
+								</select>&nbsp;&nbsp;
+								</li>
+								<li class="pull-left">
+									企业管家&nbsp; <select style="width:auto" name="" onchange="" id="">
+									<option class="all" value="all">{$shopagent}</option>
+								</select>&nbsp;&nbsp;
+								</li>
+								<li class="pull-left">
+									公司&nbsp; <select style="width:auto" name="" id="" onchange="">
+									<option class="all" value="all"><?php echo session('company')?></option>
+								</select>&nbsp;&nbsp;
+								</li>
+<!-- 								<li class="pull-left">
+									员工:&nbsp; <select style="width:auto" name="role" id="role" onchange="changeCondition()">
+									<option class="all" value="all">{:L('ALL')}</option>
+									<volist name="roleList" id="vo">
+										<option value="{$vo.role_id}">{$vo.user_name}</option>
+									</volist>
+								</select>&nbsp;&nbsp;
+								</li> -->
+								<else/>
+							</if>
+
+							<li class="pull-left">
+								选择日期:&nbsp; 从<input type="text" id="start_time" name="start_time" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" class="Wdate" value="{$Think.get.start_time}"/>至<input type="text" id="end_time" onClick="WdatePicker({dateFmt:'yyyy-MM-dd'})" name="end_time" class="Wdate" value="{$Think.get.end_time}" />&nbsp;&nbsp;
+							</li>
+							<li class="pull-left"><input type="hidden" name="m" value="product"/><input type="hidden" name="a" value="analytics"/>
+								<if condition="$Think.get.by neq null"><input type="hidden" name="by" value="{$Think.get.by}"/></if>
+								<button type="submit" class="btn">{:L('SEARCH')}</button></li>
+						</ul>
+					</form>
+				</li>
+			</ul>
+		</div>
+		<div class="span2 knowledgecate">
+			<ul class="nav nav-list">
+				<li class="active">
+					<a href="javascript:void(0);">产品统计表</a>
+				</li>
+			</ul>
+		</div>
+		<div class="span10">
+			<div id="report_content">
+				<table class="table table-hover table-striped" id="mytable">
+					<thead>
+					<tr>
+						<th>特许经营商</th>
+						<th>企业管家/社区店铺区域</th>
+						<th>公司</th>
+						<th>添加产品</th>
+						<th>通过审核的产品</th>
+						<th>添加社区服务</th>
+						<th>通过审核的社区服务</th>
+					</tr>
+					</thead>
+					<tfoot>
+					<tr id="totalRow" style="background:yellow">
+					</tr>
+					<tr><img src="__PUBLIC__/img/u130.png" alt="">代表社区区域代理</tr>
+					</tfoot>
+					<tbody>
+					<volist name="reportList" id="vo">
+						<tr>
+							<if condition="$Think.session.position_id eq '14'">
+								<td><?php echo session('name');?></td>
+								<td>{:getAreaAgent($vo['user'])['name']}</td>
+								<elseif condition="($Think.session.position_id eq '15')"/>
+								<td>{:getGenerAgent($vo['user'])['name']}</td>
+								<td>{:getAreaAgent($vo['user'])['name']}</td>
+								<elseif condition="($Think.session.position_id eq '16')"/>
+								<td>{:getGenerAgent($vo['user'])['name']}</td>
+								<td>{:getAreaAgent($vo['user'])['name']}</td>
+								<else/>
+								<td>{:getGenerAgent($vo['user'])['name']}</td>
+								<td>{:getAreaAgent($vo['user'])['name']}</td>
+							</if>
+							<td><?php if($vo['user']['position_id'] == 16){echo "<img src='__PUBLIC__/img/u130.png'>";};?>{$vo.user.company}</td>
+							<td>{$vo.ordernum.tradeCount}</td>
+							<td>{$vo.ordernum.tradeCheckCount}</td>
+							<td>{$vo.ordernum.communityCount}</td>
+							<td>{$vo.ordernum.communityCheckCount}</td>
+
+						</tr>
+					</volist>
+					</tbody>
+				</table>
+			</div>
+
+		</div>
+	</div>
+</div>
+<div class="hide" id="dialog-role-info" title="{:L('EMPLOYEE_INFORMATION')}">loading...</div>
+<script type="text/javascript">
+
+	function changeRole(){
+		department_id = $("#department option:selected").val();
+		$.ajax({
+			type:'get',
+			url:'index.php?m=user&a=getrolebydepartment&department_id='+department_id,
+			async:true,
+			success:function(data){
+				options = '<option value="all">{:L('ALL;')}</option>';;
+				if(data.data != null){
+					$.each(data.data, function(k, v){
+						options += '<option value="'+v.role_id+'">'+v.role_name+"-"+v.user_name+'</option>';
+					});
+				}
+				$("#role").html(options);
+				<if condition="$_GET['role']">
+					$("#role option[value='{$Think.get.role}']").prop("selected", true);
+				</if>
+			},
+			dataType:'json'});
+	}
+
+	<if condition="$_GET['department'] and $_GET['department'] neq 'all'">
+			$("#department option[value='{$Think.get.department}']").prop("selected", true);
+	changeRole();
+	</if>
+	<if condition="$_GET['department'] eq 'all'">
+			$("#role option[value='{$Think.get.role}']").prop("selected", true);
+	</if>
+
+	function ontradeagent(){
+		user_id = $('#tradeagent').val();
+		if(user_id == ''){
+			$("#company").html('');
+		}else{
+			$("#shopsagent").val('全部');
+			$.ajax({
+				type:'get',
+				url:'index.php?m=finance&a=getcompany&userId='+user_id,
+				async:true,
+				success:function(data){
+					//console.log(data);
+					options = '';
+					options = '<option class="all" value="all">{:L('ALL')}</option>';
+					if(data.data){
+						$.each(data.data, function(k, v){
+							options += '<option value="'+v.user_id+'">'+v.company+'</option>';
+						});
+					}
+					$("#company").html(options);
+				},
+				dataType:'json'
+			});
+		}
+	}
+
+	function onshopsagent(){
+		user_id = $('#shopsagent').val();
+		if(user_id == ''){
+			$("#company").html('');
+		}else{
+			$("#tradeagent").val('全部');
+			$.ajax({
+				type:'get',
+				url:'index.php?m=finance&a=getcompany&userId='+user_id,
+				async:true,
+				success:function(data){
+					//console.log(data);
+					options = '';
+					options = '<option class="all" value="all">{:L('ALL')}</option>';
+					if(data.data){
+						$.each(data.data, function(k, v){
+							options += '<option value="'+v.user_id+'">'+v.company+'</option>';
+						});
+					}
+					$("#company").html(options);
+				},
+				dataType:'json'
+			});
+		}
+	}
+
+	$(document).ready(function() {
+
+		var communityCount = 0;
+		var communityCheckCount = 0;
+		var tradeCount = 0;
+		var tradeCheckCount = 0;
+		$('#mytable tr').each(function() {
+			$(this).find('td:eq(3)').each(function(){
+				communityCount += parseFloat($(this).text());
+			});
+			$(this).find('td:eq(4)').each(function(){
+				communityCheckCount += parseFloat($(this).text());
+			});
+			$(this).find('td:eq(5)').each(function(){
+				tradeCount += parseFloat($(this).text());
+			});
+			$(this).find('td:eq(6)').each(function(){
+				tradeCheckCount += parseFloat($(this).text());
+			});
+
+		});
+
+		$('#totalRow').append('<td></td><td></td><td>共计</td><td><span style="color:red;">'+communityCount+'</span></td><td><span style="color:red;">'+communityCheckCount+'</span></td><td><span style="color:red;">'+tradeCount+'</span></td><td><span style="color:red;">'+tradeCheckCount+'</span></td>');
+	});
+</script>
+<include file="Public:footer" />

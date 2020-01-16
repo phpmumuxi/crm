@@ -1,0 +1,166 @@
+<include file="Public:header" />
+<script src="__PUBLIC__/js/layer/layer.js" type="text/javascript" charset="utf-8"></script>
+<style>
+    .orderno{background-color: #F4F4F4;font-size: 16px;height: 35px;margin-bottom: 30px;}
+    .ordernot{margin-left:10px;margin-right:60px;text-align: center; float: left;padding-top: 7px;}
+    .shopinfo{background-color: #F4F4F4;font-size: 16px;}
+    .tmoney{font-size: 16px;float:right;}
+    .orderinfo{font-size: 16px;font-weight: bold;background-color: #E8F1F6;height: 30px;padding-top: 8px;padding-left:30px;margin-top:35px;margin-bottom:25px;}
+    .message{font-size: 16px;margin-left:35px;margin-bottom:15px;margin-top:10px;}
+</style>
+<div class="container">
+    <include file="Public:alert" />
+    <div class="row">
+        <div class="span12">
+            <div class="orderno">
+
+                <div class="ordernot">订单编号 : {$order.orderNo}</div>
+                <div class="ordernot">订单状态 : <span style="color:#029BE2;font-weight: bold;"><switch name="order.orderStatus">
+                            <case value="F22">待商家收货</case>
+                            <case value="F26">申请退货</case>
+                            <case value="F27">同意</case>
+                            <case value="F28">已驳回</case>
+                            <default/>
+                        </switch></span></div>
+                <div class="ordernot">订单类型 : 售后订单</div>
+                <div style="clear: both;"></div>
+            </div>
+            <div>
+                <table class="table" width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr class="shopinfo">
+                        <th style="padding-left: 120px;">商品信息</th>
+                        <th>退货单价(元)</th>
+                        <th>数量</th>
+                        <th>状态</th>
+                        <th>操作</th>
+                    </tr>
+ 
+                    <tr>
+                        <td width="50%" style="padding-top: 15px;">
+                            <img src="{$order.servicePicPath}{$vo.servicePicPath}" alt="" style="width:120px;float:left;margin-right: 15px;">
+                            <div>{$order.title}</div><br>
+                            <div>
+                                {$order.specification}
+                            </div>
+                            <div style="clear:both;"></div>
+                        </td>
+                        <td style="padding-top: 15px;">{$order['refundPrice']/$order['serviceNum'] | round = 2} {$order.serviceUnit}</td>
+                        <td style="padding-top: 15px;">
+                            {$order.serviceNum}
+                        </td>
+                        <td style="padding-top: 15px;">
+                            <switch name="order.orderStatus">
+                                <case value="F22">待商家收货</case>
+                                <case value="F26">申请退货</case>
+                                <case value="F27">同意</case>
+                                <case value="F28">已驳回</case>
+                                <default/>
+                            </switch>
+                        </td>
+                        <td style="padding-top: 15px;">
+                        <switch name="Think.session.position_id">
+                            <case value="13|14|15|16">
+                            </case>
+                            <default/>
+                        <if condition="($order[orderStatus] eq 'F27') OR ($order[orderStatus] eq 'F28') ">
+                        <elseif condition="$order[orderStatus] eq 'F26'"/>
+                            <div><a href="javascript:;" orderStatus="{$order.orderStatus}" orderChangeDatetime="{$order.orderChangeTime}" sid="{$order.sid}"class="operation" type ='3'>同意</a></div><br>
+                            <div><a href="javascript:;" orderStatus="{$order.orderStatus}" orderChangeDatetime="{$order.orderChangeTime}" sid="{$order.sid}"class="operation" type='4'>驳回</a></div>
+                        <elseif condition="$order[orderStatus] eq 'F22'"/>
+                            <div><a href="{:U('Pay/doalipay',array('ordreNo'=>$order['payNo'],'title'=>$order['title'],'sid'=>$order['sid'],'orderChangeTime'=>$order['orderChangeTime'],'totalPrice'=>encode($order['refundPrice'])))}" target="view_window">收货并退款</a></div><br>
+                        <else />
+                        </if>
+                        </switch>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="tmoney">退款总金额:<span style="color:#029BE2;font-weight: bold;">￥{$order['refundPrice']}</span></div>
+            <div style="clear:both;"></div>
+            <div class="orderinfo">订单信息</div>
+            <div>
+                <div class="message">收货人姓名: {$order.userName}</div>
+                <div class="message">收货人手机号:{$order.telephone}</div>
+                <div class="message">收货人地址:{$order.servicePlace}</div>
+                <div class="message">问题描述:{$order.question}</div>
+                <div class="message">下单时间:{$order.createTime}</div>
+                <div class="message">受理时间:{$order.dealTime}</div>
+                <div class="message">退款时间:{$order.refundTime}</div>
+            </div>
+            <div class="orderinfo">付款信息</div>
+            <div>
+                <div class="message">支付方式:
+                    <if condition="$order[payType] eq '0'">支付宝
+                        <elseif condition="$order[payType] eq '1'"/>微信  
+                        <elseif condition="$order[payType] eq '2'"/>余额支付    
+                        <elseif condition="$order[payType] eq '3'"/>银行卡
+                        <elseif condition="$order[payType] eq '4'"/>线下支付
+                        <else/>
+                    </if>
+                </div>
+                <div class="message">付款时间:{$order.refundTime}</div>
+               <!--  <div class="message">付款账号:</div> -->
+            </div>
+            
+            
+            <switch name="Think.session.position_id">
+                <case value="13|14|15|16">
+                </case>
+                <default/>
+                <div class="orderinfo">处理意见:</div>
+                <div class="message">
+                    <if condition="($order[orderStatus] eq 'F27') OR ($order[orderStatus] eq 'F28') ">
+                    <elseif condition="$order[orderStatus] eq 'F26'"/>
+                        <div><a href="javascript:;" orderStatus="{$order.orderStatus}" orderChangeDatetime="{$order.orderChangeTime}" sid="{$order.sid}"class="operation" type ='3'>同意</a></div><br>
+                        <div><a href="javascript:;" orderStatus="{$order.orderStatus}" orderChangeDatetime="{$order.orderChangeTime}" sid="{$order.sid}"class="operation" type='4'>驳回</a></div>
+                    <elseif condition="$order[orderStatus] eq 'F22'"/>
+                        <div><a href="{:U('Pay/doalipay',array('ordreNo'=>$order['payNo'],'title'=>$order['title'],'sid'=>$order['sid'],'orderChangeTime'=>$order['orderChangeTime'],'totalPrice'=>encode($order['refundPrice'])))}"class="btn btn-primary" target="view_window">收货并退款</a></div><br>
+                    <else />
+                </if>
+                </div>
+            </switch>
+        </div>
+    </div>        
+</div>
+
+<script>
+$(function(){
+    $('.status').click(function () {
+        $('.status').removeClass("active");
+        $(this).addClass("active");
+    });
+});
+
+$('.operation').click(function(){
+    var sid = $(this).attr('sid');
+    var orderChangeDatetime = $(this).attr('orderChangeDatetime');
+    var orderStatus = $(this).attr('orderStatus');
+    var type = $(this).attr('type');
+    if (orderStatus == 'F22') {
+        var orderStatusChanged = 'F17';
+    }else if(orderStatus == 'F26'){
+        if(type == 3){
+            var orderStatusChanged = 'F22';
+        }else if(type ==4){
+            var orderStatusChanged = 'F28';
+        }
+    }
+
+    $.ajax({
+        url:'{$url}/manager/order/afterSale/orderStatusChange',
+        data:{sid:sid,orderStatusChanged:orderStatusChanged,orderChangeDatetime:orderChangeDatetime},
+        type:'post',
+        cache:'false',
+        dataType:'json',
+        success:function(json){
+            //console.log(json);
+            alert(json.message);
+            window.location.href = document.referrer;
+        },
+        error:function(){
+            alert('网络异常!');
+        }
+    });
+});
+</script>
+<include file="Public:footer">

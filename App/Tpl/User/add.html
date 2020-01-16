@@ -1,0 +1,1088 @@
+<include file="Public:header" />
+<style type="text/css">
+	.shop{display:none;}
+	.area{display:none;}
+	.areashop{display: none;}
+</style>
+<div class="container">
+	<div class="page-header">
+		<h4>{:L('ADD_USER')}</h4>
+	</div>
+	<div class="row">
+		<div class="span12">
+			<include file="Public:alert" />
+			<div class="tab-content">
+				<div class="tab-pane active" id="tab2">
+					<form id="add" action="{:U('user/add')}" method="post">
+						<table style="width:580px" class="table">
+							<thead>
+							<tr>
+								<th colspan="2">{:L('BASIC_INFO')}</th>
+							</tr>
+							</thead>
+							<tbody>
+							<tr>
+								<td class="tdleft">手机号:<span style="color:red;">*</span></td>
+								<td>
+									<input class="span2" type="text" name="telephone" id="telephone" style="width:210px"/>
+								</td>
+							</tr>
+							<tr>
+								<td class="tdleft">{:L('USER_NAME')}&nbsp;<span style="color:red;">*</span></td>
+								<td>
+									<input class="span2" type="text" name="name" id="name" style="width:210px"/>
+								</td>
+							</tr>
+							<tr>
+								<td class="tdleft">{:L('PASSWORD')}<span style="color:red;">*</span></td>
+								<td>
+									<input class="span2" type="password" name="password" id="password" style="width:210px"/>
+								</td>
+							</tr>
+							<if condition="$Think.session.position_id eq '17' OR $Think.session.position_id eq '22'">
+								<input type="hidden" name="position_id" value="18">
+								<elseif condition="$Think.session.position_id eq '19'"/>
+								<input type="hidden" name="position_id" value="20">
+								<else/>
+							</if>
+
+							<if condition="$Think.session.position_id eq '14'">
+								<tr>
+									<td class="tdleft">公司名称:<span style="color:red;">*</span></td>
+									<td>
+										<input class="span2" type="text" name="company" id="company" style="width:210px"/>
+									</td>
+								</tr>
+								<tr>
+									<td class="tdleft">角色&nbsp;<span style="color:red;">*</span></td>
+									<td>
+										<select id="role2" name="position_id" onchange="changeAgent()">
+											<option value="">--请选择--</option>
+											<volist name="part" id="vo">
+												<option <if condition="$value['position_id'] eq $vo['position_id']">selected="selected"</if> value="{$vo.position_id}">{$vo.name}</option>
+											</volist>
+										</select>
+									</td>
+									<td style="display: none" class="typee">
+										<input name="userShopType" type="radio" value="2" />工厂店铺
+										<input name="userShopType" type="radio" value="3" />贸易服务商店铺
+									</td>
+								</tr>
+								<tr class="areashop">
+									<td class="tdleft">区域划分帐号&nbsp;<span style="color:red;">*</span></td>
+									<td>
+										<select id="areashop" name="areashop" class="">
+										</select>
+									</td>
+								</tr>
+
+								<tr class="area">
+									<td class="tdleft">企业管家&nbsp;<span style="color:red;">*</span></td>
+									<td>
+										<select id="area" name="area_agent">
+										</select>
+									</td>
+								</tr>
+
+								<!-- <tr class="a_show" style="display: none">
+									<td class="tdleft">社区店铺&nbsp;<span style="color:red;">*</span></td>
+									<td>
+										<input type="radio" name="level" value="0">免费门店
+										<input type="radio" name="level" value="1">A级店铺
+										<input type="radio" name="level" value="2">B级店铺
+									</td>
+								</tr> -->
+
+								
+
+								<!-- <tr class="c_show" style="display: none">
+									<td class="tdleft">工厂店铺&nbsp;<span style="color:red;">*</span></td>
+									<td>
+										<input type="radio" name="level" value="3">A级工厂
+										<input type="radio" name="level" value="4">B级工厂
+									</td>
+								</tr> -->
+
+								<elseif condition="$Think.session.position_id eq '16'"/>
+									<tr>
+										<td class="tdleft">角色&nbsp;<span style="color:red;">*</span></td>
+										<td>
+											<select id="role2" name="position_id" onchange="changeuser()">
+											<option  value="19">社区管家店铺</option>
+											<option  value="20">员工</option>
+											</select>
+										</td>
+									</tr>
+
+									<tr class="oncompany">
+										<td class="tdleft">公司名称:<span style="color:red;">*</span></td>
+										<td>
+											<input class="span2" type="text" name="company" id="company" style="width:210px"/>
+										</td>
+									</tr>
+
+								<!-- <tr class="a_show">
+									<td class="tdleft">社区店铺&nbsp;<span style="color:red;">*</span></td>
+									<td>
+										<input type="radio" name="level" value="0">免费门店
+										<input type="radio" name="level" value="1">A级店铺
+										<input type="radio" name="level" value="2">B级店铺
+									</td>
+								</tr> -->
+
+								<else/>
+							</if>
+
+							<if condition="$Think.session.position_id eq '13'">
+								<tr>
+									<td class="tdleft">公司名称:<span style="color:red;">*</span></td>
+									<td>
+										<input class="span2" type="text" name="company" id="company" style="width:210px"/>
+									</td>
+								</tr>
+								
+								<tr>
+									<td class="tdleft">{:L('DEPARTMENT')}&nbsp;<span style="color:red;">*</span></td>
+									<td>
+										<select id="department2" name="department_id" onchange="changeRoleContent2()">
+											<option value="">--请选择--</option>
+											<volist name="department_list" id="temp">
+												<option value="{$temp.department_id}">{$temp.name}</option>
+											</volist>
+										</select>
+									</td>
+								</tr>
+								<!--岗位-->
+								<tr>
+									<td class="tdleft">角色<span style="color:red;">*</span></td>
+									<td>
+										<select id="role2" name="position_id" onchange="changeAgent()">
+										</select>
+									</td>
+									<td style="display: none" class="typee">
+									<input name="userShopType" type="radio" value="2" />工厂店铺
+									<input name="userShopType" type="radio" value="3" />贸易服务商店铺
+								</td>
+								</tr>
+								<tr class="shop">
+									<td class="tdleft">特许经营商&nbsp;<span style="color:red;">*</span></td>
+									<td>
+										<select id="shop" name="general_agent" class="generalAgent">
+										</select>
+									</td>
+								</tr>
+
+								<tr class="areashop">
+									<td class="tdleft">区域划分帐号&nbsp;<span style="color:red;">*</span></td>
+									<td>
+										<select id="areashop" name="areashop" class="">
+										</select>
+									</td>
+								</tr>
+
+								<tr class="area">
+									<td class="tdleft">企业管家&nbsp;<span style="color:red;">*</span></td>
+									<td>
+										<select id="area" name="area_agent">
+										</select>
+									</td>
+								</tr>
+								<input type="hidden" name="category_id" value="2"/>
+							</if>
+
+							<if condition="session('?admin')">
+								<tr>
+									<td class="tdleft">公司名称:<span style="color:red;">*</span></td>
+									<td>
+										<input class="span2" type="text" name="company" id="company" style="width:210px"/>
+									</td>
+								</tr>
+								<tr>
+									<td class="tdleft">{:L('USER_CATEGORY')}&nbsp;<span style="color:red;">*</span></td>
+									<td>
+										<select name="category_id">
+											<option value="">--请选择--</option>
+											<volist name="categoryList" id="vo">
+												<option <if condition="$value['category_id'] eq $vo['category_id']">selected="selected"</if> value="{$vo.category_id}">{$vo.name}</option>
+											</volist>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<td class="tdleft">{:L('DEPARTMENT')}&nbsp;<span style="color:red;">*</span></td>
+									<td>
+										<select id="department2" name="department_id" onchange="changeRoleContent2()">
+											<option value="">--请选择--</option>
+											<volist name="department_list" id="temp">
+												<option value="{$temp.department_id}">{$temp.name}</option>
+											</volist>
+										</select>
+									</td>
+								</tr>
+								<!--岗位-->
+								<tr>
+									<td class="tdleft">角色<span style="color:red;">*</span></td>
+									<td>
+										<select id="role2" name="position_id" onchange="changeAgent()">
+										</select>
+									</td>
+									<td style="display: none" class="typee">
+									<input name="userShopType" type="radio" value="2" />工厂店铺
+									<input name="userShopType" type="radio" value="3" />贸易服务商店铺
+								</td>
+								</tr>
+								<tr class="shop">
+									<td class="tdleft">特许经营商&nbsp;<span style="color:red;">*</span></td>
+									<td>
+										<select id="shop" name="general_agent" class="generalAgent">
+										</select>
+									</td>
+								</tr>
+
+								<tr class="areashop">
+									<td class="tdleft">区域划分帐号&nbsp;<span style="color:red;">*</span></td>
+									<td>
+										<select id="areashop" name="areashop" class="">
+										</select>
+									</td>
+								</tr>
+
+								<tr class="area">
+									<td class="tdleft">企业管家&nbsp;<span style="color:red;">*</span></td>
+									<td>
+										<select id="area" name="area_agent">
+										</select>
+									</td>
+								</tr>
+
+
+								<!-- <tr class="a_show" style="display: none">
+									<td class="tdleft">社区店铺&nbsp;<span style="color:red;">*</span></td>
+									<td>
+										<input type="radio" name="level" value="0">免费门店
+										<input type="radio" name="level" value="1">A级店铺
+										<input type="radio" name="level" value="2">B级店铺
+									</td>
+								</tr> -->
+
+			
+
+								<!-- <tr class="c_show" style="display: none">
+									<td class="tdleft">工厂店铺&nbsp;<span style="color:red;">*</span></td>
+									<td>
+										<input type="radio" name="level" value="3">A级工厂
+										<input type="radio" name="level" value="4">B级工厂
+									</td>
+								</tr> -->
+								<else />
+								<!--category_id  用户类别-->
+								<input type="hidden" name="category_id" value="2"/>
+							</if>
+
+							<tr>
+								<td>&nbsp;</td>
+								<td>
+									<input class="btn btn-primary" name="submit" type="submit" value="{:L('ADD')}"/>&nbsp; <input class="btn btn-primary" name="submit" type="submit" value="{:L('SAVE AND NEW')}"/> &nbsp;<input class="btn" onclick="history.go(-1)" type="reset" value="{:L('RETURN')}"/>
+								</td>
+							</tr>
+							</tbody>
+						</table>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+	function changeRoleContent(){
+		department_id = $('#department').val();
+		if(department_id == ''){
+			$("#role").html('');
+		}else{
+			$.ajax({
+				type:'get',
+				url:'index.php?m=user&a=getpositionlist&id='+department_id,
+				async:false,
+				success:function(data){
+					//console.log(data);
+					options = '';
+					$.each(data.data, function(k, v){
+						options += '<option value="'+v.position_id+'">'+v.name+'</option>';
+					});
+					$("#role").html(options);
+				},
+				dataType:'json'
+			});
+		}
+	}
+	function changeRoleContent2(){
+		department_id = $('#department2').val();
+		if(department_id == ''){
+			$("#role2").html('');
+		}else{
+			$.ajax({
+				type:'get',
+				url:'index.php?m=user&a=getpositionlist&id='+department_id,
+				async:false,
+				success:function(data){
+					// console.log(data);
+					options = '';
+					options += '<option value="">--请选择--</option>';
+					if(data.data){
+						$.each(data.data, function(k, v){
+							options += '<option value="'+v.position_id+'">'+v.name+'</option>';
+						});
+					}
+					$("#role2").html(options);
+				},
+				dataType:'json'
+			});
+
+		}
+	}
+
+	function changeAgent(){
+		var position = {$Think.session.position_id};
+		if(position == 14){
+			department_id = 12;
+			position_id = $('#role2').val();
+			if(position_id == 15 || position_id == 21){
+				$('.area').hide();
+				$('.areashop').hide();
+				$('.typee').show();
+				$('.a_show').hide();
+				$('.c_show').hide();
+				$('.b_show').hide();
+			}else if (position_id == 16 ||position_id == 19) {
+				$('.typee').hide();
+				$('.area').hide();
+				$('#areashop').html('');
+				$('.areashop').show();
+				//$('.a_show').show();
+				$('.c_show').hide();
+				$('.b_show').hide();
+				var parentId = $('#shop').val();
+				$.ajax({
+					type: 'get',
+					url: 'index.php?m=user&a=areashop&id='+department_id,
+					success: function (data) {
+						areashops = '';
+						if (data.data) {
+							$.each(data.data, function (k, v) {
+								areashops += '<option value="' + v.user_id + '">' + v.name + '</option>';
+							});
+							$("#areashop").html(areashops);
+						}
+					},
+					dataType: 'json'
+				});
+			}else if (position_id == 17) {
+				$('.areashop').hide();
+
+
+				$("#area").html('');
+				$('.area').show();
+				//$('.c_show').show();
+				$('.b_show').hide();
+				$('.a_show').hide();
+				$('.typee').hide();
+				var parentId = $('#shop').val();
+
+				$.ajax({
+					type: 'get',
+					url: 'index.php?m=user&a=areaAgent&id=' + department_id,
+					async: false,
+					success: function (data) {
+						areas = '';
+						if (data.data) {
+							$.each(data.data, function (k, v) {
+								areas += '<option value = "' + v.user_id + '">' + v.name + '</option>';
+							});
+							$("#area").html(areas);
+						}
+					},
+					dataType: 'json'
+				});
+			}else if(position_id == 22){
+				$('.areashop').hide();
+				$("#area").html('');
+				$('.area').show();
+				$('.c_show').hide();
+				$('.b_show').show();
+				$('.a_show').hide();
+				$('.typee').hide();
+				var parentId = $('#shop').val();
+
+				$.ajax({
+					type: 'get',
+					url: 'index.php?m=user&a=areaAgent&id=' + department_id,
+					async: false,
+					success: function (data) {
+						areas = '';
+						if (data.data) {
+							$.each(data.data, function (k, v) {
+								areas += '<option value = "' + v.user_id + '">' + v.name + '</option>';
+							});
+							$("#area").html(areas);
+						}
+					},
+					dataType: 'json'
+				});
+			}
+
+		}else if(position == 13){
+			position_id = $('#role2').val();
+			if(position_id == 14){
+				$('.typee').hide();
+				$('.shop').hide();
+			}
+			if(position_id == 15){
+				$('.typee').show();
+				$('.shop').show();
+				$('.areashop').hide();
+				$('.area').hide();
+				$.ajax({
+					type: 'get',
+					url: 'index.php?m=user&a=generalAgent&id=' + department_id,
+					async: false,
+					success: function (data) {
+						shops = '';
+						if (data.data) {							
+							$.each(data.data, function (k, v) {
+								shops += '<option value = "' + v.user_id + '">' + v.name + '</option>';
+							});
+							$("#shop").html(shops);						
+						}
+					},
+					dataType: 'json'
+				});
+			}
+			if (position_id == 16) {
+				$('.typee').hide();				
+				$('.shop').show();
+				$.ajax({
+					type: 'get',
+					url: 'index.php?m=user&a=generalAgent&id=' + department_id,
+					async: false,
+					success: function (data) {
+						shops = '';
+						if (data.data) {
+							$.each(data.data, function (k, v) {
+								shops += '<option value = "' + v.user_id + '">' + v.name + '</option>';
+							});
+							$("#shop").html(shops);
+						}
+					},
+					dataType: 'json'
+				});
+
+				$('#areashop').html('');
+				$('.areashop').show();
+				var parentId = $('#shop').val();
+				$.ajax({
+					type: 'get',
+					url: 'index.php?m=user&a=areashop&id=' + department_id + '&parentId=' + parentId,
+					success: function (data) {
+						areashops = '';
+						if (data.data) {
+							$.each(data.data, function (k, v) {
+								areashops += '<option value="' + v.user_id + '">' + v.name + '</option>';
+							});
+							$("#areashop").html(areashops);
+						}
+					},
+					dataType: 'json'
+				});
+				$('.generalAgent').change(function () {
+					var parentId = $('#shop').val();
+					$.ajax({
+						type: 'get',
+						url: 'index.php?m=user&a=areashop&id=' + department_id + '&parentId=' + parentId,
+						async: false,
+						success: function (data) {
+							areashops = '';
+							if (data.data) {
+								$.each(data.data, function (k, v) {
+									areashops += '<option value = "' + v.user_id + '">' + v.name + '</option>';
+								});
+								$("#areashop").html(areashops);
+							}
+						},
+						dataType: 'json'
+					});
+				});
+			}			
+			if (position_id == 17) {
+				$('.areashop').hide();
+				$('.shop').show();				
+				$('.typee').hide();
+				$.ajax({
+					type: 'get',
+					url: 'index.php?m=user&a=generalAgent&id=' + department_id,
+					async: false,
+					success: function (data) {
+						shops = '';
+						if (data.data) {
+							$.each(data.data, function (k, v) {
+								shops += '<option value = "' + v.user_id + '">' + v.name + '</option>';
+							});
+							$("#shop").html(shops);
+						}
+					},
+					dataType: 'json'
+				});
+				$("#area").html('');
+				$('.area').show();
+				var parentId = $('#shop').val();
+				$.ajax({
+					type: 'get',
+					url: 'index.php?m=user&a=areaAgent&id=' + department_id + '&parentId=' + parentId + '&isagent=2',
+					async: false,
+					success: function (data) {
+						areas = '';
+						if (data.data) {
+							$.each(data.data, function (k, v) {
+								areas += '<option value = "' + v.user_id + '">' + v.name + '</option>';
+							});
+							$("#area").html(areas);
+						}
+					},
+					dataType: 'json'
+				});
+				$('.generalAgent').change(function () {
+					var parentId = $('#shop').val();
+					$.ajax({
+						type: 'get',
+						url: 'index.php?m=user&a=areaAgent&id=' + department_id + '&parentId=' + parentId,
+						async: false,
+						success: function (data) {
+							areas = '';
+							if (data.data) {
+								$.each(data.data, function (k, v) {
+									areas += '<option value = "' + v.user_id + '">' + v.name + '</option>';
+								});
+								$("#area").html(areas);
+							}
+						},
+						dataType: 'json'
+					});
+				});
+			}
+			if (position_id == 19) {
+				$('.areashop').hide();
+				$('.area').hide();
+				$('.shop').show();
+				$('.typee').hide();
+				$.ajax({
+					type: 'get',
+					url: 'index.php?m=user&a=generalAgent&id=' + department_id,
+					async: false,
+					success: function (data) {
+						shops = '';
+						if (data.data) {
+							$.each(data.data, function (k, v) {
+								shops += '<option value = "' + v.user_id + '">' + v.name + '</option>';
+							});
+							$("#shop").html(shops);
+						}
+					},
+					dataType: 'json'
+				});
+
+				$("#areashop").html('');
+				$('.areashop').show();
+				var parentId = $('#shop').val();
+				$.ajax({
+					type: 'get',
+					url: 'index.php?m=user&a=areashop&id=' + department_id + '&parentId=' + parentId,
+					async: false,
+					success: function (data) {
+						areashops = '';
+						if (data.data) {
+							$.each(data.data, function (k, v) {
+								areashops += '<option value = "' + v.user_id + '">' + v.name + '</option>';
+							});
+							$("#areashop").html(areashops);
+						}
+					},
+					dataType: 'json'
+				});
+				$('.generalAgent').change(function () {
+					var parentId = $('#shop').val();
+					$.ajax({
+						type: 'get',
+						url: 'index.php?m=user&a=areashop&id=' + department_id + '&parentId=' + parentId,
+						async: false,
+						success: function (data) {
+							areashops = '';
+							if (data.data) {
+								$.each(data.data, function (k, v) {
+									areashops += '<option value = "' + v.user_id + '">' + v.name + '</option>';
+								});
+								$("#areashop").html(areashops);
+							}
+						},
+						dataType: 'json'
+					});
+
+				});
+			}
+			if ( position_id == 21) {
+				$('.typee').hide();
+				$('.areashop').hide();
+				$('.shop').show();
+				$('.area').hide();				
+				$.ajax({
+					type: 'get',
+					url: 'index.php?m=user&a=generalAgent&id=' + department_id,
+					async: false,
+					success: function (data) {
+						shops = '';
+						if (data.data) {
+							if(position_id == 14){
+								$('.shop').hide();
+							}else{
+								$.each(data.data, function (k, v) {
+									shops += '<option value = "' + v.user_id + '">' + v.name + '</option>';
+								});
+								$("#shop").html(shops);								
+							}
+						}
+					},
+					dataType: 'json'
+				});
+			}			
+			if(position_id == 22){
+				$('.shop').show();
+				$('.areashop').hide();
+				$("#area").html('');
+				$('.area').show();
+				$('.typee').hide();
+				$.ajax({
+					type: 'get',
+					url: 'index.php?m=user&a=generalAgent&id=' + department_id,
+					async: false,
+					success: function (data) {
+						shops = '';
+						if (data.data) {
+							$.each(data.data, function (k, v) {
+								shops += '<option value = "' + v.user_id + '">' + v.name + '</option>';
+							});
+							$("#shop").html(shops);
+						}
+					},
+					dataType: 'json'
+				});
+
+				$("#area").html('');
+				$('.area').show();
+				var parentId = $('#shop').val();
+				$.ajax({
+					type: 'get',
+					url: 'index.php?m=user&a=areaAgent&id=' + department_id + '&parentId=' + parentId + '&isagent=2',
+					async: false,
+					success: function (data) {
+						areas = '';
+						if (data.data) {
+							$.each(data.data, function (k, v) {
+								areas += '<option value = "' + v.user_id + '">' + v.name + '</option>';
+							});
+							$("#area").html(areas);
+						}
+					},
+					dataType: 'json'
+				});
+				$('.generalAgent').change(function () {
+					var parentId = $('#shop').val();
+					$.ajax({
+						type: 'get',
+						url: 'index.php?m=user&a=areaAgent&id=' + department_id + '&parentId=' + parentId,
+						async: false,
+						success: function (data) {
+							areas = '';
+							if (data.data) {
+								$.each(data.data, function (k, v) {
+									areas += '<option value = "' + v.user_id + '">' + v.name + '</option>';
+								});
+								$("#area").html(areas);
+							}
+						},
+						dataType: 'json'
+					});
+				});
+			}
+		}else {
+			position_id = $('#role2').val();
+			if(position_id == 21 || position_id == 14){
+				$('.typee').hide();
+			}
+			if(position_id == 15){
+				$('.typee').show();
+			}
+			if (position_id == 15 || position_id == 21 || position_id == 14) {
+				$('.areashop').hide();
+				$('.shop').show();
+				$('.area').hide();
+				$('.a_show').hide();
+				$('.c_show').hide();
+				$('.b_show').hide();
+				$.ajax({
+					type: 'get',
+					url: 'index.php?m=user&a=generalAgent&id=' + department_id,
+					async: false,
+					success: function (data) {
+						// console.log(data);
+						shops = '';
+						if (data.data) {
+							if(position_id == 14){
+								$('.shop').hide();
+							}else{
+								$.each(data.data, function (k, v) {
+									shops += '<option value = "' + v.user_id + '">' + v.name + '</option>';
+								});
+								$("#shop").html(shops);								
+							}
+						}
+					},
+					dataType: 'json'
+				});
+
+			} else if (position_id == 16) {
+				$('.typee').hide();
+				//$('.a_show').show();
+				$('.c_show').hide();
+				$('.b_show').hide();
+				$('.shop').show();
+				$.ajax({
+					type: 'get',
+					url: 'index.php?m=user&a=generalAgent&id=' + department_id,
+					async: false,
+					success: function (data) {
+						//console.log(data);
+						shops = '';
+						if (data.data) {
+							$.each(data.data, function (k, v) {
+								shops += '<option value = "' + v.user_id + '">' + v.name + '</option>';
+							});
+							$("#shop").html(shops);
+						}
+					},
+					dataType: 'json'
+				});
+
+				$('#areashop').html('');
+				$('.areashop').show();
+				var parentId = $('#shop').val();
+				$.ajax({
+					type: 'get',
+					url: 'index.php?m=user&a=areashop&id=' + department_id + '&parentId=' + parentId,
+					success: function (data) {
+						areashops = '';
+						if (data.data) {
+							$.each(data.data, function (k, v) {
+								areashops += '<option value="' + v.user_id + '">' + v.name + '</option>';
+							});
+							$("#areashop").html(areashops);
+						}
+					},
+					dataType: 'json'
+				});
+				$('.generalAgent').change(function () {
+					var parentId = $('#shop').val();
+					$.ajax({
+						type: 'get',
+						url: 'index.php?m=user&a=areashop&id=' + department_id + '&parentId=' + parentId,
+						async: false,
+						success: function (data) {
+							areashops = '';
+							if (data.data) {
+								$.each(data.data, function (k, v) {
+									areashops += '<option value = "' + v.user_id + '">' + v.name + '</option>';
+								});
+								$("#areashop").html(areashops);
+							}
+						},
+						dataType: 'json'
+					});
+				});
+
+			} else if (position_id == 17) {
+				$('.areashop').hide();
+				$('.shop').show();
+				//$('.c_show').show();
+				$('.b_show').hide();
+				$('.a_show').hide();
+				$('.typee').hide();
+				$.ajax({
+					type: 'get',
+					url: 'index.php?m=user&a=generalAgent&id=' + department_id,
+					async: false,
+					success: function (data) {
+						//console.log(data);
+						shops = '';
+						if (data.data) {
+							$.each(data.data, function (k, v) {
+								shops += '<option value = "' + v.user_id + '">' + v.name + '</option>';
+							});
+							$("#shop").html(shops);
+						}
+					},
+					dataType: 'json'
+				});
+
+				$("#area").html('');
+				$('.area').show();
+				var parentId = $('#shop').val();
+
+				$.ajax({
+					type: 'get',
+					url: 'index.php?m=user&a=areaAgent&id=' + department_id + '&parentId=' + parentId + '&isagent=2',
+					async: false,
+					success: function (data) {
+						areas = '';
+						if (data.data) {
+							$.each(data.data, function (k, v) {
+								areas += '<option value = "' + v.user_id + '">' + v.name + '</option>';
+							});
+							$("#area").html(areas);
+						}
+					},
+					dataType: 'json'
+				});
+
+				$('.generalAgent').change(function () {
+					var parentId = $('#shop').val();
+					//alert(parentId);
+					$.ajax({
+						type: 'get',
+						url: 'index.php?m=user&a=areaAgent&id=' + department_id + '&parentId=' + parentId,
+						async: false,
+						success: function (data) {
+							areas = '';
+							if (data.data) {
+								$.each(data.data, function (k, v) {
+									areas += '<option value = "' + v.user_id + '">' + v.name + '</option>';
+								});
+								$("#area").html(areas);
+							}
+						},
+						dataType: 'json'
+					});
+				});
+			} else if (position_id == 19) {
+				$('.areashop').hide();
+				$('.area').hide();
+				$('.shop').show();
+				//$('.a_show').show();
+				$('.c_show').hide();
+				$('.b_show').hide();
+				$('.typee').hide();
+				$.ajax({
+					type: 'get',
+					url: 'index.php?m=user&a=generalAgent&id=' + department_id,
+					async: false,
+					success: function (data) {
+						//console.log(data);
+						shops = '';
+						if (data.data) {
+							$.each(data.data, function (k, v) {
+								shops += '<option value = "' + v.user_id + '">' + v.name + '</option>';
+							});
+							$("#shop").html(shops);
+						}
+					},
+					dataType: 'json'
+				});
+
+				$("#areashop").html('');
+				$('.areashop').show();
+				var parentId = $('#shop').val();
+				$.ajax({
+					type: 'get',
+					url: 'index.php?m=user&a=areashop&id=' + department_id + '&parentId=' + parentId,
+					async: false,
+					success: function (data) {
+						areashops = '';
+						if (data.data) {
+							$.each(data.data, function (k, v) {
+								areashops += '<option value = "' + v.user_id + '">' + v.name + '</option>';
+							});
+							$("#areashop").html(areashops);
+						}
+					},
+					dataType: 'json'
+				});
+				$('.generalAgent').change(function () {
+					var parentId = $('#shop').val();
+					//alert(parentId);
+					$.ajax({
+						type: 'get',
+						url: 'index.php?m=user&a=areashop&id=' + department_id + '&parentId=' + parentId,
+						async: false,
+						success: function (data) {
+							areashops = '';
+							if (data.data) {
+								$.each(data.data, function (k, v) {
+									areashops += '<option value = "' + v.user_id + '">' + v.name + '</option>';
+								});
+								$("#areashop").html(areashops);
+							}
+						},
+						dataType: 'json'
+					});
+
+				});
+			} else if (position_id == 14) {
+				$('.shop').hide();
+				$('.typee').hide();
+			}else if(position_id == 22){
+				$('.shop').show();
+				$('.areashop').hide();
+
+				$("#area").html('');
+				$('.area').show();
+				$('.c_show').hide();
+				$('.b_show').show();
+				$('.a_show').hide();
+				$('.typee').hide();
+				$.ajax({
+					type: 'get',
+					url: 'index.php?m=user&a=generalAgent&id=' + department_id,
+					async: false,
+					success: function (data) {
+						//console.log(data);
+						shops = '';
+						if (data.data) {
+							$.each(data.data, function (k, v) {
+								shops += '<option value = "' + v.user_id + '">' + v.name + '</option>';
+							});
+							$("#shop").html(shops);
+						}
+					},
+					dataType: 'json'
+				});
+
+				$("#area").html('');
+				$('.area').show();
+				var parentId = $('#shop').val();
+
+				$.ajax({
+					type: 'get',
+					url: 'index.php?m=user&a=areaAgent&id=' + department_id + '&parentId=' + parentId + '&isagent=2',
+					async: false,
+					success: function (data) {
+						areas = '';
+						if (data.data) {
+							$.each(data.data, function (k, v) {
+								areas += '<option value = "' + v.user_id + '">' + v.name + '</option>';
+							});
+							$("#area").html(areas);
+						}
+					},
+					dataType: 'json'
+				});
+
+				$('.generalAgent').change(function () {
+					var parentId = $('#shop').val();
+					//alert(parentId);
+					$.ajax({
+						type: 'get',
+						url: 'index.php?m=user&a=areaAgent&id=' + department_id + '&parentId=' + parentId,
+						async: false,
+						success: function (data) {
+							areas = '';
+							if (data.data) {
+								$.each(data.data, function (k, v) {
+									areas += '<option value = "' + v.user_id + '">' + v.name + '</option>';
+								});
+								$("#area").html(areas);
+							}
+						},
+						dataType: 'json'
+					});
+				});
+			}
+		}
+	}
+
+
+	//贸易店铺等级分类
+/* 	function aa(id){
+		if(id==1){
+			$('.c_show').show();
+			$('.b_show').hide();
+		}else{
+			$('.b_show').show();
+			$('.c_show').hide();
+		}
+	} */
+
+	function changeuser() {
+		position_id = $('#role2').val();
+		if(position_id == 20){
+			$('.oncompany').hide();
+			$('.a_show').hide();
+		}else if(position_id == 19){
+			$('.oncompany').show();
+			$('.a_show').show();
+		}
+	}
+
+	$('#role').click(
+			function(){
+				department_id = $('#department').val();
+				if(department_id == ''){
+					alert("{:L('SELECT_DEPARTMENT_FIRST')}");
+				}
+			}
+	);
+	$('#role2').click(
+			function(){
+				department_id = $('#department2').val();
+				if(department_id == ''){
+					alert("{:L('SELECT_DEPARTMENT_FIRST')}");
+				}
+			}
+	);
+
+	$('#telephone').blur(function(){
+		var telephone = $.trim($('#telephone').val());
+		var reg = /^0?1[3|4|5|8|7][0-9]\d{8}$/;
+
+		if(telephone){
+			if (reg.test(telephone)) {
+			}else{
+				alert("手机号有误!");
+				return false;
+			};
+			$.ajax({
+				type: "POST",
+				cache: true,
+				async: true,
+				ifModified:true,
+				timeout:12000,
+				url: "{$url}/manager/syncAccount/verifyIsRegister",
+				data: {cellPhone:telephone},
+				dataType: "json",
+				success: function(data) {
+					//console.log(data);
+					if(data.code == 2000){
+						$("#name").val(data.data.userNickNmae);
+						$("#name").attr("readonly","readonly")
+					}else if(data.code == 4000){
+						$("#name").val(data.data.userNickNmae);
+						$("#name").attr("readonly","readonly")
+						if(!confirm(data.message)){
+							history.go(-1);
+						}
+					}
+				},
+				error: function(data) {
+					alert("网络异常!");
+				}
+			})
+		}
+	});
+</script>
+
+<include file="Public:footer" />	

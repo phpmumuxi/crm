@@ -1,0 +1,103 @@
+<div class="nav-collapse collapse">
+	<ul class="nav" >
+		<volist name="top" id="vo">
+			<if condition="$vo.title eq '订单'">
+			<li <if condition="strtolower(MODULE_NAME) eq strtolower($vo['module'])">class="active"</if>>
+			<a  href="{$vo.url}">{$vo.title}</a>
+			</li>
+			</if>
+			
+			<if condition="$vo.title eq '产品'">
+			<li <if condition="strtolower(MODULE_NAME) eq strtolower($vo['module'])">class="active"</if>>
+			<a  href="{$vo.url}">{$vo.title}</a>
+			</li>
+			</if>
+
+		</volist>
+		<volist name="top" id="vo">
+		
+			<if condition="$vo.title neq '' and $vo.title neq '订单' and $vo.title neq '产品'">
+			<li <if condition="strtolower(MODULE_NAME) eq strtolower($vo['module'])">class="active"</if>><a  href="{$vo.url}">{$vo.title}</a></li>
+			</if>
+		</volist>
+		<if condition="$Think.session.position_id eq '17' OR $Think.session.position_id eq '18' OR $Think.session.position_id eq '19' OR $Think.session.position_id eq '16'" >
+			<li><a href="{$Think.config.YIGUANJIACLUB}/login.html" target="view_window">聊天</a></li>	
+		</if>
+		<if condition="$Think.session.position_id neq '13'" >		
+			<li class="dropdown">
+				<a href="#" class="dropdown-toggle" data-toggle="dropdown">{:L('MORE')} <b class="caret"></b></a>
+				<ul class="dropdown-menu">					
+					<volist name="more" id="vo">
+						<if condition="$vo.title neq ''">
+						<li><a href="{$vo.url}">{$vo.title}</a></li>
+						</if>
+					</volist>
+					<li class="divider"></li>
+					<li><a href="{:U('navigation/index')}">{:L('MENU_SETTINGS')}</a></li>
+					<li><a href="javascript:;">客服电话 : 400-100-9293</a></li>	
+				</ul>
+			</li>
+		</if>
+	</ul>
+
+</div>
+
+<div id="message" class="hide"><p id="tips"></p></div>
+<div class="hide" id="dialog-message-send" title="{:L('WRITE_LETTER')}">loading...</div>
+<script type="text/javascript">
+$('#dialog-upgrade').dialog({
+	autoOpen: false,
+	modal: true,
+	width: 600,
+	maxHeight: 400,
+	position :["center",100],
+	buttons: { 
+		"OK": function () {
+			$(this).dialog("close");
+		}
+	}
+});
+
+$('#dialog-authorize').dialog({
+	autoOpen: false,
+	modal: true,
+	width: 600,
+	maxHeight: 400,
+	position :["center",100],
+	buttons: { 
+		"OK": function () {
+			$(this).dialog("close");
+		}
+	}
+});
+$("#dialog-message-send").dialog({
+    autoOpen: false,
+    modal: true,
+	width: 800,
+	maxHeight: 600,
+	position: ["center",100]
+});
+function check_version() {
+	$('#dialog-upgrade').dialog('open');
+	$.get("{:U('upgrade/index')}", function(data){
+		if (data.status) {
+			info = "<span style='color:green;'>" + data.info + "</span>";
+		} else {
+			info = "<span style='color:red;'>" + data.info + "</span>";
+		}
+		$("#dialog-upgrade #info").html(info);
+	});
+}
+
+a = 1;
+function fn(){
+	if(a == 1){
+		$('#message_tips').css({color:'#fff'});
+		a = 0;
+	}else{
+		$('#message_tips').css({color:'#D2D2D2'});
+		a = 1;
+	}
+}
+var myInterval;
+</script>

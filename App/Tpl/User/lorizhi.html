@@ -1,0 +1,14 @@
+<table border="1">
+	<tr>
+	<td>用户</td>
+	<td>ip</td>
+	<td>登录时间</td>
+	</tr>
+	<foreach  name="list" item="vo">
+	<tr>
+	<td>{$vo.user_id}</td>
+	<td>{$vo.login_ip}</td>
+	<td>{$vo.login_time}</td>
+	</tr>
+	</foreach>
+</table>

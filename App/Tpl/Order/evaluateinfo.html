@@ -1,0 +1,127 @@
+<include file="Public:header" />
+<style type="text/css">
+.orderGoods{padding: 5px;}
+.table{margin-top: 30px;}
+.table td{text-align: center;vertical-align:middle;border: 1px solid #A9B7B7;}
+</style>
+<div style="margin-bottom:30px;font-size:16px;" class="container">	
+	<div style="font-size:17px;height:30px;line-height:30px;background: #F4F4F4">
+		<span>&nbsp;&nbsp;订单编号：{$info['orderNo']}</span>
+		<span style="margin:0 80px">订单状态：
+			<span style="color:#029BE2;font-weight: bold;">
+				<if condition="$info['orderType'] eq 'F0'">待支付
+					<elseif condition="$info['orderType'] eq 'F13'"/>待支付
+					<elseif condition="$info['orderType'] eq 'F1'"/>待发货
+					<elseif condition="$info['orderType'] eq 'F14'"/>待收货
+					<elseif condition="$info['orderType'] eq 'F4'"/>已完成
+					<elseif condition="$info['orderType'] eq 'F11'"/>订单关闭
+					<elseif condition="$info['orderType'] eq 'F20'" />订单关闭
+					<elseif condition="$info['orderType'] eq 'F21'" />订单关闭
+					<elseif condition="$info['orderType'] eq 'F19'" />订单关闭
+					<elseif condition="$info['orderType'] eq 'F15'"/>退货中
+					<elseif condition="$info['orderType'] eq 'F16'"/>用户申请退货
+					<elseif condition="$info['orderType'] eq 'F17'"/>已退货
+					<elseif condition="$info['orderType'] eq 'F18'"/>已驳回
+					<elseif condition="$info['orderType'] eq 'F24'"/>已完成
+					<elseif condition="$info['orderType'] eq 'F22'"/>待商家收货
+					<else/>
+				</if>
+			</span>
+		</span>
+		<span >订单类型：销售订单</span>
+	</div>
+	<table class="table" width="100%" cellspacing="1" cellpadding="0">
+		<tr style="background: #F4F4F4">
+			<td colspan="2"><b>商品信息</b></td>
+			<td><b>评价</b></td>
+			<td><b>操作</b></td>
+		</tr>
+		<volist name="order" id="vo">
+			<tr>
+				<td style="width:12%"><img src="{$vo.servicePicPath}" style="width:80px;"></td>
+				<td style="width:35%">
+					<div class="orderGoods">{$vo.serviceName|msubstr=0,18}</div>
+					<div class="orderGoods">{$vo.goodsSpec}</div>
+				</td>
+				<if condition="$vo.isUse eq '0'">
+					<td style="text-align: left;">
+						【买家评价】 :
+						<p class="orderGoods">
+							<sapn style="color:#FFB734">
+								<if condition="$vo.evaluationLevel eq '1'">好评&nbsp;&nbsp;&nbsp;
+								<elseif condition="$vo.evaluationLevel eq '2'"/>中评&nbsp;&nbsp;&nbsp;
+								<elseif condition="$vo.evaluationLevel eq '3'"/>差评&nbsp;&nbsp;&nbsp;
+								<else/>
+								</if>
+							</sapn>
+								<if condition="$vo.picArray">
+								<volist name="vo.picArray" id="val">
+									&nbsp;&nbsp;&nbsp;<a target="_blank" href="{$val.evaluatePictures}"><img src="{$val.evaluatePictures}" style="width:60px;height:60px"></a>
+								</volist>
+								</if>
+						</p>
+							<if condition="$vo.evaluationContent neq null">
+								<p style="text-indent: 2em">{$vo.evaluationContent}</p>
+							<else/>
+								<p style="text-indent: 2em">此用户没有填写评价内容</p>
+							</if>
+						<if condition="$vo.sellerReply neq null">
+						【卖家回复】 :<p class="orderGoods" style="text-indent:2em">{$vo.sellerReply}</p>
+						</if>
+					</td>
+					<td style="width:10%">
+						<if condition="$vo.sellerReply neq null">
+						<else/>
+							<button vd="{$vo.sid}" class="evaluateButton">回复评价</button>
+						</if>
+					</td>
+				<else/>
+					<td style="text-align:left;color:#FFB734">&nbsp;买家评价已删除</td>
+					<td ></td>
+				</if>
+			</tr>
+		</volist>		
+	</table>
+</div>
+<script src="__PUBLIC__/js/layer/layer.js" type="text/javascript"></script>
+<script>
+$('.evaluateButton').click(function () {
+	var _goodsId = $(this).attr("vd");console.log(_goodsId);
+	var _url = "{:C('URL')}";
+
+	var _html='<div style="text-align:center;margin:20px 0 8px"><textarea id="evaluateCont"></textarea></div><div style="float: right;"><button id="evaluateSureButton" style="cursor: pointer;margin-right:35px">确定</button></div><p style="clear:both"></p>';
+
+	layer.open({
+		type: 1,
+		title: '回复评价',
+		content:_html,
+		skin: 'layer-ext-moon',
+		area: ['15%','20%'], 
+		resize: false,
+		shadeClose: true,
+		success:function(){
+            $("#evaluateSureButton").click(function(){
+                var _evaluateCont =  $.trim($('#evaluateCont').val());
+                if(_evaluateCont){
+                    $.post(_url+'/manager/serviceGoodsEvaluate/responseEvaluation',{'sid':_goodsId,'sellerReply':_evaluateCont},function(result){
+                      if(result.success){
+                        layer.msg(result.message,{icon: 1,time: 1500},function(){
+                          window.location.reload();
+                        });
+                      }else{
+                        layer.msg('回复评价失败！',{icon: 2,time: 1500},function(){
+                          window.location.reload();
+                        });
+                      }
+                    },'json')
+                }else{
+                    layer.msg('请回复评价！',{icon: 2,time: 2000},function(){
+                        window.location.reload();
+                    });
+                }
+            });
+        }
+	});
+})
+</script>
+<include file="Public:footer" />

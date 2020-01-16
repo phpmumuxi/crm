@@ -1,0 +1,114 @@
+<include file="Public:header" />
+<style type="text/css" media="screen">
+.table th, .table td{padding:8px;line-height:20px;border:1px solid #EBF1F1;text-align:center;vertical-align:middle;}
+</style>
+<div class="container">
+	<a href="{:U('Product/freightadd?source=1')}" title=""><div class="btn btn-primary">新建运费模板</div></a>
+	<!-- <a href="{:U('Product/freightadd2')}" title=""><div class="btn btn-primary">新建运费模板(按件计费)</div></a> -->
+	<br/><br/>
+	<table class="table " width="95%" border="1" cellspacing="1" cellpadding="1">
+		<thead>
+			<tr>
+				<th width="10%">模板名称</th>
+				<th width="10%">计费方式</th>
+				<th width="10%">{:L('OPERATION')}</th>
+				<th width="30%">运送到</th>
+				<th width="10%">首重(kg)/件</th>
+				<th width="10%">首费(元)</th>
+				<th width="10%">续重(kg)/件</th>
+				<th width="10%">续费(元)</th>
+			</tr>
+		</thead>
+		<tbody id="str">
+		</tbody>
+	</table>
+</div>
+<script>
+var sid = '{$sid}';
+console.log(sid);
+$.ajax({
+	url:'{$url}/manager/template/queryTradeShipTemplate',// 跳转到 action
+	data:{sid: sid},
+	type:'post',
+	cache:false,
+	dataType:'json',
+	success:function(data) {
+		//console.log(data)
+		if(data.code =="2000" ){
+			//console.log(data)
+			var datalist= data.data;
+			//console.log(datalist);
+			var htmlstr = '';
+			if(datalist){
+				for (var i=0;i<datalist.length;i++){
+				var obj = datalist[i];
+				// var bsid = datalist[i]['sid'];
+				// console.log(bsid);
+					if (obj.feeWay == 1) {
+						obj.feeWay = '按重计费';
+					}else{
+						obj.feeWay = '按件计费';
+					};
+					//console.log(obj);
+					var tmp = obj.infoList;
+					//console.log(tmp);
+					if (tmp) {
+						var tmplength = tmp.length;
+						htmlstr += '<tr>'
+						+'<td rowspan="'+tmplength+'">'+obj.templateName +'</td>'
+						+'<td rowspan="'+tmplength+'">'+obj.feeWay +'</td>'
+						+'<td rowspan="'+tmplength+'">'
+						+'<a href="{:U('product/freightedit')}&id='+obj.sid+'" title="修改">修改</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a  class="delate"  onClick="freight_del(\''+obj.sid+'\')" href="javascript:;" title="删除">删除</a>'
+						+'</td>'
+						for(var j=0;j<tmp.length;j++){
+							var templ = tmp[j];
+						//console.log(templ);
+						if(templ.shipArea == "default"){
+							templ.shipArea = '默认';
+							}
+						htmlstr+='<td>'+templ.shipArea +'</td>'
+						+'<td>'+templ.shipDefaultNum+'</td>'
+						+'<td>'+templ.shipDefaultFee +'</td>'
+						+'<td>'+templ.shipAddNum +'</td>'
+						+'<td>'+templ.shipAddFee +'</td>'
+						+'</tr>'	
+						document.getElementById("str").innerHTML =htmlstr
+					}
+				};	
+			};
+		}
+	}else{
+		alert(data.message);
+	}
+},
+error:function() {
+	alert("网络异常,请稍后再试！");
+}
+});
+
+/*删除*/
+function freight_del(id){
+        //alert(id);
+        $.ajax( {
+           url:'{$url}/manager/template/deleteTradeShipTemplate',// 跳转到 action
+           data:{sid:id},
+           type:'post',
+           cache:false,
+           dataType:'json',
+           success:function(data) {
+               //console.log(data);
+               if(data.code =="2000" ){
+               	location.reload();
+               }else{
+               	alert(data.message);
+               }
+           },
+           error : function() {
+           	alert("异常！");
+           }
+       });
+    }
+
+</script>
+
+<include file="Public:footer" />	

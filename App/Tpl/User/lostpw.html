@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+  <head>
+    <meta charset="utf-8">
+    <title>{:L(FIND_PASSWORD)}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="{:L('AUTHOR')}">
+
+    <!-- Le styles -->
+    <link href="__PUBLIC__/css/bootstrap.min.css" rel="stylesheet">
+    <script src="__PUBLIC__/js/jquery-1.9.0.min.js"></script>
+    <script src="__PUBLIC__/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/js/jquery.validate.min.js" charset="UTF-8"></script>
+    <link href="__PUBLIC__/css/bootstrap-responsive.min.css" rel="stylesheet">
+    <script type="text/javascript">
+  
+        var browserInfo = {browser:"", version: ""};
+        var ua = navigator.userAgent.toLowerCase();
+        if (window.ActiveXObject) {
+            browserInfo.browser = "IE";
+            browserInfo.version = ua.match(/msie ([\d.]+)/)[1];
+            if(browserInfo.version <= 7){
+                if(confirm("您的ie浏览器版本过低，建议使用chorme浏览器，\n点击【确定】转到下载页面")){}
+                location.href = 'http://www.google.cn/intl/zh-CN/chrome/browser/';
+            }
+        }
+        
+        
+        	
+        	$(function(){
+        	    imgcode()
+        		
+        	})
+        	
+        	
+        function imgcode(){
+        	$.ajax({
+                url:"http://aps.eachonline.com:8002/manager/account/getVCodeUrl",
+                type:'GET',
+                dataType:'json',
+                async:false,
+                success:function(result) {
+                	$(".imgcodeurl img").attr("src",result.data.imgeUrl);
+                },
+                error:function(msg){
+                }
+            })
+            
+        	
+        }
+    </script>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+   	<link rel="shortcut icon" href="../favicon.png"/>
+    <style type="text/css">
+		body {
+			padding-top: 60px;
+			padding-bottom: 40px;
+			background-color: #f5f5f5;
+		}
+
+		.form-signin {
+			max-width: 600px;
+			padding: 19px 29px 29px;
+			margin: 0 auto 20px;
+			background-color: #fff;
+			border: 1px solid #e5e5e5;
+			-webkit-border-radius: 5px;
+			   -moz-border-radius: 5px;
+					border-radius: 5px;
+			-webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+			   -moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+					box-shadow: 0 1px 2px rgba(0,0,0,.05);
+		}
+		.form-signin .form-signin-heading,
+		.form-signin .checkbox {
+			margin-bottom: 10px;
+		}
+		.form-signin input[type="text"],
+		.form-signin input[type="password"] {
+			font-size: 16px;
+			height: auto;
+			margin-bottom: 15px;
+			padding: 7px 9px;
+		}
+		.wukong {
+			margin-top:30px;
+			padding-top:10px;
+			border-top:1px solid #e5e5e5;		
+		}
+		.row{
+			margin-right:-15px;
+			margin-left:-15px;
+			float:left;
+			width:100%;
+		}
+		.row label{
+			width:100px;
+		}
+		.row input{
+			width:50%
+		}
+
+.row div{
+	float:left;
+}
+.row-input input{
+	width:200px;
+}
+.error {
+display: block;
+    overflow: hidden;
+    padding: 0 8px 0 0;
+    position: relative;
+    color:red;
+    margin-left:5px;
+}
+
+
+    </style>
+  </head>
+
+  <body>
+
+    <div class="container">
+    <input type="hidden" class="loginurl" value="{$loginurl}">
+     <input type="hidden" class="url" value="{$url}">
+    <input type="hidden" class="isUser" value="">
+		<form action="" method="post" class="form-signin" id="form1">					
+			<fieldset>
+			<legend><h3>{:L(FIND_PASSWORD)}<!-- <small> - {:C('defaultinfo.name')}</small> --></h3></legend>				
+			<include file="Public:alert" />
+			<!-- {:L('USER_NAME')}：<input type="text" name="name" class="text-input" placeholder="{:L('USER_NAME')}"/>
+			{:L('OR')}<br/>
+			{:L('RESET_PASSWORD_EMAIL')}<input type="text" name="email" class="text-input" placeholder="Email"/> -->
+			<!-- <input name="submit" class="btn btn-primary" type="submit" value="{:L('FIND_PASSWORD')}"/> &nbsp; <a href="{:U('user/login')}">{:L('LOGIN')}</a> -->
+			<div class="row">
+			
+					<div><label >手机号：</label></div>
+					<div class="row-input"><input type="text" placeholder="请输入手机号" class="telphone" name="telphone" value=""></div>
+					<div class="isusertel"></div>
+				</div>
+				<div class="row ">
+					<div><label>图形验证码：</label></div>
+					<div class="row-input"><input type="text" name="imgcode" class="imgcode" value="" placeholder="请输入图形验证码"></div>
+					<div><label style="margin-left:30px;height:30px" class="imgcodeurl"><img class="imgurl" src="" /></label></div>
+				</div>
+				
+				<div class="row ">
+					<div><label>短信验证码：</label></div>
+					<div class="row-input"><input type="text" name="vercode" class="vercode" value="" placeholder="请输入短信验证码"> </div>
+					<div><button type="button" style="margin-left:30px;height:30px" class="getvercode">获取验证码</button> </div>
+					<div class="newsmessage"></div>
+				</div>
+				<div class="row">
+					<div><label>新密码：</label></div>
+					<div class="row-input"><input type="password" placeholder="请输入密码" class="password" name="password" value=""></div>
+				</div>
+				
+				<div class="row">
+					<div><label>确认密码：</label></div>
+					<div class="row-input"><input type="password" placeholder="请再次输入密码" class="checkpassword" name="checkpassword" value=""></div>
+				</div>
+				
+				<div class="row" >
+				
+					<div><input name="submit" type="button" style="width:100px;margin-left:5px;height:30px" class="passreset" value="密码修改"></div>
+					<div><label class="message"></label></div>
+				</div>
+			</fieldset>
+		</form>
+    </div> <!-- /container -->
+    
+    <script>
+
+    $(function (){
+    	$(".passreset").click(function(){
+    		var url = $(".url").val();
+    		var telephone = $(".telphone").val();
+    		var verificationCode = $(".vercode").val();
+    		var password = $(".password").val();
+    		$.post(url+"/manager/account/checkCode",{"verificationCode":verificationCode,"telephone":telephone},function(result){
+    			   if(result.success){
+    				   $.post("http://crm.yiguanjiaclub.net/index.php?m=user&a=lostpw",{"telephone":telephone,"password":password},function(data){
+    					   if(data.error){
+    						   $(".message").html("<font color='red'>"+data.message+"</font>");   
+    					   }else{ 
+    						   $(".message").html("<font color='green'>"+data.message+"</font>");
+    						  // setTimeout("window.location.href = 'http://crm.yiguanjiaclub.net/index.php?m=user&a=login'",1000);//测试环境
+    						   //setTimeout("window.location.href = 'http://www.crm.com/index.php?m=user&a=login'",1000);//本地
+    						  setTimeout("window.location.href = 'http://crm.yiguanjiaclub.net/index.php?m=user&a=login'",1000);//线上
+    					   }
+    				   })
+    			   }else{
+    				   $(".message").html("<label ><font color='red'>"+result.message+"</font></label>");
+    				   
+    			   }
+    		   })
+    	}) 
+    	
+   	//更换验证码aps.eachonline.com  ==180.76.140.84
+   	$(".imgurl").click(function(){
+   		$.ajax({
+            url:"http://aps.eachonline.com:8002/manager/account/getVCodeUrl",
+            type:'GET',
+            dataType:'json',
+            async:false,
+            success:function(result) {
+            	$(".imgurl").attr("src",result.data.imgeUrl);
+            },
+            error:function(msg){
+            }
+        })
+   	})
+   		
+
+   	//获取短信验证码
+   	 $(".getvercode").click(function(){
+   		   var url = $(".url").val();
+   		   var vCode = $(".imgcode").val();
+   		   var telephone = $(".telphone").val();
+   		   var mobile = /^(13[0-9]{9})|(18[0-9]{9})|(14[0-9]{9})|(17[0-9]{9})|(15[0-9]{9})$/;
+   		   if(telephone.length == 11 && mobile.test(telephone)){
+	   			$.post(url+"/manager/account/sendCode",{"vCode":vCode,"telephone":telephone},function(result){
+	   				
+	 			   if(result.success){
+	 				$(".newsmessage").html("<font color='green'>验证码发送成功</font>");
+	 			   }else{
+	 				$(".newsmessage").html("<font color='red'>"+result.message+"</font>");
+	 			   }
+	 		   })
+   		   }else{
+   			$(".newsmessage").html("<font color='red'>*手机号码格式不正确</font>");
+   		   }
+   		   
+   		   
+   	   })
+    	
+   	   //验证是否是手机号
+        $.validator.addMethod("isMobile", function(value, element) {
+    	    var length = value.length;
+    	    var mobile = /^(13[0-9]{9})|(18[0-9]{9})|(14[0-9]{9})|(17[0-9]{9})|(15[0-9]{9})$/;
+    	    
+    	    return this.optional(element) || (length == 11 && mobile.test(value));
+    	}, "*请正确填写您的手机号码");
+    	
+    	  $.validator.addMethod("isUser", function(value, element) {
+    		  
+      	    $.post("http://crm.yiguanjiaclub.net/index.php?m=user&a=checkuser",{"telephone":value},function(userinfo){
+      	    	if(userinfo.isUser){
+      	    		$("#telphone-error").html("<font color='green'>验证通过</font>");
+      	    	}else{
+      	    		$(".telphone-error").html("<font color='red'>用户不存在</font>");
+      	    	}
+      	    });
+ 
+      	}, "*用户不存在");
+    	  
+        //验证密码格式
+        $.validator.addMethod("ispassword", function(value, element) {
+    	    var length = value.length;
+    	    var password = /[-\da-zA-Z!@#$%^&*_]*/;
+    	    return this.optional(element) || (length >= 6 && password.test(value));
+    	}, "*请正确填写密码");
+ 
+   		$("#form1").validate({
+
+   		rules: {
+   			telphone : {
+   	            required : true,
+   	            minlength : 11,
+   	            // 自定义方法：校验手机号在数据库中是否存在
+   	            // checkPhoneExist : true,
+   	            
+   	            isMobile : true,
+   	         	isUser : true
+   	        },
+   	     password: {
+              required: true,
+              minlength: 6,
+              ispassword:true
+              
+          },
+          checkpassword: {
+              required: true,
+              minlength: 6,
+              equalTo: ".password"
+          },	
+   		},
+   		messages: {
+   			telphone : {
+   	            required : "*请输入手机号",
+   	            minlength : "*确认手机号不能小于11个字符",
+   	            isMobile : "*请正确填写您的手机号码",
+   	            isUser : "*用户不存在",
+   	        },
+   	     password: {
+              required: "*请输入密码",
+              minlength: "*密码不能小于6个字符",
+              ispassword:"*密码格式不正确"
+          },
+          checkpassword: {
+              required: "*请输入确认密码",
+              minlength: "*密码不能小于6个字符",
+              equalTo: "*请再次输入相同的值"
+          },
+   		}
+   	});
+    	
+    }); 
+    </script>
+  </body>
+</html>

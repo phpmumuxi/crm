@@ -1,0 +1,328 @@
+<include file="Public:header" />
+<script src="__PUBLIC__/js/layer/layer.js" type="text/javascript" charset="utf-8"></script>
+<style>
+.tabtitle{font-size: 17.5px;font-weight:bold;margin: 20px auto;width:120px;}
+.tdshop{vertical-align:middle;}
+.price{font-size: 18px;margin-top: 5px;}
+tr{font-size: 16px;}
+.table th, .table td{text-align: center;vertical-align:middle;font-size: 16px;padding: 5px;border: 1px solid #EBF1F1;}
+.btn-button{margin: 30px auto;font-size: 20px;}
+.ems{border:1px solid #ccc;font-size: 18px;}
+.orderno{background-color: #F4F4F4;font-size: 16px;height: 35px;margin-bottom: 30px;}
+.ordernot{margin-left:10px;margin-right:60px;text-align: center; float: left;padding-top: 7px;}
+.shopinfo{background-color: #F4F4F4;font-size: 16px;}
+.tmoney{font-size: 16px;float:right;}
+.tmoney2{margin: 10px;}
+.orderinfo{font-size: 16px;font-weight: bold;background-color: #E8F1F6;height: 30px;padding-top: 8px;padding-left:30px;margin-top:35px;margin-bottom:25px;}
+.message{font-size: 16px;margin-left:35px;margin-bottom:15px;margin-top:10px;}
+</style>
+
+<!-- 只写一个详情页面,详情页的信息根据状态判断来显示 -->
+
+<div class="container">
+    <include file="Public:alert" />
+    <div class="row">
+        <div class="span12">
+            <div class="orderno">
+                <div class="ordernot">订单编号 : {$order.childOrderList.0.orderNo}</div>
+                <div class="ordernot">订单状态 : <span style="color:#029BE2;font-weight: bold;">
+                        <if condition="$order[childOrderList][0][totalOrderStatus] eq 'F0'">待支付
+                            <elseif condition="$order[childOrderList][0][totalOrderStatus] eq 'F13'"/>待支付
+                            <elseif condition="$order[childOrderList][0][totalOrderStatus] eq 'F1'"/>待发货
+                            <elseif condition="$order[childOrderList][0][totalOrderStatus] eq 'F14'"/>待收货
+                            <elseif condition="$order[childOrderList][0][totalOrderStatus] eq 'F4'"/>已完成
+                            <elseif condition="$order[childOrderList][0][totalOrderStatus] eq 'F11'"/>订单关闭
+                            <elseif condition="$order[childOrderList][0][totalOrderStatus] eq 'F20'" />订单关闭
+                            <elseif condition="$order[childOrderList][0][totalOrderStatus] eq 'F21'" />订单关闭
+                            <elseif condition="$order[childOrderList][0][totalOrderStatus] eq 'F19'" />订单关闭
+                            <elseif condition="$order[childOrderList][0][totalOrderStatus] eq 'F15'"/>退货中
+                            <elseif condition="$order[childOrderList][0][totalOrderStatus] eq 'F16'"/>用户申请退货
+                            <elseif condition="$order[childOrderList][0][totalOrderStatus] eq 'F17'"/>已退货
+                            <elseif condition="$order[childOrderList][0][totalOrderStatus] eq 'F18'"/>已驳回
+                            <elseif condition="$order[childOrderList][0][totalOrderStatus] eq 'F24'"/>已完成
+                            <else/>
+                        </if></span></div>
+                <div class="ordernot">订单类型 : 销售订单</div>
+                <div style="clear: both;"></div>
+            </div>
+            
+            <div>
+                <table class="table" width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr class="shopinfo">
+                        <th style="padding-left: 120px;">商品信息</th>
+                        <th>商品价格(元)</th>
+                        <th>数量</th>
+                        <th>状态</th>
+                        <th>操作</th>
+                    </tr>
+
+                    <volist name="shop" id="vo">
+                    <tr>
+                        <td width="50%" style="padding-top: 15px;">
+                            <img src="{$vo.servicePicPath}" alt="" style="width:120px;float:left;margin-right: 15px;">
+                            <div>{$vo.title}</div><br>
+                            <div>
+                                {$vo.specification}
+                            </div>
+                            <div style="clear:both;"></div>
+                        </td>
+                        <td style="padding-top: 15px;">{$vo.goodsPrice}{$vo.serviceUnit}</td>
+                        <td style="padding-top: 15px;">
+                            {$vo.serviceNum}
+                        </td>
+                        <td style="padding-top: 15px;">
+                            <if condition="$vo.orderStatus eq '0'">待支付
+                                <elseif condition="$vo.orderStatus eq '13'"/>待支付
+                                <elseif condition="$vo.orderStatus eq '1'"/>待发货
+                                <elseif condition="$vo.orderStatus eq '14'"/>待收货
+                                <elseif condition="$vo.orderStatus eq '4'"/>已完成
+                                <elseif condition="$vo.orderStatus eq '11'"/>订单关闭
+                                <elseif condition="$vo.orderStatus eq '20'" />订单关闭
+                                <elseif condition="$vo.orderStatus eq '21'" />订单关闭
+                                <elseif condition="$vo.orderStatus eq '19'" />订单关闭
+                                <elseif condition="$vo.orderStatus eq '15'"/>退货中<br/>(退货原因:{$vo.returnReason})
+                                <elseif condition="$vo.orderStatus eq 16"/>用户申请退货<br/>(退货原因:{$vo.returnReason})
+                                <elseif condition="$vo.orderStatus eq 17"/>已退货<br/>(退货原因:{$vo.returnReason})
+                                <elseif condition="$vo.orderStatus eq 18"/>已驳回<br/>(退货原因:{$vo.returnReason})
+                                <elseif condition="$vo.orderStatus eq 24"/>已完成
+                                <else/>
+                            </if> 
+                        </td>
+                        <switch name="Think.session.position_id">
+                            <case value="13|14|15|16"><td></td></case>
+                            <default/>
+                                <if condition="$vo.orderStatus eq '16'">
+                                    <td>
+                                    <div class="btn btn-primary sonorder" orderNo="{$vo.orderNo}" childOrderNo="{$vo.childOrderNo}" orderId="{$vo.sid}" totalOrderStatus="{$vo.totalOrderStatus}" status="{$vo.orderStatus}" type='3' orderChangeDatetime="{$vo.orderChangeDatetime}" >同意退货，并退款</div>
+                                    <div class="btn btn-primary sonorder" orderNo="{$vo.orderNo}" childOrderNo="{$vo.childOrderNo}" orderId="{$vo.sid}" totalOrderStatus="{$vo.totalOrderStatus}" status="{$vo.orderStatus}" type='4' orderChangeDatetime="{$vo.orderChangeDatetime}">驳回</div>
+                                    </td>
+                                <elseif condition="$vo.orderStatus eq '22'"/>
+                     <!--                <td>
+                                        <div class="btn btn-primary sonorder" orderNo=" {$vo.orderNo}" childOrderNo="{$vo.childOrderNo}" orderId=" {$vo.sid}" totalOrderStatus="{$vo.totalOrderStatus}" status="{$vo.orderStatus}" orderChangeDatetime="{$vo.orderChangeDatetime}">收货并退款</div>
+                                    </td> -->
+                                <else/>
+                                    <td></td>
+                                </if>
+                        </switch> 
+                    </tr>
+                    </volist>
+                </table>
+            </div>
+            <div class="tmoney">
+                <div class="tmoney2">商品总价:￥
+                    <?php $sum = 0; 
+                    foreach ($shop as $val){
+                        $sum += ($val['payPrice']);
+                    }
+                    echo ($sum);?>
+                </span></div>
+                <div class="tmoney2">运费:￥{$order.totalOrderInfo.freight}</div>
+                <div class="tmoney2">订单总价:<span style="color:#029BE2;font-weight: bold;">￥
+                    <?php $sum = 0; 
+                    foreach ($shop as $val){
+                        $sum += ($val['payPrice']);
+                    };
+                    echo ($sum+$order['totalOrderInfo']['freight']);?></span></div>
+            </div><div style="clear:both;"></div>
+
+            <div class="orderinfo">订单信息</div>
+            <div>
+                <div class="message">收货人姓名: <span style="margin-left: 65px;">{$order.totalOrderInfo.receiptUserName}</span></div>
+                <div class="message">收货人手机号:<span style="margin-left: 53px;">{$order.totalOrderInfo.receiptTelephone}</span></div>
+                <div class="message">收货人地址:<span style="margin-left: 69px;">{$order.totalOrderInfo.receiptPlace}</span></div>
+                <div class="message">买家留言:<span style="margin-left: 86px;">{$order.totalOrderInfo.message}</span></div>
+                <div class="message">下单时间:<span style="margin-left: 85px;">{$order.totalOrderInfo.dealDatetime}</span></div>
+            </div>
+
+            <div class="orderinfo">付款信息</div>
+            <div>
+                <div class="message">支付方式:&nbsp;&nbsp;
+                    <if condition="$order['totalOrderInfo']['payType'] eq '0'">支付宝
+                        <elseif condition="$order['totalOrderInfo']['payType'] eq '1'"/>微信  
+                        <elseif condition="$order['totalOrderInfo']['payType'] eq '2'"/>余额支付    
+                        <elseif condition="$order['totalOrderInfo']['payType'] eq '3'"/>银行卡
+                        <elseif condition="$order['totalOrderInfo']['payType'] eq '4'"/>线下付款
+                        <else/>
+                    </if>
+                </div>
+                <div class="message">付款时间:&nbsp;&nbsp;{$order.totalOrderInfo.payDatetime}</div>
+                <div class="message">付款账号:&nbsp;&nbsp;{$order.totalOrderInfo.buyerName}</div>
+            </div>
+           
+            <div class="orderinfo">快递信息</div>
+            <div class="btn btn-primary ems" orderNo="{$vo.orderNo}" payNo="{$order.childOrderList.0.payNo}">
+                查看物流
+            </div><br/><br>
+            <table class="table" width="100%" border="0" cellspacing="0" cellpadding="0" id="logi">
+            </table>
+
+            <switch name="Think.session.position_id">
+                <case value="13|14|15|16"></case>
+                <default/>
+                    <div class="orderinfo">处理意见</div>
+                    <div class="btn-button">
+                       <!--       根据状态值显示数据 -->
+                       <if condition="($shop[0][totalOrderStatus] eq 'F0') OR ($shop[0][totalOrderStatus] eq 'F13')">
+                        <div class="btn btn-primary operation" orderNo="{$order.childOrderList.0.orderNo}" status="{$shop.0.totalOrderStatus}" orderChangeDatetime="{$shop.0.orderChangeDatetime}">订单取消</div>
+                        <div class="btn btn-primary shut" url="{:U('Order/index')}">关闭</div>
+                        <elseif condition="$shop[0][totalOrderStatus] eq 'F1'" />
+                        <div class="btn btn-primary"><a href="{:U('Order/send',array('payNo'=>$order['totalOrderInfo']['payNo'],'orderNo'=>$order['totalOrderInfo']['ordreNo'],'orderChangeDatetime'=>$order['totalOrderInfo']['orderChangeDatetime']))}" type='1' style="color: #fff;" >发货</a></div>
+                        <div class="btn btn-primary operation" orderNo="{$order.childOrderList.0.orderNo}" status="{$shop.0.totalOrderStatus}" type='2' orderChangeDatetime="{$shop.0.orderChangeDatetime}">拒绝发货并退款</div>
+                        <div class="btn btn-primary shut" url="{:U('Order/index')}">关闭</div>
+                        <elseif condition="($shop[0][totalOrderStatus] eq 'F14') OR ($shop[0][totalOrderStatus] eq 'F4') OR ($shop[0][totalOrderStatus] eq 'F11') OR ($shop[0][totalOrderStatus] eq 'F20') OR ($shop[0][totalOrderStatus] eq 'F21') OR ($shop[0][totalOrderStatus] eq 'F19') OR ($shop[0][totalOrderStatus] eq 'F15') OR ($shop[0][totalOrderStatus] eq 'F17') OR ($shop[0][totalOrderStatus] eq 'F24') OR ($vo.orderStatus eq 'F18')" />
+                        <div class="btn btn-primary shut" url="{:U('Order/index')}">关闭</div>
+                        <elseif condition="$shop[0][totalOrderStatus] eq 'F16'"/>
+                        <div class="btn btn-primary shut" url="{:U('Order/index')}">关闭</div>
+                        <elseif condition="$shop[0][totalOrderStatus] eq 'F22'"/>
+                        <div class="btn btn-primary operation" orderNo="{$order.childOrderList.0.orderNo}" status="{$shop.0.totalOrderStatus}" orderChangeDatetime="{$shop.0.orderChangeDatetime}">收货并退款</div>
+                        <div class="btn btn-primary shut" url="{:U('Order/index')}">关闭</div>   
+                        <else/>
+                        </if> 
+                    </div>
+            </switch>
+        </div>
+    </div>
+</div>
+<script>
+$('.shut').click(function(){
+    var url = $(this).attr('url');
+    window.location.href = url;
+});
+
+
+$('.operation').click(function(){
+    var orderNo = $(this).attr('orderNo');
+    var status = $(this).attr('status');
+    var type = $(this).attr('type');
+    var orderChangeDatetime = $(this).attr('orderChangeDatetime');
+    //alert(type);return;
+    if (status == 'F0' || status == 'F13') {
+        var orderStatusChanged = 'F11';
+        var childOrderStatusChanged = '11';
+    }else if(status == 'F1'){
+        var type = $(this).attr('type');
+        if(type == 1){
+            var orderStatusChanged = 'F14';
+            var childOrderStatusChanged = '14';
+        }else if(type ==2){
+            var orderStatusChanged = 'F21';
+            var childOrderStatusChanged ='21';
+        }
+    }else if(status == 'F16'){
+        if(type == 3){
+            var orderStatusChanged = 'F22';
+            var childOrderStatusChanged = '17';
+        }else if(type ==4){
+            var orderStatusChanged = 'F18';
+            var childOrderStatusChanged = '18';
+        }
+    }else if(status == 'F22'){
+        var orderStatusChanged = 'F17';
+        var childOrderStatusChanged = '17';
+    }
+    //alert(orderStatusChanged);
+    $.ajax({
+        url:'{$url}/manager/order/megerOrderStatusChange',
+        data:{orderNo:orderNo,orderStatusChanged:orderStatusChanged,childOrderStatusChanged:childOrderStatusChanged,orderType:1,orderChangeDatetime:orderChangeDatetime},
+        type:'post',
+        cache:'false',
+        dataType:'json',
+        success:function(json){
+            //console.log(json);
+            alert(json.message);
+            location.reload();
+        },
+        error:function(){
+            alert('网络异常!');
+        }
+    });
+});
+
+$('.sonorder').click(function(){
+    var orderNo = $(this).attr('orderNo');
+    var childOrderNo = $(this).attr('childOrderNo');
+    // console.log('a'+childOrderNo);return;
+    var orderId = $(this).attr('orderId');
+    var orderChangeDatetime = $(this).attr('orderChangeDatetime');
+    var status = $(this).attr('status');
+    var type = $(this).attr('type');
+     if(status == '16'){
+        if(type == 3){
+            var childOrderStatusChanged = '17';
+            var totalOrderStatus = 'F22';
+        }else if(type ==4){
+            var childOrderStatusChanged = '18';
+            var totalOrderStatus = 'F18';
+        }
+     }
+    $.ajax({
+        url:'{$url}/manager/order/singleOrderStatusChange',
+        data:{orderNo:orderNo,childOrderNo:childOrderNo,orderId:orderId,totalOrderStatus:totalOrderStatus,childOrderStatusChanged:childOrderStatusChanged,orderType:1,orderChangeDatetime:orderChangeDatetime},
+        type:'post',
+        cache:'false',
+        dataType:'json',
+        success:function(json){
+           //console.log(json);
+           if (json.code == 2000) {
+                alert(json.message);
+                location.reload();
+           }
+        },
+       error:function(){
+        alert('网络异常!');
+    }
+});
+});
+
+$('.ems').click(function(){
+    var payNo = $(this).attr('payNo');
+    var orderNo = $(this).attr('orderNo');
+    var index = layer.load(0, {shade: false});
+    //console.log(index);
+    //var orderNo = 'adsf';
+    $.ajax({
+        type: "POST",
+        cache: true,
+        async: true,
+        ifModified:true,
+        timeout:12000,
+        url:'{$url}/manager/order/express/queryExpressInfo',
+        data:{orderNo:orderNo,mainTradeNo:payNo},
+        dataType:'json',
+        success:function(json){
+            //console.log(json);return;
+            // delete index;
+            // var index=undefined;
+            // console.log(index);
+            layer.closeAll('loading');
+            if(json.code == 2000){
+                var data = json.data.expressDetail.result.list;
+                var expressInfo = json.data.expressInfo;
+                //console.log(data);
+                if(data){
+                	 var html = '<tr><td colspan="2" style="text-align: left;">承载单位&nbsp;：&nbsp;&nbsp;'+expressInfo.expressCompanyName+'</td></tr><tr><td colspan="2" style="text-align: left;">快递单号&nbsp;：&nbsp;&nbsp;'+expressInfo.expressNumber+'</td></tr>';
+                    for (var i=0;i<data.length;i++){
+                        var obj = data[i];
+                        //console.log(obj);
+                        html += '<tr>'  
+                        +'<td style="text-align: left;">'+obj.remark+'</td>'
+                        +'<td>'+obj.datetime+'</td>'
+                        +'</tr>';
+                    }    
+                    document.getElementById("logi").innerHTML =html;
+            }else{
+                alert('暂无物流信息');
+            }
+        }else{
+            alert('暂无物流信息');
+        }
+    },
+    error:function(){
+        alert('网络异常!');
+        layer.closeAll('loading');
+    }
+});
+});
+</script>
+
+<include file="Public:footer">

@@ -1,0 +1,28 @@
+<include file="Public:header" />
+<script src="__PUBLIC__/js/layer/layer.js" type="text/javascript" charset="utf-8"></script>
+<style>
+.yun{width:70px;}
+.delate{cursor: pointer;}
+</style>
+<div class="container">
+	<div class="page-header">
+		<h4>配送费信息</h4>
+	</div>
+	<div class="row">
+		<div class="span12">
+			<include file="Public:alert" />
+			<if condition="$code eq '5000'">
+				<div>您还未设定过配送费</div>
+				<a href="{:U('Product/fserviceadd')}" title="" class="btn btn-primary">编辑</a>
+			<elseif condition="$code eq '2000'" />
+				<div>默认配送费用 : {$free} 元</div>
+				<br/>
+				<a href="{:U('product/fserviceadd')}" title="" class="btn btn-primary">编辑</a>
+				<else />
+
+			</if>
+		</div>
+	</div>
+</div>
+
+<include file="Public:footer" />	

@@ -1,0 +1,778 @@
+<include file="Public:header" />
+<script type="text/javascript" src="/Public/js/kindeditor-all-min.js"></script>
+<script src="__PUBLIC__/js/layer/layer.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript" src="/Public/js/zh_CN.js"></script>
+<script src="/Public/js/PCASClass.js" type="text/javascript"></script>
+<script type="text/javascript" src="/Public/js/formValidator-4.0.1.min.js" charset="UTF-8"></script>
+<script type="text/javascript" src="/Public/js/formValidatorRegex.js" charset="UTF-8"></script>
+<script type="text/javascript" src="/Public/js/mapv2.js"></script>
+<link rel="stylesheet" href="__PUBLIC__/css/kindeditor.css" type="text/css" />
+<link rel="stylesheet" href="__PUBLIC__/css/base.css" type="text/css" />
+<style type="text/css">
+    .datetime{width: 86px;}
+    .datemoney{width: 70px;}
+    #allmap{width:100%;height:600px;overflow:hidden;}
+    img{
+        /* 防止bootstrap 与 百度地图样式冲突，设置max-width为200%*/
+        max-width:200%;
+    }
+    .BMap_shadow img{
+        max-width:none;
+    }
+    .tangram-suggestion-main{
+        z-index: 9999;
+    }
+    .ulstree{margin-left: 0px;width: 220px;background-color:#eeeeee;}
+    ul li{
+        list-style: none;
+    }
+    .listree{
+        cursor: pointer;
+        font-size: 16px;
+        color:#999;
+        padding: 3px;
+    }
+</style>
+<div class="container">
+    <div class="page-header">
+        <h4>账号管理</h4>
+    </div>
+    <include file="Public:alert" />
+    <div class="row">
+         <div class="span2 knowledgecate">
+            <include file="Public:companynav" />
+        </div>
+        <div class="span10" style="margin-bottom: 100px;">
+            <h4>公司信息</h4><hr>
+            <table class="table" width="95%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td class="tdleft" width="15%">公司名称:</td>
+                    <td width="35%"><input type="text" id="companyName" name="companyName" maxlength="" value="{$company}" /> &nbsp;  <span id="" style="color:red;"></span></td>
+                </tr>
+                <tr>
+                    <td class="tdleft" width="15%">公司地址:</td>
+                    <td colspan="3">
+                        <script type="text/javascript">
+                            $(function(){
+                                new PCAS("crm_afgmsj['state']","crm_afgmsj['city']","crm_afgmsj['area']","{$area.0}","{$area.1}","{$area.2}");
+                            });
+                        </script>
+
+                        <select name="crm_afgmsj['state']" class="input-medium area"></select>
+                        <select name="crm_afgmsj['city']" class="input-medium city"></select>
+                        <select name="crm_afgmsj['area']" class="input-medium state"></select><br/>
+                        <input type="text" name="crm_afgmsj['street']" placeholder="详情信息" class="input-large area2 getmap" rel="" value="{$area.3}" style="margin-top:6px;"><br/>
+                        <input type="text" name="crm_afgmsj['men']" placeholder="门牌号" class="input-large area3" rel="" value="{$area.4}" style="margin-top:6px;">
+                        <ul class="ulstree">
+                        </ul>
+                    </td>
+
+                </tr>
+                <tr class="showmap" style="display:none;"><td></td><td><div id="allmap"></div></td></tr>
+                <tr>
+                    <td class="tdleft" width="15%">邮编:</td>
+                    <td width="35%"><input type="text" id="crm_tuvzfc" name="crm_tuvzfc" maxlength="6" value="{$types.postCode}"/> &nbsp;  <span id="crm_tuvzfcTip" style="color:red;"></span></td>
+                </tr>
+                <tr>
+                    <td class="tdleft" width="15%">传真:</td>
+                    <td width="45%"><input type="text" id="guo" name="" maxlength="2" value="{$fax.0}" placeholder="国家码" style="width:70px;text-align: center;"/>&nbsp;-&nbsp;<input type="text" id="sta" name="" maxlength="4" value="{$fax.1}" placeholder="区号" style="width:60px;text-align: center;"/>&nbsp;-&nbsp;<input type="text" id="crm_uigupv" name="crm_uigupv" maxlength="8" value="{$fax.2}"/> &nbsp;  <span id="crm_uigupvTip" style="color:red;"></span></td>
+                    <td colspan="2">&nbsp;</td>
+                </tr>
+                <tr>
+                    <td class="tdleft" width="15%">公司描述:</td>
+                    <td colspan="3"><textarea  rows="6" class="span6" id="crm_wpcdlc" name="crm_wpcdlc" maxlength="2000">{$types.companyDes}</textarea> &nbsp;  <span id="crm_wpcdlcTip" style="color:red;"></span><br>建议您填写详细的公司介绍，展现您企业的竞争力。
+                    </td>
+
+                </tr>
+                <tr>
+                    <td class="tdleft" width="15%">公司商标:</td>
+                    <td width="35%"><input type="text" id="companyBrand" name="companyBrand" maxlength="" value="{$types.companyBrand}"/> &nbsp;  <span id="crm_viqykjTip" style="color:red;"></span></td>
+                </tr>
+                <if condition="($types.companyLogo neq '')">
+                    <tr class="yuanimg1">
+                        <td class="tdleft" width="15%"></td>
+                        <td class="tdleft"><img src="{$types.companyLogoPic}" alt="" style="float:left;width: 120px;"></td>
+                    </tr>
+                    <else/>
+                </if>
+                <tr>
+                    <td class="tdleft" width="15%">公司logo:</td>
+                    <td colspan="3"><input type="file" name="file" id="file"  onchange="logo(this)" class='myfile'></input>
+                        <input type="hidden" id="companyLogo" name="companyLogo" value="{$types.companyLogo}">
+                        <div id="reader_box"></div>
+                        <span class="dd_left"></span>
+                        <span class="dd_right" id="str" ></span>
+                    </td>
+                </tr>
+
+                <if condition="($types.companyImgUrl neq '')">
+                    <tr class="yuanimg2">
+                        <td class="tdleft" width="15%"></td>
+                        <td class="tdleft"><img src="{$types.companyImgUrlPic}" alt="" style="float:left;width: 120px;"></td>
+                    </tr>
+                    <else/>
+                </if>
+                <tr>
+                    <td class="tdleft" width="15%">公司场景图片:</td>
+                    <td colspan="3"><input type="file" name="file2" id="file2"  onchange="preview(this)" class='myfile2'></input>
+                        <input type="hidden" id="companyImgUrl" name="companyImgUrl" value="{$types.companyImgUrl}">
+                        <div id="reader_box"></div>
+                        <span class="dd_left"></span>
+                        <span class="dd_right" id="str2" ></span>
+                    </td>
+                </tr>
+
+                <if condition="($types.licenseUrl neq '')">
+                    <tr class="yuanimg3">
+                        <td class="tdleft" width="15%">营业执照复印件:</td>
+                        <input type="hidden" id="licenseUrl" name="licenseUrl" value="{$types.licenseUrl}">
+                        <td class="tdleft"><img src="{$types.licenseUrlPic}" alt="" style="float:left;width: 120px;"><br/>如您需要修改公司营业执照复印件，请联系我们</td>
+                    </tr>
+
+                    <else/>
+                    <tr>
+                        <td class="tdleft" width="15%">营业执照复印件:</td>
+                        <td colspan="3"><input type="file" name="file3" id="file3"  onchange="licence(this)" class='myfile'></input>
+                            <input type="hidden" id="licenseUrl" name="licenseUrl" value="{$types.licenseUrl}">
+                            <div id="reader_box"></div>
+                            <span class="dd_left"></span>
+                            <span class="dd_right" id="str3" ></span>
+                        </td>
+                    </tr>
+                </if>
+
+                <tr>
+                    <td class="tdleft" width="15%">业务范围:</td>
+                    <td>
+                        <textarea class="checkValue pull-left" type="text" id="typename0" name="typename0" maxlength=""  value= "" style="margin: 0px 0px 0px 5px;width: 206px; height: 110px;" readonly="readonly">{$types.businessScope}</textarea></span>
+                        <a class="btn btn-primary pull-left" id="#" href="javascript:void(0);" onclick="typelistshow(0)">
+                            <i class="icon-plus"></i>&nbsp;&nbsp;选择
+                        </a>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdleft" width="15%"></td>
+                    <td>
+                        <a class="btn btn-primary addtypename" id="#" href="javascript:void(0);" onclick="addtypename()">
+                            <i class="icon-plus"></i>&nbsp;&nbsp;新增
+                        </a>
+                    </td>
+                </tr>
+                <tr><td class="tdleft" width="15%" style="border: 0"></td><td id="addfw2" style="border:0"></td></tr>
+                <tr><td class="tdleft" width="15%" style="border: 0"></td><td id="addfw" style="border:0"></td></tr>
+                <tr class="type_content" style="display: none;">
+                    <td class="tdleft" width="15%"></td>
+                    <td colspan="3">
+                        <div id="typelist1">
+                            加载中，请稍后……
+                        </div>
+                        <div id="typelist2"></div>
+                        <div id="typelist3"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdleft" width="15%">主营产品:</td>
+                    <td colspan="3">
+                        <textarea  rows="6" class="span6" id="mainProducts" name="mainProducts" placeholder="请输入主营产品,并用 ' , ' 隔开" maxlength="100">{$types.mainProducts}</textarea> &nbsp;
+                        <span id="crm_wpcdlcTip" style="color:red;"></span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="tdleft" width="15%">经营模式:</td>
+                    <td colspan="3"> &nbsp;
+                        <input type='radio' name='businessModel' id='businessModel' value='生产制造'/>&nbsp; 生产制造 &nbsp;
+                        <input type='radio' name='businessModel' id='businessModel' value='贸易批发'/>&nbsp; 贸易批发 &nbsp;
+                        <input type='radio' name='businessModel' id='businessModel' value='社区商铺'/>&nbsp; 社区商铺 &nbsp;
+                        <input type='radio' name='businessModel' id='businessModel' value='商业服务'/>&nbsp; 商业服务 &nbsp;
+                        <input type='radio' name='businessModel' id='businessModel' value='其他组织'/>&nbsp; 其他组织
+                        <span id="crm_rmydlsTip" style="color:red;"></span>&nbsp;
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="tdleft" width="15%">厂房/仓库面积:</td>
+                    <td colspan="3"> <input type="text" id="companyArea" name="companyArea" maxlength="10" value="{$types.companyArea}"/> &nbsp;  <span id="crm_vdferfTip" style="color:red;"></span>平方米</td>
+                </tr>
+
+                <tr>
+                    <td class="tdleft" width="15%">员工人数:</td>
+                    <td colspan="3">
+                        <select id="employeeNum" name="employeeNum" class="employeeNum">
+                            <option value=''>--请选择--</option>
+                            <option value='&lt;5人'>&lt;5人</option>
+                            <option value='5-50人'>5-50人</option>
+                            <option value='51-200人'>51-200人</option>
+                            <option value='201-500人'>201-500人</option>
+                            <option value='501-1000人'>501-1000人</option>
+                            <option value='&gt;1000人'>&gt;1000人</option>
+                        </select> &nbsp;  <span id="crm_hcolncTip" style="color:red;"></span>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="tdleft" width="15%">营业额:</td>
+                    <td colspan="3"><select id="tumover" name="tumover">
+                        <option value=''>--请选择--</option>
+                        <option value='10万元以下'>10万元以下</option>
+                        <option value='10-30万元'>10-30万元</option>
+                        <option value='31-50万元'>31-50万元</option>
+                        <option value='51-100万元'>51-100万元</option>
+                        <option value='101-200万元'>101-200万元</option>
+                        <option value='201-500万元'>201-500万元</option>
+                        <option value='501-1000万元'>501-1000万元</option>
+                        <option value='1001-2000万元'>1001-2000万元</option>
+                        <option value='2001-5000万元'>2001-5000万元</option>
+                        <option value='5001-1亿元'>5001-1亿元</option>
+                        <option value='1亿元以上'>1亿元以上</option>
+                    </select> &nbsp;  <span id="crm_dakovzTip" style="color:red;">
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="tdleft" width="15%">年出口额:</td>
+                    <td colspan="3"><select id="yearsMoney" name="yearsMoney">
+                        <option value=''>--请选择--</option>
+                        <option value='10万元以下'>10万元以下</option>
+                        <option value='10-30万元'>10-30万元</option>
+                        <option value='31-50万元'>31-50万元</option>
+                        <option value='51-100万元'>51-100万元</option>
+                        <option value='101-200万元'>101-200万元</option>
+                        <option value='201-500万元'>201-500万元</option>
+                        <option value='501-1000万元'>501-1000万元</option>
+                        <option value='1001-2000万元'>1001-2000万元</option>
+                        <option value='2001-5000万元'>2001-5000万元</option>
+                        <option value='5001-1亿元'>5001-1亿元</option>
+                        <option value='1亿元以上'>1亿元以上</option>
+                    </select> &nbsp;  <span id="crm_dakovzTip" style="color:red;">
+                    </td>
+                </tr>
+                <tr>
+                    <td class="" width="15%"></td>
+                    <td colspan="3">
+                        <div class="btn btn-primary" onclick="btnsubmit();">提 交</div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+<script src="__PUBLIC__/js/images-loaded.min.js" type="text/javascript"></script>
+<script src="__PUBLIC__/js/litebox.min.js" type="text/javascript"></script>
+<script>
+    var companyLogo = '';
+    var companyImgUrl ='';
+    var licenseUrl = '';
+    var businessScope='';
+    var t = 0;
+    $(function(){
+        $.formValidator.initConfig({formID:"form1",debug:false,submitOnce:true,
+            onError:function(msg,obj,errorlist){
+                alert(msg);
+            },
+            submitAfterAjaxPrompt : '有数据正在异步验证，请稍等...'});
+    });
+
+    //公司logo
+    function logo(file){
+        $("#str").remove('.imgstr');
+        $(".yuanimg1").hide();
+        $('#str').show();
+        var prevDiv = document.getElementById('str');
+        if (file.files && file.files[0]){
+            var reader = new FileReader();
+            reader.onload = function(evt){
+                img = evt.target.result;
+                prevDiv.innerHTML = '<img src="' + evt.target.result + '" style="height:120px;"/>';
+            };
+            reader.readAsDataURL(file.files[0]);
+        }
+        else
+        {
+            prevDiv.innerHTML = '<div class="img" style="filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=scale,src=\'' + file.value + '\'" style="height:120px;"></div>';
+        }
+    }
+
+    function preview(file){
+        $("#str2").remove('.imgstr2');
+        $("#str2").show();
+        $(".yuanimg2").hide();
+        var prevDiv = document.getElementById('str2');
+        if (file.files && file.files[0]){
+            var reader = new FileReader();
+            reader.onload = function(evt){
+                img = evt.target.result;
+                prevDiv.innerHTML = '<img src="' + evt.target.result + '" style="height:120px;"/>';
+            };
+            reader.readAsDataURL(file.files[0]);
+        }
+        else
+        {
+            prevDiv.innerHTML = '<div class="img" style="filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=scale,src=\'' + file.value + '\'" style="height:120px;"></div>';
+        }
+    }
+
+    function licence(file){
+        $("#str3").remove('.imgstr3');
+        $("#str3").show();
+        $(".yuanimg3").hide();
+        var prevDiv = document.getElementById('str3');
+        if (file.files && file.files[0]){
+            var reader = new FileReader();
+            reader.onload = function(evt){
+                img = evt.target.result;
+                prevDiv.innerHTML = '<img src="' + evt.target.result + '" style="height:120px;"/>';
+            };
+            reader.readAsDataURL(file.files[0]);
+        }
+        else
+        {
+            prevDiv.innerHTML = '<div class="img" style="filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=scale,src=\'' + file.value + '\'" style="height:120px;"></div>';
+        }
+    }
+
+    $(document).on("change", "input[name=file]", logosub);
+
+    function logosub() {
+        //模拟form表单提交数据
+        var filepath=$("input[name='file']").val();
+        var extStart=filepath.lastIndexOf(".");
+        var ext=filepath.substring(extStart,filepath.length).toUpperCase();
+        if(ext!=".jpeg"&&ext!=".jpg"&&ext!=".bmp"&&ext!=".png" &&ext!=".JPEG"&&ext!=".JPG"&&ext!=".BMP"&&ext!=".PNG"){
+            alert("文件选择错误,图片类型必须是jpeg,jpg,bmp,png中的一种");
+            var file = $("#file") ;
+            file.after(file.clone().val(""));
+            file.remove();
+            $('#str').hide();
+            return false;
+
+        }
+        var index = layer.load(1, {shade: [0.1,'#fff']});
+        var fileObj = document.getElementById("file").files[0];
+        // console.log(fileObj);return;
+
+        var FileController = '{$url}/manager/companyInfo/uploadPic';
+        var form = new FormData();
+        form.append("file", fileObj);
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("post", FileController, true);
+        xhr.onload = function (json) {
+            var obj = jQuery.parseJSON(json.target.responseText);
+            //console.log(obj);
+            layer.closeAll('loading');
+            if(obj.code == 2000){
+                // console.log(obj.data.key);return;
+                alert(obj.message);
+                companyLogo = obj.data.key;
+            }
+        };
+        xhr.send(form);
+    }
+
+
+    $(document).on("change", "input[name=file2]", previewsub);
+    function previewsub() {
+        //模拟form表单提交数据
+        var filepath=$("input[name='file2']").val();
+        var extStart=filepath.lastIndexOf(".");
+        var ext=filepath.substring(extStart,filepath.length).toUpperCase();
+        if(ext!=".jpeg"&&ext!=".jpg"&&ext!=".bmp"&&ext!=".png" &&ext!=".JPEG"&&ext!=".JPG"&&ext!=".BMP"&&ext!=".PNG"){
+            alert("文件选择错误,图片类型必须是jpeg,jpg,bmp,png中的一种");
+            var file = $("#file2") ;
+            file.after(file.clone().val(""));
+            file.remove();
+            $('#str2').hide();
+            return false;
+        }
+        var index = layer.load(1, {shade: [0.1,'#fff']});
+        var fileObj = document.getElementById("file2").files[0];
+        //console.log(fileObj);
+
+        var FileController = '{$url}/manager/companyInfo/uploadPic';
+        var form = new FormData();
+        form.append("file", fileObj);
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("post", FileController, true);
+        xhr.onload = function (json) {
+            var obj = jQuery.parseJSON(json.target.responseText);
+            layer.closeAll('loading');
+            if(obj.code == 2000){
+                alert(obj.message);
+                companyImgUrl = obj.data.key;
+            }
+        };
+        xhr.send(form);
+    }
+
+    $(document).on("change", "input[name=file3]", licencesub);
+    function licencesub() {
+        //模拟form表单提交数据
+        var filepath=$("input[name='file3']").val();
+        var extStart=filepath.lastIndexOf(".");
+        var ext=filepath.substring(extStart,filepath.length).toUpperCase();
+        if(ext!=".jpeg"&&ext!=".jpg"&&ext!=".bmp"&&ext!=".png" &&ext!=".JPEG"&&ext!=".JPG"&&ext!=".BMP"&&ext!=".PNG"){
+            alert("文件选择错误,图片类型必须是jpeg,jpg,bmp,png中的一种");
+            var file = $("#file3") ;
+            file.after(file.clone().val(""));
+            file.remove();
+            $('#str3').hide();
+            return false;
+        }
+        var index = layer.load(1, {shade: [0.1,'#fff']});
+        var fileObj = document.getElementById("file3").files[0];
+        //console.log(fileObj);
+
+        var FileController = '{$url}/manager/companyInfo/uploadPic';
+        var form = new FormData();
+        form.append("file", fileObj);
+
+        var xhr = new XMLHttpRequest();
+        xhr.open("post", FileController, true);
+        xhr.onload = function (json) {
+            var obj = jQuery.parseJSON(json.target.responseText);
+            //console.log(obj);
+            layer.closeAll('loading');
+            if(obj.code == 2000){
+                alert(obj.message);
+                licenseUrl = obj.data.key;
+                //console.log(licenseUrl);
+            }
+        };
+        xhr.send(form);
+    }
+
+
+    function btnsubmit() {
+        //模拟form表单提交数据
+        var fileObj = document.getElementById("file").files[0];
+        // console.log(companyLogo);
+        if (!companyLogo) {
+            companyLogo = $('#companyLogo').val();
+        }
+        if (!companyImgUrl) {
+            companyImgUrl = $('#companyImgUrl').val();
+        }
+        if (!licenseUrl) {
+            licenseUrl = $('#licenseUrl').val();
+        }
+        //拼接数据
+        var userId = '{$userId}';
+        var _flag = true;
+        var companyName = $.trim($('#companyName').val());
+        var oldCompanyName = '{$company}';
+        if(companyName !== oldCompanyName){
+            $.ajaxSettings.async = false;
+            $.post("__APP__/Company/editCompanyName", { 'userId': userId, 'companyName':companyName},function(re){
+                if(re.success){
+                    $.ajax({
+                        type: "post",
+                        url: "{$url}/manager/syncAccount/sysncCrmCompanyName",
+                        data: {
+                            userId: userId,
+                            companyName: companyName
+                        },
+                        dataType: 'json',
+                        cache: false,
+                        success: function(res) {
+                            if(!res.success){
+                                _flag =false;
+                                alert('公司名称更新失败');
+                            }
+                        }
+                    });
+                }else{
+                    _flag =false;
+                    alert(re.message);                   
+                }
+            },'json');
+        }
+        var companyDistrict = $('.area option:selected').val()+' '+$('.city option:selected').val()+' '+$('.state option:selected').val();//区域
+        var companyAddress = companyDistrict = $('.area option:selected').val()+' '+$('.city option:selected').val()+' '+$('.state option:selected').val()+' '+$('.area2').val()+' '+$('.area3').val();//地址
+        var postCode = $('#crm_tuvzfc').val();//邮编
+        var companyFax =  $('#guo').val()+' '+$('#sta').val()+' '+$('#crm_uigupv').val();  //传真                      
+        var mainProducts = $("#mainProducts").val();            //主营产品
+        if(!mainProducts){
+            alert('主营产品不能为空!');
+            return;
+        }
+        var companyDes = $('#crm_wpcdlc').val();
+        var businessModel =  $("input[type='radio']:checked").val();   //经营模式
+        var companyArea = $('#companyArea').val();//厂房面积
+        var employeeNum = $('#employeeNum option:selected').val();//员工人数
+        var tumover = $('#tumover option:selected').val();//营业额
+        var yearsMoney = $('#yearsMoney option:selected').val();
+        var companyBrand = $('#companyBrand').val();//公司商标
+        if (businessModel === undefined) {
+            businessModel = '';
+        }
+        // var tname = new Array();
+        // for (var y = 0; y <= t; y++) {
+        //     businessScope = $("#typename"+y).val();//业务范围
+        //     tname.push(businessScope);
+        //     console.log(tname);
+        // };
+        // businessScope = tname.join("-")//业务范围
+
+        var tname = [];
+        $(".checkValue").each(function(index, el) {
+            var a = $(this)[0].value;
+            tname.push(a);
+            //console.log(tname);
+        });
+        businessScope = tname.join("-")//业务范围
+        var sid = "{$sid}";
+        var name = '{$name}';
+
+        var json = '{"companyDistrict":"'+companyDistrict+'","postCode":"'+postCode+'","companyFax":"'+companyFax+'","mainProducts":"'+mainProducts+'","businessModel":"'+businessModel+'","companyArea":"'+companyArea+'","employeeNum":"'+employeeNum+'","tumover":"'+tumover+'","yearsMoney":"'+yearsMoney+'","companyBrand":"'+companyBrand+'","companyLogo":"'+companyLogo+'","companyImgUrl":"'+companyImgUrl+'","licenseUrl":"'+licenseUrl+'","companyName":"'+companyName+'","name":"'+name+'","companyDes":"'+companyDes+'","companyAddress":"'+companyAddress+'","sid":"'+sid+'","businessScope":"'+businessScope+'"}';
+        var FileController = '{$url}/manager/companyInfo/updateTradeCompanyInfo';
+        if(_flag){
+            var form = new FormData();
+            form.append("jsonStr", json);
+            form.append("crmUserId",userId);
+            var xhr = new XMLHttpRequest();
+            xhr.open("post", FileController, true);
+            xhr.onload = function (json) {
+                var obj = jQuery.parseJSON(json.target.responseText);
+                //console.log(obj);
+                if(obj.code == 2000){
+                    alert(obj.message);
+                    //location.reload();
+                    history.go(0);
+                }else{
+                    alert(obj.message);
+                }
+            };
+            xhr.send(form);
+        }
+    };
+
+    //产品分类
+    function typeList(lv, val, name) {
+        $.ajax({
+            type: "get",
+            url: "{$url}/manager/syncAccount/getCategoryTree",
+            data: {
+                level: lv,
+                value: val
+            },
+            dataType: 'json',
+            cache: false,
+            success: function(data) {
+                //console.log(data)
+                if(code = "200") {
+                    switch(lv) {
+                        case 1:
+                            var first = data[0];
+                            var second = data[1];
+                            var third = data[2];
+                            var str1 = "";
+                            var str2 = "";
+                            var str3 = "";
+                            for(k = 0; k < first.length; k++) {
+                                var text1 = first[k].text;
+                                var value1 = first[k].value;
+                                str1 += '<li class="typeli" data-text="' + text1 + '" data-value="' + value1 + '" data-level="' + first[k].level + '" data-haschild="' + first[k].hasChild + '" >' + text1 + '</li>'
+                            }
+                            $("#typelist1").html(str1);
+                            break;
+                        case 2:
+                            var second = data[0];
+                            var third = data[1];
+                            var str2 = "";
+                            var str3 = "";
+                            var child = $(this).data("data-haschild");
+
+                            for(i = 0; i < second.length; i++) {
+                                //var level2 = second[i].level;
+                                var text2 = second[i].text;
+                                var value2 = second[i].value;
+                                str2 += '<li class="typeli" data-faval="' + val + '" data-faname="' + name + '" data-text="' + text2 + '" data-value="' + value2 + '" data-level="' + second[i].level + '" data-haschild="' + second[i].hasChild + '">' + text2 + '</li>'
+                            }
+                            $("#typelist2").html(str2);
+                            break;
+                        case 3:
+                            var third = data[0];
+                            var str3 = "";
+                            for(j = 0; j < third.length; j++) {
+                                var text3 = third[j].text;
+                                var value3 = third[j].value;
+                                str3 += '<li class="typeli" data-faval="' + val + '" data-faname="' + name + '" data-text="' + text3 + '" data-value="' + value3 + '" data-level="' + third[j].level + '" data-haschild="' + third[j].hasChild + '">' + text3 + '</li>'
+                            }
+                            $("#typelist3").html(str3);
+                            break;
+                    }
+                }
+            }
+        });
+    }
+
+    //产品分类展示
+    function typelistshow(t) {
+        $(".type_content").toggle();
+        //console.log(t)
+        typeList(1, 'main');
+    }
+
+
+    $(".type_content").on("click", ".typeli", function() {
+        var lv = Number($(this).attr("data-level"));
+        var val = $(this).attr("data-value");
+        var child = $(this).attr("data-haschild");
+        var name = $(this).attr("data-text");
+        var faval = $(this).attr("data-faval");
+        var faname = $(this).attr("data-faname");
+        //console.log(">>>>"+t);
+        // console.log(name);
+        switch(lv) {
+            case 1:
+                typeList(2, val, name);
+                $("#typename"+t).html("");
+                $("#typelist3").html("");
+                $("#typename"+t).attr({
+                    "data-lv1-value": val,
+                    "data-lv2-value": '',
+                    "data-lv3-value": '',
+                    "data-lv1-name": name,
+                    "data-lv2-name": '',
+                    "data-lv3-name": ''
+                });
+                break;
+            case 2:
+                $("#typename"+t).attr({
+                    "data-level": lv,
+                    "data-lv2-value": val,
+                    "data-lv3-value": '',
+                    "data-lv2-name": name,
+
+                    "data-lv3-name": ''
+                });
+                if(child == 'true') {
+                    typeList(3, val, name);
+                    $("#typename"+t).html("");
+                    $(this).siblings().removeClass("type_active");
+                } else {
+                    $("#typename"+t).attr({
+                        "data-level": lv,
+                        "value":name
+                    });
+                    $("#typename"+t).html(name);
+                    $("#typelist3").html("");
+                    $(this).siblings().removeClass("type_active");
+                    $(this).addClass("type_active");
+                }
+                break;
+            case 3:
+                $("#typename"+t).html(name);
+                $("#typename"+t).attr({
+                    "data-level": lv,
+                    "data-lv3-value": val,
+                    "data-lv3-name": name,
+                    "value":name
+                });
+                $(this).siblings().removeClass("type_active");
+                $(this).addClass("type_active");
+                break;
+        }
+    });
+
+    function addtypename(){
+        var flag = true;
+        $(".checkValue").each(function(index, el) {
+            var a = $(this)[0].value;
+            if(a == ''){
+                alert("请选择业务范围");
+                flag = false;
+            }
+        });
+        if(!flag){return}
+        t++;
+        var id = 'typename'+t;
+        var id2 = 'trname'+t;
+        var item =  '<tr id="'+id2+'">'+
+                '<td>'+
+                '<input class="checkValue" type="text" id="'+id+'" name="" maxlength="" value="" readonly="readonly"></span>'+
+                '<span class="btn btn-primary" onclick="deletetypename('+t+');">删除</span>'+
+                '<a class="btn btn-primary pull-right" id="#" href="javascript:void(0);" onclick="typelistshow('+t+')"><i class="icon-plus"></i>&nbsp;&nbsp;选择</a>'+
+                '</td>'+
+                '<tr>';
+        $('#addfw').append(item);
+        if(t >= 20){
+            alert('最多20条');
+
+        }
+    }
+
+    function deletetypename(t){
+        $('#trname'+t).remove();
+    }
+
+
+    //数据回填
+    $("#employeeNum option[value='{$types.employeeNum}']").attr("selected",true);
+    $("#tumover option[value='{$types.tumover}']").attr("selected",true);
+    $("#yearsMoney option[value='{$types.yearsMoney}']").attr("selected",true);
+    $("input[type=radio][value='{$types.businessModel}']").attr("checked",'checked');
+
+    //定位搜索框
+    area = "{$area.1}";
+    $('.area').change(function() {
+        area = $('.area option:selected').val();
+    });
+    $('.getmap').bind('input propertychange',function(){
+        if(area == ''){
+            alert('请先选择省份!');
+        }
+
+        var stree = this.value;
+        if(stree){
+            $.ajax({
+                url:'http://api.map.baidu.com/place/v2/suggestion',
+                data:{q:stree,region:area,output:'json',ak:'YfrMk3eIKhguMXWprcGSHyr6VSY9V6MO',city_limit:false},
+                type:'get',
+                cache:'false',
+                dataType:'jsonp',
+                success:function(data){
+                    var data = data.result;
+                    $('.ulstree').html('');
+                    for (var i = 0; i < data.length; i++) {
+                        var streename = data[i];
+                        var html = '<li class="listree" lat= "'+streename.location.lat+'" lng="'+streename.location.lng+'" value="'+streename.name+'">'+streename.name+'</li>';
+                        $('.ulstree').prepend(html);
+
+                    }
+                    $('.listree').mousemove(function() {
+                        $(this).css({background: "#0088cc"});
+                    });
+                    $('.listree').mouseout(function() {
+                        $(this).css({background: "#eeeeee"});
+                    });
+                    $('.ulstree li').click(function() {
+                        $('.getmap').val($(this).html());
+                        $('.ulstree').hide();
+                        lat = $(this).attr('lat');
+                        lng = $(this).attr('lng');
+                        $('.showmap').toggle();
+                        // 默认江苏南京市
+                        var map = new BMap.Map('allmap');
+                        var point = new BMap.Point(lng,lat);
+                        // 根据聚焦点缩放
+                        map.enableScrollWheelZoom(true);
+                        // 将地址解析结果显示在地图上
+                        map.centerAndZoom(point, 18);
+                        var marker = new BMap.Marker(point);  // 创建标注
+                        map.addOverlay(marker);               // 将标注添加到地图中
+                        marker.setAnimation(BMAP_ANIMATION_BOUNCE); //跳动的动画
+                    });
+                },
+                error:function(){
+                    alert('网络异常,请稍后再试');
+                }
+            });
+        }
+    });
+
+
+
+</script>
+<include file="Public:footer" />		

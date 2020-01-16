@@ -1,0 +1,203 @@
+<include file="Public:header" />
+	<div class="container">
+		<div class="page-header">
+			<h4>{:L('STRUCTURE')} -
+				<small>
+				<if condition="session('?admin')">
+				<a href="{:U('user/department')}" <if condition="ACTION_NAME eq 'department' or ACTION_NAME eq 'role'">class="active"</if>>{:L('STRUCTURE')}</a> |
+
+				<a href="{:U('user/index', 'status=0')}" <if condition="ACTION_NAME eq 'index' and $Think.get.status eq '0'">class="active"</if>>{:L('INACTIVE_USER')}</a> |
+				<a href="{:U('user/index', 'status=2')}" <if condition="ACTION_NAME eq 'index' and $Think.get.status eq '2'">class="active"</if>>{:L('DISABLED_USERS')}</a> |
+				</if>
+					<a href="{:U('user/index','status=1')}" <if condition="ACTION_NAME eq 'index' and $Think.get.status eq '1'">class="active"</if>>{:L('USER_MGR')}</a> 
+				</small></h4>
+		</div>
+		<include file="Public:alert" />
+        <div class="row">			
+				<if condition="$Think.session.position_id eq '14'">	
+				<div class="span12">
+					<ul class="nav pull-left">
+						<li class="pull-left">
+							类型：
+						</li>
+						<li class="pull-left" style="margin:0 20px 10px 30px;">
+							<a href="{:U('user/index', 'type=0')}" <if condition="$type eq 0">class="active"</if> >全部</a>
+						</li>
+						<li class="pull-left" style="margin-left: 20px;margin-right: 20px;">
+							<a href="{:U('user/index', 'type=15')}" <if condition="$type eq 15">class="active"</if>>企业管家</a>
+						</li>
+						<li class="pull-left" style="margin-left: 20px;">
+							<a href="{:U('user/index', 'type=16')}" <if condition="$type eq 16">class="active"</if>>社区代理商</a>
+						</li>
+					</ul>
+				</div >
+				</if>
+			<form id="user_form" method="post">	
+				<div class="span12">
+					<ul class="nav pull-left">
+						<li class="pull-left">
+							<ul class="nav pull-left">
+								<li class="dropdown">
+									<input type="text" value="{$username}" name="username" placeholder="请输入用户名或手机号">
+									<input type="submit" value="搜索" class="btn btn-primary">
+								</li>
+							</ul>
+						</li>
+					</ul>
+
+					<div class="pull-right">
+						<if condition="session('?admin')">
+							<a id="add_department" class="btn btn-primary"><i class="icon-plus"></i>&nbsp; {:L('ADD_DEPARTMENT')}</a>&nbsp;
+							<a id="add_role" class="btn btn-primary"><i class="icon-plus"></i>&nbsp; {:L('ADD_POSITION')}</a>
+							<a class="btn btn-primary" href="{:U('user/add')}"><i class="icon-plus"></i>&nbsp; {:L('ADD_USER')}</a>
+						</if>
+						<if condition="session('position_id') eq 13 OR session('position_id') eq 17 OR session('position_id') eq 19 OR session('position_id') eq 14 OR session('position_id') eq 16 OR session('position_id') eq 22 ">
+							&nbsp; <a class="btn btn-primary" href="{:U('user/add')}"><i class="icon-plus"></i>&nbsp; {:L('ADD_USER')}</a>
+						</if>	
+					</div>
+				</div>
+			</form>
+				<div class="span12">
+					<table class="table table-hover table-striped table_thead_fixed">
+						<if condition="$user_list eq null">
+							<tr><td colspan="8" style='text-align:center'>{:L('EMPTY_TPL_DATA')}</td></tr>
+						<else/>
+							<thead>
+								<tr>
+									<th>{:L('USER_NAME')}</th>
+									<th>{:L('TELPHONE')}</th>
+									<th>Email</th>
+									<th>公司名称</th>
+									<th>{:L('ADDRESS')}</th>
+									<if condition="$Think.session.position_id eq '14'"><th>推荐人数</th></if>
+									<th>{:L('OPERATING')}</th>											   
+								</tr>
+							</thead>
+						 
+							<tbody>
+								<volist name="user_list" id="vo">
+								<tr>
+									<td><if condition="$vo['category_id'] == 1"><img style="width:16px;" src="__PUBLIC__/img/admin_img.png"/><else /><img style="width:16px;" src="__PUBLIC__/img/user_img.png"/></if> &nbsp; <a href="{:U('user/view','id=' . $vo['user_id'])}">{$vo.name}</a></td>
+									<td><if condition="C('ismobile') eq 1"><a href="tel:{$vo.telephone}">{$vo.telephone}</a><else />{$vo.telephone}</if></td>
+									<td>{$vo.email}</td>
+									<td>{$vo.company}</td>								
+									<td>{$vo.address}</td>
+									<if condition="$Think.session.position_id eq '14'"><td><a href="{:U('user/view',array('id'=>$vo['user_id'],'type'=>1))}">{$vo.counts}人</a></td></if>
+									<td>
+									<a href="{:U('user/view', 'id=' . $vo['user_id'])}"><i class="icon-search">&nbsp; {:L('VIEW')}</i></a>&nbsp;
+									<if condition="$Think.session.position_id eq '13' OR $Think.session.position_id eq '14' OR $Think.session.position_id eq '15' OR $Think.session.position_id eq '16'">
+										<else/>
+										<a href="{:U('user/edit', 'id=' . $vo['user_id'])}" title="{:L('EDIT')}"><i class="icon-edit">&nbsp; {:L('EDIT')}</i></a>&nbsp;&nbsp;
+									</if>
+									</td>
+								</tr>
+								</volist>
+							</tbody>
+
+							<tfoot>
+								<tr>
+									<td colspan="8">
+										<div class="pagination">
+											{$page}
+										</div>
+										<div class="clear"></div>
+									</td> 
+								</tr>
+							</tfoot>
+
+						</if>
+					</table>					
+				</div>
+
+		</div>
+	</div>
+<div id="dialog-message" class="hide" title="{:L('DIALOG_ASSIGN_POSITION')}">loading...</div>
+<if condition="session('?admin')"><div id="dialog-message2" class="hide" title="{:L('DIALOG_ADD_DEPARTMENT')}">loading...</div></if>
+<div id="dialog-message3" class="hide" title="{:L('DIALOG_ADD_POSITION')}">loading...</div>
+<include file="Public:footer" />	
+<script type="text/javascript">
+	$(function(){
+		$("#check_all").click(function(){
+			$("input[class='check_list']").prop('checked', $(this).prop("checked"));
+		});
+		<if condition="session('?admin')">$("#add_department").click(function(){
+			$('#dialog-message2').dialog('open');$('#dialog-message2').load('{:U("user/department_add")}');
+		});</if>
+		$("#add_role").click(function(){
+			$('#dialog-message3').dialog('open');$('#dialog-message3').load('{:U("user/role_add")}');
+		});
+		$(".role").click(function(){
+			$('#dialog-message').dialog('open');
+			id = $(this).attr('rel');
+			$('#dialog-message').load('{:U("User/user_role_relation","by=user_role&id=")}'+id);
+		});
+		$("#delete_user").click(function(){		
+			if(confirm("{:L('CONFIRM_TO_DELETE_USER')}")){
+				$('#user_form').submit();
+			}
+		});
+	});
+	function searchUser(){
+		var objCategory=document.getElementById("categoryList");
+		var id=objCategory.options[objCategory.selectedIndex].value;
+		window.location="{:U('user/index','id=')}"+id;
+		
+	}
+	
+	function changeContent(){
+		a = $("#select1  option:selected").val();
+		if(a=='1'){
+			window.location.href="{:U('user/index')}";
+		}else if(a=='2'){
+			window.location.href="{:U('user/index', 'status=0')}";
+		}else if(a=='3'){
+			window.location.href="{:U('user/index', 'status=-1')}";
+		}else if(a=='4'){
+			window.location.href="";
+		}else if(a=='5'){
+			window.location.href="{:U('user/department')}{:U('user/role')}";
+		}
+	} 
+	<if condition="C('ismobile') eq 1">width=$('.container').width() * 0.9;<else/>width=600;</if>
+	$('#dialog-message').dialog({
+		autoOpen: false,
+		modal: true,
+		width: width,
+		maxHeight: 400,
+		position :["center",100]
+	});
+	<if condition="session('?admin')">
+	$('#dialog-message2').dialog({
+		autoOpen: false,
+		modal: true,
+		width: width,
+		maxHeight: 400,
+		position :["center",100],
+		buttons: {
+			"{:L('OK')}": function () {
+				$('#department_add').submit();
+				$(this).dialog("close");
+			},
+			"{:L('CANCEL')}": function () {
+				$(this).dialog("close");
+			}
+		}
+	});
+	</if>
+	$('#dialog-message3').dialog({
+		autoOpen: false,
+		modal: true,
+		width: width,
+		maxHeight: 400,
+		position :["center",100],
+		buttons: {
+			"{:L('OK')}": function () {
+				$('#role_add').submit();
+				$(this).dialog("close");
+			},
+			"{:L('CANCEL')}": function () {
+				$(this).dialog("close");
+			}
+		}
+	});
+</script>

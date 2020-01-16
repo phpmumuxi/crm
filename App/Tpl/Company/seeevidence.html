@@ -1,0 +1,59 @@
+<include file="Public:header" />
+<link rel="stylesheet" href="__PUBLIC__/css/permit.css" type="text/css" />
+<div class="container">
+    <div class="page-header">
+        <h4>查看证照详情</h4>
+    </div>
+    
+    <div class="row">
+        <div class="span2 knowledgecate">
+            <include file="Public:companynav" />
+        </div>
+        <div class="span10" style="margin-bottom: 100px;">
+            <h4>经营许可—>查看证照详情</h4><hr>
+            <table class="addbusiness_table" width="100%" border="0" rules="none"  cellspacing="0" cellpadding="0">
+                <tr style="height: 55px;">
+                    <td style="text-align: center;width:12%;"> 适用行业：</td>
+                    <td>{$info['industry']}</td>                           
+                </tr>                       
+                
+                <tr style="height: 55px;">
+                    <td style="text-align: center;width:12%"> 证照名称：</td>
+                    <td>{$info['licenceType']}</td>
+                </tr>
+
+                <tr style="height: 55px;">
+                    <td style="text-align: center;width:12%"> 有效期至：</td>
+                    <td>{$info['vldTime']}</td>
+                </tr>
+
+                <tr>
+                    <td style="text-align: center;width:12%;height: 115px;"> 证照照片：</td>
+                    <td>
+                        <div class="thumbnail" style="display: inline-block;border:0;padding:0;margin-left: 20px;cursor: pointer;">    <img src="{$info['realPicUrl']}" style="width:100px;height:100px" />                          
+                        </div>
+                    </td>                           
+                </tr>
+
+                <tr style="height: 55px;">
+                    <td style="text-align: center;width:12%"> 当前状态：</td>
+                    <td>{$info['checkStatus']}
+                       <if condition="$info['checkStatus'] eq '审核失败' && $info['comment']"><span style="margin-left: 40px">审核不通过原因：{$info['comment']}</span></if>
+                    </td>
+                </tr>
+
+                <tr style="height: 55px;">
+                    <td style="text-align: center;width:12%"> 提交时间：</td>
+                    <td>{$info['submitTime']}</td>
+                </tr>
+                <if condition="$info['checkStatus'] neq '待审核'">
+                <tr style="height: 55px;">
+                    <td style="text-align: center;width:12%"> 审核时间：</td>
+                    <td>{$info['checkTime']}</td>
+                </tr>
+                </if>
+            </table>
+        </div>
+    </div>
+</div>
+<include file="Public:footer" />		

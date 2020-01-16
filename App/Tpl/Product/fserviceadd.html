@@ -1,0 +1,61 @@
+<include file="Public:header" />
+<script src="__PUBLIC__/js/layer/layer.js" type="text/javascript" charset="utf-8"></script>
+<style>
+.yun{width:70px;}
+.delate{cursor: pointer;}
+</style>
+<div class="container">
+	<div class="page-header">
+		<h4>配送费信息</h4>
+	</div>
+	<div class="row">
+		<div class="span12">
+			<include file="Public:alert" />
+			默认配送费用 : &nbsp;&nbsp;<input type="text" name="free" value="{$free}" class="free"> 元<br/><br/>
+			<div class="btn btn-primary" onclick="freesub();">提交</div>
+			<input type="hidden" value="{:U('Product/fservice')}" id="jump">
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+
+
+function freesub(){
+	var free = $('.free').val();
+	if(free == ''){
+		alert('请输入费用');
+		return false;
+	}
+	if(isNaN(free)){
+		alert('请输入数字!');
+		return false;
+	}
+	var userId = "{$userId}";
+	var index = layer.load(1, {shade: [0.1,'#fff']});
+	$.ajax({
+		url:'{$url}/manager/community/saveFee',// 跳转到 action
+		data:{userId:userId,fee:free},
+		type:'post',
+		cache:false,
+		dataType:'json',
+		success:function(data) {
+			layer.closeAll('loading');
+			if(data.code =="2000" ){
+				alert('设置成功!');
+				var url = $('#jump').val();
+				window.location.href = url;
+			}else{
+				alert(data.message);
+			}
+		},
+		error:function() {
+			layer.closeAll('loading');
+			alert("网络较慢,请稍后再试");
+		}
+	});
+}
+
+
+</script>
+<include file="Public:footer" />	

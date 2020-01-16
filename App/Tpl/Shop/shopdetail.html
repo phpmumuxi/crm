@@ -1,0 +1,64 @@
+<include file="Public:header" />
+<script src="__PUBLIC__/js/layer/layer.js" type="text/javascript" charset="utf-8"></script>
+<style>
+    .tabtitle{font-size: 17.5px;font-weight:bold;margin: 20px auto;width:120px;}
+    .tdshop{vertical-align:middle;}
+    .price{font-size: 18px;margin-top: 5px;}
+    tr{font-size: 16px;}
+    .table th, .table td{text-align: center;vertical-align:middle;font-size: 16px;padding: 5px;border: 1px solid #EBF1F1;}
+    .btn-button{margin: 30px auto;font-size: 20px;}
+    .ems{border:1px solid #ccc;font-size: 18px;}
+    .orderno{background-color: #F4F4F4;font-size: 16px;height: 35px;margin-bottom: 30px;}
+    .ordernot{margin-left:10px;margin-right:60px;text-align: center; float: left;padding-top: 7px;}
+    .shopinfo{background-color: #F4F4F4;font-size: 16px;}
+    .tmoney{font-size: 16px;float:right;}
+    .tmoney2{margin: 10px;}
+    .orderinfo{font-size: 16px;font-weight: bold;background-color: #E8F1F6;height: 30px;padding-top: 8px;padding-left:30px;margin-top:35px;margin-bottom:25px;}
+    .message{font-size: 16px;margin-left:35px;margin-bottom:15px;margin-top:10px;}
+</style>
+
+<!-- 只写一个详情页面,详情页的信息根据状态判断来显示 -->
+
+<div class="container">
+    <div class="row">
+        <if condition="$shop['type'] == 1">
+            <div class="orderinfo">店铺详情页-社区</div>
+            <div>
+                <div class="message">店铺等级: <span style="margin-left: 65px;">{$shop.userShopLevel}</span>  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;更新时间:{$shop.levelUpdateTime}</div>
+                <div class="message">店铺简介:<span style="margin-left: 69px;">{$shop.userSpeciality}</span></div>
+                <div class="message">配送费:<span style="margin-left: 86px;">{$shop.totalOrderInfo}</span></div>
+                <div class="message">服务城市:<span style="margin-left: 85px;">{$shop.userServiceCity}</span></div>
+                <div class="message">服务状态:<span style="margin-left: 85px;">{$shop.userServiceStatus}</span></div>
+                <div class="message">头像:<span style="margin-left: 85px;"><img src="{$shop.userHeadPic}"></span></div>
+                <div class="message">用户昵称:<span style="margin-left: 85px;">{$shop.userNickName}</span></div>
+                <div class="message">真实姓名:<span style="margin-left: 85px;">{$shop.userRealName}</span></div>
+                <div class="message">用户手机号码:<span style="margin-left: 85px;">{$shop.userTelphone}</span></div>
+            </div>
+        <else/>
+            <div class="orderinfo">店铺详情页-贸易</div>
+            <div>
+                <div class="message">店铺等级: <span style="margin-left: 65px;">{$shop.userShopLevel}</span>  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;更新时间:{$shop.levelUpdateTime}</div>
+                <div class="message">公司名称:<span style="margin-left: 53px;">{$shop.companyName}</span></div>
+                <div class="message">公司地址:<span style="margin-left: 69px;">{$shop.companyAddress}</span></div>
+                <div class="message">邮编:<span style="margin-left: 86px;">{$shop.postCode}</span></div>
+                <div class="message">传真:<span style="margin-left: 85px;">{$shop.companyFax}</span></div>
+                <div class="message">公司描述: <span style="margin-left: 65px;">{$shop.companyDes}</span></div>
+                <div class="message">公司商标:<span style="margin-left: 53px;"><img src="{$shop.companyBrand}"></span></div>
+                <div class="message">公司logo:<span style="margin-left: 69px;"><img src="{$shop.companyLogo}"></span></div>
+                <div class="message">公司场景图片:<span style="margin-left: 86px;"><img src="{$shop.companyImgUrl}"></span></div>
+                <div class="message">营业执照复印件:<span style="margin-left: 85px;"><img src="{$shop.licenseUrl}"></span></div>
+                <div class="message">业务范围:<span style="margin-left: 86px;">{$shop.companyDistrict}</span></div>
+                <div class="message">主营产品:<span style="margin-left: 86px;">{$shop.mainProducts}</span></div>
+                <div class="message">经营模式:<span style="margin-left: 86px;">{$shop.businessModel}</span></div>
+                <div class="message">厂房/仓库面积:<span style="margin-left: 86px;">{$shop.companyArea}</span></div>
+                <div class="message">营业额:<span style="margin-left: 86px;">{$shop.tumover}</span></div>
+                <div class="message">年出口额:<span style="margin-left: 86px;">{$shop.years_money}</span></div>
+            </div>
+            </if>
+    </div>
+</div>
+<script>
+
+</script>
+
+<include file="Public:footer" />

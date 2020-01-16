@@ -1,0 +1,312 @@
+<include file="Public:header" />
+
+<script src="__PUBLIC__/js/layer/layer.js" type="text/javascript" charset="utf-8"></script>
+<script src="/Public/js/PCASClass.js" type="text/javascript"></script>
+<script type="text/javascript" src="/Public/js/jquery.validate.min.js" charset="UTF-8"></script>
+<script type="text/javascript" src="/Public/js/formValidatorRegex.js" charset="UTF-8"></script>
+<script type="text/javascript" src="/Public/js/mapv2.js"></script>
+<link rel="stylesheet" href="__PUBLIC__/css/base.css" type="text/css" />
+
+<style type="text/css">
+    .datetime{width: 86px;}
+    .datemoney{width: 70px;}
+    #allmap{width:100%;height:600px;overflow:hidden;}
+    img{
+        /* 防止bootstrap 与 百度地图样式冲突，设置max-width为200%*/
+        max-width:200%;
+    }
+    .BMap_shadow img{
+        max-width:none;
+    }
+    .tangram-suggestion-main{
+        z-index: 9999;
+    }
+    .ulstree{margin-left: 0px;width: 220px;background-color:#eeeeee;}
+    ul li{
+        list-style: none;
+    }
+    .listree{
+        cursor: pointer;
+        font-size: 16px;
+        color:#999;
+        padding: 3px;
+    }
+    .table tr{
+    	margin-top:1000px;
+    }
+    .xy_nav_div{
+        width:100%;
+        margin-top: -10px;
+    }
+    .xy_nav_div ul{
+        list-style:none;
+        text-align:center;
+        cursor:pointer;
+        margin-left: 0;
+    }
+    .xy_nav_div ul li{
+        float:left;
+        height:80px;
+        width:49.9%;
+        line-height:80px;
+        background: #F2F2F2;
+        border:1px solid #d1d1d1;
+        border-radius: 3%;
+    }
+    .xy_nav_active{
+        background: white !important;
+        border:0 !important;
+    }
+    .service_content,.pay_content{
+        margin:25px;
+        text-align:center;
+    }
+</style>
+<script>
+$(function(){
+    imgcode()
+	
+})
+function imgcode(){
+	$.ajax({
+        url:"http://aps.eachonline.com:8002/manager/account/getVCodeUrl",
+        type:'GET',
+        dataType:'json',
+        async:false,
+        success:function(result) {
+        	$(".imgcodeurl img").attr("src",result.data.imgeUrl);
+        },
+        error:function(msg){
+        }
+    })
+}
+</script>
+<div class="container">
+    <div class="page-header">
+        <h4>账号管理</h4>
+    </div>
+    <include file="Public:alert" />
+    <div class="row">
+        <div class="span2 knowledgecate">
+            <include file="Public:companynav" />
+        </div>
+        <div class="span10" style="margin-bottom: 100px;">
+            <h4>银行卡管理—>添加银行卡</h4><hr>
+            <form id="commentForm" action="" method="post">
+            <table class="table" width="95%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td class="tdleft" width="15%">真实姓名:</td>
+                    <td width="35%"><input type="hidden" name="userRealName" value="{$userInfo.userRealName}" /><div  class="userName">{$userInfo.userRealName}</div></td>
+                </tr>
+               
+               <tr>
+                    <td class="tdleft" width="15%">身份证号:</td>
+                    <td width="35%"><input type="hidden" name="userCodeId" value="{$userInfo.userRealName}" /><div name="userCodeId" class="userCodeId">{$userInfo.userIdCode}</div></td>
+                </tr>
+                
+                <tr>
+                    <td class="tdleft" width="15%">银行卡号:</td>
+                    <td width="35%"><input  placeholder="输入卡号后会智能识别银行和卡种" type="text" id="password" name="cardNo" required/> &nbsp; <div style="display:inline-block;" ></div></td>
+                </tr>
+                
+                <tr>
+                    <td class="tdleft" width="15%">开户行:</td>
+                    <td width="35%"><input placeholder="输入开户支行名" type="text"  name="bankBranchName" required/> &nbsp;<div style="display:inline-block;" ></div> </td>
+                </tr>
+                
+                
+                
+                <tr>
+                    <td class="tdleft" width="15%">手机号:</td>
+                    <td width="20%"><input type="text"  placeholder="请填写在银行预留的手机号" class="bankTelephone" name="bankTelephone"  required/> &nbsp;  <div style="display:inline-block;" ></div></td>
+                </tr>
+                <tr>
+                    <td class="tdleft" width="15%">图片验证码:</td>
+                    <td width="20%"><input type="text"  name="imgcode" class="imgcode" required/> &nbsp;  <span style="height:30px" class="imgcodeurl"><img width="15%" class="imgurl" src="" /></span><span style="display:inline-block;"></span></td>
+                </tr>        
+                <tr>
+                    <td class="tdleft" width="15%">验证码:</td>
+                    <td width="20%"><input type="text" class="telcode" name="code"  required/> &nbsp; <div  style="padding:0" class="btn  "><input style="margin:0" class="btn btn-primary " id="btnSendCode" type="button" value="发送验证码" onclick="sendMessage()" /></div><span style="display:inline-block;" ></span></td>
+                </tr>
+			                
+                <tr>
+                    <td class="" width="15%"></td>
+                    <td colspan="3">
+                      <div>
+                      <p>
+                      <span><input type="checkbox" name="read" checked></span>
+                      <span>我已阅读并接受</span>
+                      <span id="lookAgreement" style="color:#169BD5;cursor: pointer;">《用户协议》</span>
+                      </p>
+                      </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="" width="15%"></td>
+                    <td colspan="3">
+                      <button class="btn btn-primary"  style="width:100px" type="submit">确认</button>
+                    </td>
+                </tr>
+            </table>
+            </form>
+        </div>
+    </div>
+</div>
+<div id="payagreement" style="display: none;"><include file="Public:payagreement" /></div>
+<div id="serviceagreement" style="display: none;"><include file="Public:serviceagreement" /></div>
+<script>
+var InterValObj; //timer变量，控制时间
+var curCount = 60;//当前剩余秒数
+
+//协议点击事件
+$("#lookAgreement").click(function(){
+    var pay_str=$('#payagreement').html();
+    var service_str=$('#serviceagreement').html();
+    var _html = '<div class="xy_content"><div id="xy_nav_div" class="xy_nav_div"><ul><li class="xy_nav_active" va="pay">逸管家支付用户协议</li><li va="service">逸管家电子商务服务协议</li><p style="clear: both"></p></ul></div><div id="pay_content" class="pay_content service_pay_content">'+pay_str+'</div><div id="service_content" class="service_content service_pay_content" style="display:none">'+service_str+'</div></div>';        
+        layer.open({
+            type: 1,
+            title: '',
+            skin: '', //加上边框
+            area: ['75%', '70%'], //宽高
+            content:_html
+        });
+        //导航栏切换事件
+        $('#xy_nav_div li').click(function(){
+            var _vb=$(this).attr('va');
+            $(this).siblings().removeClass('xy_nav_active');
+            $(this).addClass('xy_nav_active');
+            $('.service_pay_content').hide();
+            $('#'+_vb+'_content').show();
+        })
+})
+
+/*
+ * 发送验证码计时器
+ */
+function SetRemainTime() {
+    if (curCount == 0) {                
+        window.clearInterval(InterValObj);//停止计时器
+        $("#btnSendCode").removeAttr("disabled");//启用按钮
+        $("#btnSendCode").val("重新发送验证码");
+    }
+    else {
+        curCount--;
+        $("#btnSendCode").val("请在" + curCount + "秒内输入验证码");
+    }
+}
+
+//图形验证码/更换验证码aps.eachonline.com  ==180.76.140.84
+$(".imgurl").click(function(){
+	$.ajax({
+    url:"http://aps.eachonline.com:8002/manager/account/getVCodeUrl",
+    type:'GET',
+    dataType:'json',
+    async:false,
+    success:function(result) {
+    	$(".imgurl").attr("src",result.data.imgeUrl);
+    },
+    error:function(msg){
+    }
+})
+})
+
+/*
+ * 获取短信验证码
+ */
+
+function sendMessage(){
+	 
+	   var vCode = $(".imgcode").val();
+	   if(vCode == "" || vCode == 'undefined' || vCode == null){
+		   console.log(vCode);
+		   $(".imgurl").parent().next().html("<font color='red'>请填写图形验证码</font>");
+		   return;
+	   }
+
+	  
+	   var telephone = $(".bankTelephone").val();
+	  // alert(telephone);return
+			$.post(
+					"http://aps.eachonline.com:8002/manager/account/sendCode",
+					{"vCode":vCode,"telephone":telephone},
+					function(result){
+			   			if(result.success){
+								$('.telcode').next().next().html("<font color='green'>验证码发送成功</font>");
+								 	$("#btnSendCode").attr("disabled", "true");
+							     	$("#btnSendCode").val("请在" + curCount + "秒内输入验证码");
+							     	InterValObj = window.setInterval(SetRemainTime, 1000); //启动计时器，1秒执行一次
+				  		 }else{
+				  				$('.telcode').next().next().html("<font color='red'>"+result.message+"</font>");
+				   			}
+	   			})
+
+   }
+   
+//验证密码格式
+$(function (){
+	jQuery.validator.addMethod("ispassword", function(value, element) {
+    var password = /^\d{6}$/;
+    return this.optional(element) || (password.test(value));
+}, "! 请正确填写6位数交易密码");
+/*
+ * 表单验证
+ */
+$("#commentForm").validate({
+    rules: {
+    	cardNo: {
+        required: true,
+      },
+      bankBranchName: {
+        required: true,
+      },
+      bankTelephone: {
+          required: true,
+        },
+      code: {
+        required: true,
+      },
+      read: {
+          required: true,
+        },
+      imgcode:{
+      	required:true,
+      }
+    },
+    messages: {
+    	cardNo: {
+        required: "! 请输入银行卡号正确",
+       
+      },
+      bankBranchName: {
+        required: "! 请输入开户行支行名称",
+      },
+      bankTelephone: {
+          required: "! 请输入预留手机号码",
+        },
+      code: "! 验证码不能为空",
+      read: "请阅读协议后打勾",
+      imgcode:"请填写图形验证码",
+     },
+      
+     errorPlacement: function(error, element) { //错误信息位置设置方法
+    	 if (element.is(':radio') || element.is(':checkbox')) { //如果是radio或checkbox
+    	       var eid = element.attr('name'); //获取元素的name属性
+    	       error.appendTo(element.parent().parent()); //将错误信息添加当前元素的父结点后面
+    	     } else {
+    	    	 if(element.is('.imgcode')){
+    	    		 error.appendTo(element.next().next());
+    	    	 }else if(element.is('.telcode')){
+    	    		 error.appendTo(element.next().next());
+    	    	 }else{
+    	    		 error.appendTo( element.next() );
+    	    	 }
+    	    	 
+    	     }
+     //这里的element是录入数据的对象
+    	 },
+    })
+    
+  
+});    
+</script>
+<include file="Public:footer" />		

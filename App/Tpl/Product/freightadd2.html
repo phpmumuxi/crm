@@ -1,0 +1,508 @@
+<include file="Public:header" />
+<script src="__PUBLIC__/js/layer/layer.js" type="text/javascript" charset="utf-8"></script>
+<style>
+.yun{width:70px;}
+.delate{cursor: pointer;}
+</style>
+<div class="container">
+	<div class="page-header">
+		<h4>运费模板</h4><!-- <span>按重计费</span> -->
+		<if condition = "$source eq 2"><input type="hidden" name="" value="{:U('Product/add')}" id="jump">
+			<else/><input type="hidden" name="" value="{:U('Product/freight')}" id="jump">
+		</if>
+	</div>
+	<div class="row">
+		<div class="span12">
+			<include file="Public:alert" />
+			<ul class="nav nav-tabs">
+				<li class="charging">
+					<a href="{:U('Product/freightadd')}">按重计费</a>
+				</li>
+				<li class="active charging">
+					<a href="{:U('Product/freightadd2')}">按件计费</a>
+				</li>
+			</ul>
+
+			<div class="tab-content">
+				<div class="tab-pane active" id="tab1"><br>
+					模板名称: <input type="text" name="templateName" value="" class="templateName"><br><br>
+					默认运费: <input type="text" name="shipDefaultNum" value="" class="yun" id="shipDefaultNum">&nbsp;件内,&nbsp;&nbsp;
+					<input type="text" name="shipDefaultFee" value="" class="yun" id="shipDefaultFee">&nbsp;元;&nbsp;&nbsp;每增加
+					<input type="text" name="shipAddNum" value="" class="yun" id="shipAddNum">&nbsp;件,&nbsp;&nbsp;增加运费
+					<input type="text" name="shipAddFee" value="" class="yun" id= "shipAddFee">&nbsp;元 <br><br>
+					除指定区域外，其他区域的运费采用"默认运费" <br><br>
+					<table id="aaa" class="table" width="100%">
+						<tr>
+							<th>运送到</th>
+							<th>首件</th>
+							<th>首费(元)</th>
+							<th>续件</th>
+							<th>续费(元)</th>
+							<th>操作</th>
+						</tr>
+
+			<!-- 			<tr id="areamoney0">
+							<td width="35%">
+								<span id="area_list0"></span>
+								<span class="area btn btn-primary" style="float:right;" onclick="openarea('0');">编辑</span>
+								<span style="clear:both;"></span>
+							</td>
+							<td><input type="text" name="shipDefaultNum0" value="" class="yun" id="shipDefaultNum0"></td>
+							<td><input type="text" name="shipDefaultFee0" value="" class="yun" id="shipDefaultFee0"></td>
+							<td><input type="text" name="shipAddNum0" value="" class="yun" id="shipAddNum0"></td>
+							<td><input type="text" name="shipAddFee0" value="" class="yun" id= "shipAddFee0"></td>
+							<td class="delate" onclick="delarea('0');">删除</td>
+						</tr> -->
+					</table>
+					<span class="addarea btn btn-primary" onclick="addarea();">新增区域</span>
+					<span class="btn btn-primary sub_btn" typelist = '2'>保&nbsp;&nbsp;存</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	<br>
+	<div class="area2 hide">
+		<form id="pr">
+			<table class="table">
+				<thead>
+					<tr>
+						<th>&nbsp;</th>
+						<th>选择区域</th>
+						<th></th>
+						<th></th>
+						<th></th>
+						<th></th>
+						<th></th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td><!-- <input type="checkbox" rel="1" class="check_all" name="check_leads"/> --></td>
+						<td>华东</td>
+						<td><input class="check_list1" type="checkbox" name="city" value="上海">上海</td>
+						<td><input class="check_list1" type="checkbox" name="city" value="江苏">江苏</td>
+						<td><input class="check_list1" type="checkbox" name="city" value="浙江">浙江</td>
+						<td><input class="check_list1" type="checkbox" name="city" value="安徽">安徽</td>
+						<td><input class="check_list1" type="checkbox" name="city" value="江西">江西</td>
+						<td>&nbsp;</td>
+					</tr>
+
+					<tr>
+						<td><!-- <input type="checkbox" rel="2" class="check_all" name="check_leads"/> --></td>
+						<td>华北</td>
+						<td><input class="check_list2" type="checkbox" name="city" value="北京">北京</td>
+						<td><input class="check_list2" type="checkbox" name="city" value="天津">天津</td>
+						<td><input class="check_list2" type="checkbox" name="city" value="山西">山西</td>
+						<td><input class="check_list2" type="checkbox" name="city" value="山东">山东</td>
+						<td><input class="check_list2" type="checkbox" name="city" value="河北">河北</td>
+						<td><input class="check_list2" type="checkbox" name="city" value="内蒙古">内蒙古</td>
+					</tr>
+
+					<tr>
+						<td><!-- <input type="checkbox" rel="3" class="check_all" name="check_leads"/> --></td>
+						<td>华中</td>
+						<td><input class="check_list3" type="checkbox" name="city" value="湖南">湖南</td>
+						<td><input class="check_list3" type="checkbox" name="city" value="湖北">湖北</td>
+						<td><input class="check_list3" type="checkbox" name="city" value="河南">河南</td>
+						<td>&nbsp;</td>
+						<td>&nbsp;</td>
+						<td>&nbsp;</td>
+
+					</tr>
+					<tr>
+						<td><!-- <input type="checkbox" rel="4" class="check_all" name="check_leads"/> --></td>
+						<td>华南</td>
+						<td><input class="check_list4" type="checkbox" name="city" value="广东">广东</td>
+						<td><input class="check_list4" type="checkbox" name="city" value="广西">广西</td>
+						<td><input class="check_list4" type="checkbox" name="city" value="福建">福建</td>
+						<td><input class="check_list4" type="checkbox" name="city" value="海南">海南</td>
+						<td>&nbsp;</td>
+						<td>&nbsp;</td>
+
+					</tr>
+					<tr>
+						<td><!-- <input type="checkbox" rel="5" class="check_all" name="check_leads"/> --></td>
+						<td>东北</td>
+						<td><input class="check_list5" type="checkbox" name="city" value="辽宁">辽宁</td>
+						<td><input class="check_list5" type="checkbox" name="city" value="吉林">吉林</td>
+						<td><input class="check_list5" type="checkbox" name="city" value="黑龙江">黑龙江</td>
+						<td>&nbsp;</td>
+						<td>&nbsp;</td>
+						<td>&nbsp;</td>
+					</tr>
+
+					<tr>
+						<td><!-- <input type="checkbox" rel="6" class="check_all" name="check_leads"/> --></td>
+						<td>西北</td>
+						<td><input class="check_list6" type="checkbox" name="city" value="陕西">陕西</td>
+						<td><input class="check_list6" type="checkbox" name="city" value="新疆">新疆</td>
+						<td><input class="check_list6" type="checkbox" name="city" value="甘肃">甘肃</td>
+						<td><input class="check_list6" type="checkbox" name="city" value="宁夏">宁夏</td>
+						<td><input class="check_list6" type="checkbox" name="city" value="青海">青海</td>
+						<td>&nbsp;</td>
+
+					</tr>
+
+					<tr>
+						<td><!-- <input type="checkbox" rel="7" class="check_all" name="check_leads"/> --></td>
+						<td>西南</td>
+						<td><input class="check_list7" type="checkbox" name="city" value="重庆">重庆</td>
+						<td><input class="check_list7" type="checkbox" name="city" value="云南">云南</td>
+						<td><input class="check_list7" type="checkbox" name="city" value="贵州">贵州</td>
+						<td><input class="check_list7" type="checkbox" name="city" value="西藏">西藏</td>
+						<td><input class="check_list7" type="checkbox" name="city" value="四川">四川</td>
+						<td>&nbsp;</td>
+
+					</tr>
+					<tr>
+						<td><!-- <input type="checkbox" rel="8" class="check_all" name="check_leads"/> --></td>
+						<td>港澳台</td>
+						<td><input class="check_list8" type="checkbox" name="city" value="香港">香港</td>
+						<td><input class="check_list8" type="checkbox" name="city" value="澳门">澳门</td>
+						<td><input class="check_list8" type="checkbox" name="city" value="台湾">台湾</td>
+						<td>&nbsp;</td>
+						<td>&nbsp;</td>
+						<td>&nbsp;</td>
+					</tr>
+					<tr>
+						<td><!-- <input type="checkbox" rel="9" class="check_all" name="check_leads"/> --></td>
+						<td>海外</td>
+						<td><input class="check_list9" type="checkbox" name="city" value="海外">海外</td>
+						<td>&nbsp;</td>
+						<td>&nbsp;</td>
+						<td>&nbsp;</td>
+						<td>&nbsp;</td>
+						<td>&nbsp;</td>
+					</tr>
+				</tbody>
+				<tfoot>
+					<tr>
+						<td></td>
+						<td></td>
+						<td class="btn btn-primary areaqd" id="sure" onclick="sure()">&nbsp;确&nbsp;&nbsp;定&nbsp;</td>
+						<td></td>
+						<td class="btn btn-primary areaqx" onclick="cancel()">&nbsp;取&nbsp;&nbsp;消&nbsp;</td>
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr>
+				</tfoot>
+			</table>
+		</form>
+	</div>
+</div>
+
+<script type="text/javascript">
+	var i = 0;
+	var city = [];
+	var citydel = [];
+	//显示区域
+	function openarea(id,index) {
+		$('.area2').show();
+		$("#pr")[0].reset();
+		setTimeout(function(){
+			$("#sure").attr("data-id",id)
+			$("#sure").attr("data-index",index)
+		},500)
+
+	}
+
+	$(document).on('change','input[type=checkbox]',function(e){
+		var cityName = e.target.defaultValue;
+		//console.log(citydel);
+		var cityArea = [];
+		if(e.currentTarget.checked){
+		for(var j = 0; j<addAreaIndex; j++){
+			if(document.getElementById("area_list"+j)!=undefined){
+				var cityAreaIndex = (document.getElementById("area_list"+j).innerHTML);
+				var cityArealist = cityAreaIndex.split(",");
+				if (cityArealist) {
+					for (var t = 0; t < cityArealist.length; t++) {
+						cityArea.push(cityArealist[t]);
+						//console.log(cityArealist[t]);
+					};
+				};
+				//console.log(cityArea);
+			}
+		}
+
+
+		//console.log(cityArea);
+		for (var i = 0; i < cityArea.length; i++) {
+			//console.log(cityArea[i]);
+			// console.log(cityName);
+			if(cityArea[i] == cityName){
+				e.currentTarget.checked = false;
+				alert(cityName+'已选')
+				return
+			}
+		};
+			// if (citydel.length) {
+			// 	for(var i = 0 , j = citydel.length ; i<j ; i++){
+			// 		if(citydel[i] == cityName){
+			// 			e.currentTarget.checked = false;
+			// 			alert(cityName+'已选')
+			// 			return
+			// 		}
+			// 	}
+			// }else{
+			// 	for(var i = 0 , j = city.length ; i<j ; i++){
+			// 		if(city[i] == cityName){
+			// 			e.currentTarget.checked = false;
+			// 			alert(cityName+'已选')
+			// 			return
+			// 		}
+			// 	}
+			// }
+			//console.log(city);
+		}else{
+			//暂时不写
+		}
+	});
+
+	function cancel(){
+		$("#pr")[0].reset();
+		$('.area2').hide();
+	}
+
+	function sure(){
+		var id = 'area_list' +$("#sure").attr("data-id");
+		var index = $("#sure").attr("data-index");
+		var citylist = [];
+		$('input[name="city"]:checked').each(function () {
+			city.push($(this).val());
+			citylist.push($(this).val());
+		});
+	
+		if(!controlArray[index]){
+			controlArray[index]=citylist;
+		}else{
+			var tempValue = controlArray[index];
+			for (var i = 0; i < tempValue.length; i++) {
+				citylist.push(tempValue[i]);
+			};
+			controlArray[index] = citylist;
+		}
+		
+		if(citylist && citylist.length >0){	
+			$("#"+id).html(citylist+'');
+			// for (var i = 0; i < citylist.length; i++) {
+			// 	console.log(citylist[i]);
+			// };
+		}
+		
+		$('.area2').hide();
+	}
+
+	var addAreaIndex = 0;
+	var controlArray = [];
+	var emsArray = [];
+	function createAreaData(childArray){
+		// console.log(1);
+		controlArray.push(childArray);
+		addAreaIndex++;
+	}
+
+	// function main(){
+	// 	var childArray = ['南京','上海'];
+	// 	createAreaData(childArray);
+	// 	controlArray[addAreaIndex];
+	// }
+
+	//复制地区 按重计费
+	function addarea(){
+		$("#pr")[0].reset();
+		$('.area2').hide();
+		i++;
+		var id = 'areamoney'+addAreaIndex;
+		var id1 = 'area_list'+addAreaIndex;
+		var id2 = 'shipDefaultNum'+addAreaIndex;
+		var id3 = 'shipDefaultFee'+addAreaIndex;
+		var id4 = 'shipAddNum'+addAreaIndex;
+		var id5 = 'shipAddFee'+addAreaIndex;
+		var id6 = 'index'+addAreaIndex;
+		var item = '<tr id='+id+'>'+
+		'<td width="35%">'+
+		'<span id='+id1+'></span>'+
+		'<span class="area btn btn-primary" style="float:right;" onclick="openarea('+addAreaIndex+','+addAreaIndex+');">编辑</span>'+
+		'<span style="clear:both;"></span>'+
+		'</td>'+
+		'<td><input type="text" name='+id2+' value="" class="yun" id='+id2+'></td>'+
+		'<td><input type="text" name='+id3+' value="" class="yun" id='+id3+'></td>'+
+		'<td><input type="text" name='+id4+' value="" class="yun" id='+id4+'></td>'+
+		'<td><input type="text" name='+id5+' value="" class="yun" id='+id5+'></td>'+
+		'<input type="hidden" name='+id6+' value='+addAreaIndex+' class="yun" id='+id6+'>'+
+		'<td class="delate" onclick="delarea('+addAreaIndex+');">删除</td>'+
+		'</tr>'
+		$('#aaa').append(item);	
+
+		createAreaData("");
+	}	
+
+	//区域选中
+	$(function(){
+		$(".check_all").click(function(){
+			var rel = $(this).attr('rel');
+			$("input[class='check_list"+rel+"']").prop('checked', $(this).prop("checked"));
+		});
+	});
+
+
+	$(".sub_btn").click(function() {
+		var templateInfo = [];
+		var template = new Object();
+		template.feeWay = $('.sub_btn').attr('typelist');
+		template.templateName = $('.templateName').val();
+		template.userId = '{$userId}';
+		var feeWay = $('.sub_btn').attr('typelist');
+		var templateName = $('.templateName').val();
+		var userId = '{$userId}';
+		if (!templateName) {
+			layer.tips('请填写模板名称', '.templateName');
+			return;
+		};
+		// template.push({	feeWay:feeWay,
+		// 	templateName:templateName,
+		// 	userId:userId	
+
+		// })
+	//console.log(template);
+	//默认运费
+	var  shipDefaultNum = $('#shipDefaultNum').val();
+	var  shipDefaultFee = $('#shipDefaultFee').val();
+	var  shipAddNum = $('#shipAddNum').val();
+	var  shipAddFee = $('#shipAddFee').val();
+	var shipArea = 'default';
+	if(!shipDefaultNum || isNaN(shipDefaultNum) || shipDefaultNum==0) {
+		layer.tips('请正确填写默认运费', '#shipDefaultNum');
+			return;
+	}
+
+	if(!shipDefaultFee){
+		layer.tips('请填写默认运费', '#shipDefaultFee');
+			return;
+	}
+
+	if(!shipAddNum || isNaN(shipAddNum) || shipAddNum==0){
+		layer.tips('请正确填写默认运费', '#shipAddNum');
+			return;
+	}
+	if(!shipAddFee){
+		layer.tips('请填写默认运费', '#shipAddFee');
+			return;
+	}
+	templateInfo.push({  shipDefaultNum:shipDefaultNum,
+		shipDefaultFee:shipDefaultFee,
+		shipAddNum:shipAddNum,
+		shipAddFee:shipAddFee,
+		shipArea:shipArea})
+
+	for(var j = 0; j<addAreaIndex; j++){
+		if(document.getElementById("area_list"+j)!=undefined){
+			var  shipDefaultNum = $('#shipDefaultNum'+j).val();
+			var  shipDefaultFee = $('#shipDefaultFee'+j).val();
+			var  shipAddNum = $('#shipAddNum'+j).val();
+			var  shipAddFee = $('#shipAddFee'+j).val();
+			var  shipArea = document.getElementById("area_list"+j).innerHTML;
+
+
+			if(shipDefaultNum || shipDefaultFee || shipAddNum || shipAddFee || shipArea){
+				if(!shipDefaultNum || isNaN(shipDefaultNum) || shipDefaultNum==0) {
+					alert('请正确填写首重');
+						return;
+				}
+				if(!shipDefaultFee){
+					alert('请填写首费');
+						return;
+				}
+
+				if(!shipAddNum || isNaN(shipAddNum) || shipAddNum==0){
+					alert('请正确填写续重');
+						return;
+				}
+				if(!shipAddFee){
+					alert('请填写续费');
+						return;
+				}
+				if(shipDefaultNum && shipDefaultFee && shipAddNum && shipAddFee && shipArea){
+				templateInfo.push({  shipDefaultNum:shipDefaultNum,
+					shipDefaultFee:shipDefaultFee,
+					shipAddNum:shipAddNum,
+					shipAddFee:shipAddFee,
+					shipArea:shipArea})
+				}
+			}	
+		}
+	}
+	// console.log(addAreaIndex);
+	//console.log(controlArray);
+	
+	// for (var i = 0; i < controlArray.length; i++) {
+	// 		var cityArray = controlArray[i];
+	// 		console.log(cityArray);
+	// };
+
+	// if(cityArray){
+	// 	for (var j = 0; j < addAreaIndex; j++) {
+	// 		var  shipDefaultNum = $('#shipDefaultNum'+j).val();
+	// 		var  shipDefaultFee = $('#shipDefaultFee'+j).val();
+	// 		var  shipAddNum = $('#shipAddNum'+j).val();
+	// 		var  shipAddFee = $('#shipAddFee'+j).val();
+	// 		console.log(shipDefaultNum);
+	// 	};
+	// }
+
+		// temp = template.concat(templateInfo);  
+		// var temps = JSON.stringify(temp);
+		// console.log(temps);
+
+		var template = JSON.stringify(template);
+		var templateInfo = JSON.stringify(templateInfo);
+		var json = '{"template":'+template+',"templateInfo":'+templateInfo+'}';
+		// console.log(json);return;
+		var index = layer.load(0, {shade: false});
+		//发送数据
+		$.ajax({
+			url:'{$url}/manager/template/addTradeShipTemplate',// 跳转到 action
+			data:{jsonStr:json},
+			type:'post',
+			cache:false,
+			dataType:'json',
+			success:function(data) {
+				layer.closeAll('loading');
+				if(data.code =="2000" ){
+					alert(data.message);
+					var url = $('#jump').val();
+            		window.location.href = url; 
+					
+				}else{
+					alert(data.message);
+				}
+			},
+			error:function() {
+				alert("异常！");
+			}
+		});
+	});
+
+	function delarea(id){
+		// i--;
+		// console.log(i);
+		controlArray[id] = null;	
+		var shipArea = document.getElementById("area_list"+id).innerHTML;
+		var shiparea2 = shipArea.split(',');
+
+		var tmp = shiparea2.concat(city);
+		var o = {};
+		for (var t = 0; t < tmp.length; t ++) (tmp[t] in o) ? o[tmp[t]] ++ : o[tmp[t]] = 1;
+			for (x in o) if (o[x] == 1) citydel.push(x);
+		//console.log(citydel);
+		$('#areamoney'+id).remove();
+		//$("#pr")[0].reset();
+	}
+
+	//新增区域
+	addarea();
+</script>
+<include file="Public:footer" />	

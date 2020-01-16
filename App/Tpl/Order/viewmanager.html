@@ -1,0 +1,199 @@
+<include file="Public:header" />
+<script src="__PUBLIC__/js/layer/layer.js" type="text/javascript" charset="utf-8"></script>
+<style>
+    .orderno{background-color: #F4F4F4;font-size: 16px;height: 35px;margin-bottom: 30px;}
+    .ordernot{margin-left:10px;margin-right:60px;text-align: center; float: left;padding-top: 7px;}
+    .shopinfo{background-color: #F4F4F4;font-size: 16px;}
+    .tmoney{font-size: 16px;float:right;}
+    .tmoney2{margin: 10px;}
+    .orderinfo{font-size: 16px;font-weight: bold;background-color: #E8F1F6;height: 30px;padding-top: 8px;padding-left:30px;margin-top:35px;margin-bottom:25px;}
+    .message{font-size: 16px;margin-left:35px;margin-bottom:15px;margin-top:10px;}
+</style>
+<div class="container">
+    <include file="Public:alert" />
+    <div class="row">
+        <div class="span12">
+            <div class="orderno">
+                <div class="ordernot">订单编号 : {$order.orderTicketRecord.orderNo}</div>
+                <div class="ordernot">订单状态 : <span style="color:#029BE2;font-weight: bold;">	<if condition="$order['orderTicketRecord']['orderStatus'] eq 's1'">已下单待支付
+                    <elseif condition="$order['orderTicketRecord']['orderStatus'] eq 's2'"/>已下单已支付
+                    <elseif condition="$order['orderTicketRecord']['orderStatus'] eq 's3'"/>申请退款
+                    <elseif condition="$order['orderTicketRecord']['orderStatus'] eq 's4'"/>已退款<elseif condition="$order['orderTicketRecord']['orderStatus'] eq 's5'"/>订单未付款超时关闭<elseif condition="$order['orderTicketRecord']['orderStatus'] eq 's6'"/>取消订单关闭
+                                    <elseif condition="$order['orderTicketRecord']['orderStatus'] eq 's7'"/>已消费
+                    </if></span>
+                </div>
+                <div class="ordernot">订单类型 : 服务订单</div>
+                <div style="clear: both;"></div>
+            </div>
+            <div>
+                <table class="table" width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr class="shopinfo">
+                        <th style="padding-left: 120px;">产品图</th>
+                        <th>商品名称/介绍</th>
+                        <th>价格</th>
+                        <th>数量</th>
+                        <th>实付(总)</th>
+                        <th>券码</th>
+                        <th>有效期</th>
+                        <th>状态</th>
+                    </tr>
+
+                        <tr>
+                            <td width="25%" style="padding-top: 15px;">
+                                <img src="{$order['orderTicketRecord']['realPicUrl']}" alt="" style="width:120px;float:left;margin-left: 75px;">
+                            </td>
+                            <td style="padding-top: 15px;">222{$order['orderTicketRecord']['serviceName']}</td>
+                            <td style="padding-top: 15px;">{$order['orderTicketRecord']['unitFee']}</td>
+                            <td style="padding-top: 15px;">{$order['orderTicketRecord']['sumCount']}</td>
+                            <td style="padding-top: 15px;">{$order['orderTicketRecord']['sumFee']}</td>
+                            <td style="padding-top: 15px;">
+                                <volist name="ticket" id="vo">
+                                {$vo['ticketNo']}<span style="color:#029BE2;font-weight: bold;">	<if condition="$vo['ticketStatus'] eq 't0'">待付款
+                    <elseif condition="$vo['ticketStatus'] eq 't1'"/>待消费
+                    <elseif condition="$vo['ticketStatus'] eq 't2'"/>已消费
+                                    <elseif condition="$vo['ticketStatus'] eq 't3'"/>申请退款中
+                                    <elseif condition="$vo['ticketStatus'] eq 't5'"/>已过期
+                    <elseif condition="$vo['ticketStatus'] eq 't4'"/>已退款
+                    </if></span><br/>
+                                </volist>
+                            </td>
+                            <td style="padding-top: 15px;"><if condition="$order['orderTicketRecord']['isLimit'] eq '0'">不限制</if><if condition="$order['orderTicketRecord']['isLimit'] eq '1'">限制</if></td>
+                            <td style="padding-top: 15px;">
+                                <if condition="$order['orderTicketRecord']['orderStatus'] eq 's1'">已下单待支付
+                                    <elseif condition="$order['orderTicketRecord']['orderStatus'] eq 's2'"/>已下单已支付
+                                    <elseif condition="$order['orderTicketRecord']['orderStatus'] eq 's3'"/>申请退款
+                                    <elseif condition="$order['orderTicketRecord']['orderStatus'] eq 's4'"/>已退款<elseif condition="$order['orderTicketRecord']['orderStatus'] eq 's5'"/>订单未付款超时关闭<elseif condition="$order['orderTicketRecord']['orderStatus'] eq 's6'"/>取消订单关闭
+                                    <elseif condition="$order['orderTicketRecord']['orderStatus'] eq 's7'"/>已消费
+                                </if>
+                            </td>
+                        </tr>
+
+                </table>
+        </div>
+        <div class="tmoney">
+            <div class="tmoney2">商品总价:￥
+                <span>{$order['orderTicketRecord']['sumFee']}
+                </span></div>
+            <div class="tmoney2">订单总价:￥{$order['orderTicketRecord']['sumFee']}<span style="color:#029BE2;font-weight: bold;"></span></div>
+        </div><div style="clear:both;"></div>
+        <div style="clear:both;"></div>
+        <div class="orderinfo">订单信息</div>
+        <div>
+            <div class="message">收货人姓名: <span style="margin-left: 65px;">{$order['orderTicketRecord']['buyerName']}</span></div>
+            <div class="message">收货人手机号:<span style="margin-left: 53px;">{$order['orderTicketRecord']['buyerPhone']}</span></div>
+            <div class="message">收货人地址:<span style="margin-left: 69px;">{$order['sellerInfo']['userAddressDetail']}</span></div>
+            <div class="message">下单时间:<span style="margin-left: 85px;">{$order['orderTicketRecord']['payOverTime']}</span></div>
+        </div>
+        <div class="orderinfo">付款信息</div>
+        <div>
+            <div class="message">支付方式:&nbsp;&nbsp;
+                <if condition="$order['orderTicketRecord']['payType'] eq '0'">支付宝
+                    <elseif condition="$order['orderTicketRecord']['payType'] eq '1'"/>微信
+                    <elseif condition="$order['orderTicketRecord']['payType'] eq '2'"/>余额支付
+                    <elseif condition="$order['orderTicketRecord']['payType'] eq '3'"/>银行卡
+                    <elseif condition="$order['orderTicketRecord']['payType'] eq '4'"/>线下支付
+                    <else/>
+                    未支付
+                </if>
+            </div>
+            <div class="message">付款时间:&nbsp;&nbsp;{$order['orderTicketRecord']['payTime']}</div>
+            <div class="message">付款账号:&nbsp;&nbsp;{$order['orderTicketRecord']['buyerName']}</div>
+        </div>
+            <div class="btn btn-primary shut" url="{:U('Order/managerservice')}" style="margin-left:500px">关闭</div>
+    </div>
+</div>
+</div>
+
+<script>
+    $(function(){
+        $('.status').click(function () {
+            $('.status').removeClass("active");
+            $(this).addClass("active");
+        });
+    });
+
+    $('.shut').click(function(){
+        var url = $(this).attr('url');
+        window.location.href = url;
+    });
+
+
+    $('.operation').click(function(){
+        var orderNo = $(this).attr('orderNo');
+        var status = $(this).attr('status');
+        var type = $(this).attr('type');
+        var orderChangeDatetime = $(this).attr('orderChangeDatetime');
+        //alert(type);return;
+        if (status == 'F0' || status == 'F13') {
+            var orderStatusChanged = 'F11';
+            var childOrderStatusChanged = '11';
+        }else if(status == 'F1'){
+            var type = $(this).attr('type');
+            if(type == 1){
+                var orderStatusChanged = 'F2';
+                var childOrderStatusChanged = '2';
+            }else if(type ==2){
+                var orderStatusChanged = 'F3';
+                var childOrderStatusChanged ='3';
+            }
+        }
+        //alert(orderStatusChanged);
+        $.ajax({
+            url:'{$url}/manager/order/megerOrderStatusChange',
+            data:{orderNo:orderNo,orderStatusChanged:orderStatusChanged,childOrderStatusChanged:childOrderStatusChanged,orderType:1,orderChangeDatetime:orderChangeDatetime},
+            type:'post',
+            cache:'false',
+            dataType:'json',
+            success:function(json){
+                //console.log(json);
+                alert(json.message);
+                location.reload();
+            },
+            error:function(){
+                alert('网络异常!');
+            }
+        });
+    });
+
+
+    $('.sonorder').click(function(){
+        var orderNo = $(this).attr('orderNo');
+        var orderChangeDatetime = $(this).attr('orderChangeDatetime');
+        var status = $(this).attr('status');
+        var type = $(this).attr('type');
+        var sid = $(this).attr('sid');
+        var childOrderNo = $(this).attr('childOrderNo');
+        if(status == '5'){
+            if(type == '10'){
+                var childOrderStatusChanged = '6';
+                var totalOrderStatus = 'F12';
+            }else if(type == '11'){
+                var childOrderStatusChanged = '8';
+                var totalOrderStatus = 'F18';
+            }
+        }else if(status == '10'){
+            var childOrderStatusChanged = '2';
+            var totalOrderStatus = 'F2';
+        }
+        // console.log(childOrderStatusChanged);
+        // console.log(totalOrderStatus);
+        $.ajax({
+            url:'{$url}/manager/order/singleOrderStatusChange',
+            data:{orderNo:orderNo,totalOrderStatus:totalOrderStatus,childOrderStatusChanged:childOrderStatusChanged,orderType:1,orderChangeDatetime:orderChangeDatetime,orderId:sid,childOrderNo:childOrderNo},
+            type:'post',
+            cache:'false',
+            dataType:'json',
+            success:function(json){
+                //console.log(json);
+                if (json.code == 2000) {
+                    alert(json.message);
+                    location.reload();
+                }
+            },
+            error:function(){
+                alert('网络异常!');
+            }
+        });
+    });
+</script>
+<include file="Public:footer">

@@ -1,0 +1,106 @@
+<include file="Public:header" />
+<script src="__PUBLIC__/js/PCASClass.js" type="text/javascript"></script>
+<link rel="stylesheet" href="__PUBLIC__/css/base.css" type="text/css" />
+<style>
+	#pro_name  {
+	white-space: nowrap; 
+	text-overflow:ellipsis;  
+	overflow: hidden;
+	display:block;
+	max-width:150px;   
+  }
+</style>
+<div class="container no-mar-top no-bg">
+	<input type="hidden" id="edit" edit="{:U('Product/edit?sid=')}">
+	<input type="hidden" id="product" product="{:U('Product/index')}">
+	<div class="row">
+		<div class="span2 bs-docs-sidebar mar-left3">
+			<ul class="nav nav-list bs-docs-sidenav span2 widths" id="left_list" style="min-height:300px;">
+				<li class="first-li"><span class="spans1"><img src="/Public/img/house.png"/>&nbsp;产品详情</span></li>
+				<li class="active">
+					<a href="#tab1">基本信息</a>
+				</li>
+			</ul>
+		</div>
+		<div class="tab-content span8 mar-lefts">
+			<div class="tab-pane fade in active" id="tab1">
+				<div class="container2 top-pad">
+					<a class="basic_information" name="tab">基本信息</a>
+					<div class="pull-right" style="margin:-3px 10px 0 0;">
+						<if condition="$Think.session.position_id eq '13' OR $Think.session.position_id eq '14' OR $Think.session.position_id eq '15' OR $Think.session.position_id eq '16' ">
+							<else/>
+							<a id="pro_edit" class="btn btn-primary">修改</a>
+							<a href="javascript:void(0)" onclick="prodelete()" class="btn btn-primary">删除</a>
+						</if>	
+						<a href="javascript:void(0)" class="btn btn-primary" onclick="javascript:history.go(-1)">返回</a>
+					</div>
+				</div>
+				<div class="back_box mar-top">
+					<table class="table">
+						<tbody>
+							<tr>
+								<td class="tdleft" width="15%">产品名称：</td>
+								<td id="pro_name"></td>
+								<td class="tdleft">产品信息添加者</td>
+								<td id="pro_user"></td>
+							</tr>							
+							<tr>
+								<td class="tdleft" width="15%">产品类别：</td>
+								<td width="35%" id="pro_type"></td>
+								<td class="tdleft" width="15%">规格单位：</td>
+								<td width="35%" id="por_unit"></td>
+							</tr>
+							<tr>
+								<td class="tdleft" width="15%">单位重量：</td>
+								<td width="35%" id="pro_weight"></td>
+								<td class="tdleft" width="15%">总库存：</td>
+								<td width="35%" id="pro_total"></td>
+							</tr>
+							<tr>
+								<!-- <td class="tdleft" width="15%"> 产品型号：</td> -->								
+								<!-- <td width="35%" id="pro_model"></td> -->
+								<td class="tdleft" width="15%">产品品牌：</td>
+								<td width="35%" colspan="3" id="por_brand"></td>
+							</tr>
+							<tr>
+								<td class="tdleft" width="15%">发货地址：</td>
+								<td width="35%" colspan="3" id="pro_address"></td>						
+							</tr>
+							<tr>
+								<td class="tdleft" width="15%">产品描述：</td>
+								<td colspan="3" style="word-break:break-word;" id="pro_detail"></td>
+							</tr>
+						</tbody>
+					</table>
+					<!-- 产品展示图 -->
+					<table class="table">
+						<tbody>
+							<tr>
+								<th colspan="4">产品图片</th>
+							</tr>
+							<tr>
+								<td class="tdleft" width="15%">主图</td>
+								<td colspan="3">
+									<div class="box-main"></div>
+								</td>
+							</tr>
+							<tr>
+								<td class="tdleft" width="15%">副图</td>
+								<td colspan="3">
+									<div class="ui-sortable" id="secondary_pic">
+										
+									</div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<link href="__PUBLIC__/css/litebox.css" rel="stylesheet" type="text/css">
+<script src="__PUBLIC__/js/litebox.min.js" type="text/javascript"></script>
+<script type="text/javascript" src="__PUBLIC__/js/produc_view.js"></script>
+<include file="Public:footer" />

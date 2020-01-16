@@ -1,0 +1,234 @@
+<include file="Public:header" />
+<link rel="stylesheet" href="__PUBLIC__/css/permit.css" type="text/css" />
+<link rel="stylesheet" href="__PUBLIC__/css/base.css" type="text/css" />
+<div class="container">
+    <div class="page-header">
+        <h4>添加行业资质证照</h4>
+    </div>
+    
+    <div class="row">
+        <div class="span2 knowledgecate">
+            <include file="Public:companynav" />
+        </div>
+        <div class="span10" style="margin-bottom: 100px;">
+            <h4>经营许可—>添加行业资质证照</h4><hr>
+            <table class="addbusiness_table" width="100%" border="0" rules="none"  cellspacing="0" cellpadding="0">
+                <tr style="height: 70px;">
+                    <td style="text-align: center;width:12%;"> 添加证照：</td>
+                    <td>
+                        <select id="typeList">
+                            <volist name="listTypeArr" id="vo">
+                                <option value="{$key}">{$vo}</option>  
+                            </volist> 
+                        </select> 
+                        &nbsp; <span id="nameTip" style="color:red;"></span>
+                    </td>                           
+                </tr>                       
+                
+                <tr id="inTimeTr" style="height: 70px;">
+                    <td style="text-align: center;width:12%"> 有效期至：</td>
+                    <td><input type="text" id="inTime" name="name" onClick="WdatePicker({dateFmt:'yyyy-MM-dd',minDate:'%y-%M-%d'})" class="Wdate sBeginTime" style="width: 170px"/><div style="display: inline-block;margin-left:10px"><span><input type="checkbox"  style="margin-left: 6px;margin-bottom: 4px" name="name" ></span><span>&nbsp;&nbsp;永久</span></div><span id="nameTip" style="color:red;"></span></td>
+                </tr>
+                
+                <tr>
+                    <td style="text-align: center;width:12%;height: 115px;"> 证照照片：</td>
+                    <td>
+                        <div id="show_picture_div" class="thumbnail" style="margin-left:10px;width:80px;height:80px;display: inline-block;position: relative;display: none;"><img id="show_picture_img" src="" key="" class="thumb80" /><div id="del_picture" style="width: 10px;color:red;position: absolute;top:-6px;right:-1px;cursor: pointer;font-size:15px;">X</div>
+                        </div>
+                        <div id="add_show_picture" class="thumbnail" style="display: inline-block;border:0;padding:0;margin-left: 20px;cursor: pointer;"><img src="__PUBLIC__/img/upload_file.jpg" onclick="imgclick()"/>
+                            <input type="file" name="fileToUpload" id="fileToUpload" onchange="uploadImg(this);" style="display:none;">                         
+                        </div>
+                    </td>                           
+                </tr>
+                
+                <tr>
+                    <td style="padding-top: 20px" colspan="2"><input id="sure_submit" name="submit" class="btn btn-primary" type="button" value="提交" style="margin-left: 18%;"/></td>
+                </tr>
+            </table>
+            <notempty name="industry">
+            <hr/>            
+            <div style="width: 90%;margin-top: 30px;margin-left: 25px;">
+                我的资质申请记录：
+                <table class="permit_table" border='1px'>
+                    <tr style="background: #CCCCCC;height: 50px;">
+                        <td style="width:25%">适用行业</td>
+                        <td style="width:20%">证照名称</td>
+                        <td style="width:15%">证照图片</td>
+                        <td style="width:15%">有效期至</td>
+                        <td style="width:15%">提交时间</td>
+                        <td style="width:10%">当前状态</td>
+                    </tr>
+                    <volist name="recordlist" id="vo" empty="$empty">
+                    <tr>
+                        <td>{$vo['industry']}</td>
+                        <td>{$vo['licenceType']}</td>
+                        <td><img src="{$vo['realPicUrl']}"/></td>
+                        <td>{$vo['vldTime']}</td>
+                        <td>{$vo['submitTime']}</td>
+                        <td>{$vo['checkStatus']}</td>
+                    </tr>
+                   </volist>
+                </table>
+            </div>
+            </notempty>   
+        </div>
+    </div>
+</div>
+<div id="mask"></div>
+<div class="dialog" style="display:none; ">
+    <img src="__PUBLIC__/img/load.gif">正在上传……
+</div>
+<include file="Public:footer" />
+<script src="__PUBLIC__/js/layer/layer.js" type="text/javascript" charset="utf-8"></script>
+<script>
+var url='{$Think.config.URL}';
+var positionId = "{$Think.session.position_id}";
+var userId;
+switch(positionId)
+{
+    case '17':
+        userId = "{$Think.session.user_id}"; 
+        break;
+    case '18':
+        userId = "{$Think.session.parent_id}";
+        break;
+    case '22':
+        userId = "{$Think.session.user_id}"; 
+        break;
+    default:
+        break;
+}
+
+//提交保存
+$('#sure_submit').click(function(){
+    var licenceType = $('#typeList').val();
+    if(licenceType==0){
+        layer.msg('请选择要添加的证照类型！', {icon: 2}); 
+        return false;
+    }   
+    var vldtime='';
+    var forever='0';
+    if($('input[type=checkbox]').prop('checked')){
+        forever = '1';
+        vldtime = '';
+    }else{
+        forever = '0';
+        vldtime = $('#inTime').val();
+        if(vldtime==''){
+            layer.msg('请选择有效期时间！', {icon: 2}); 
+            return false;
+        }
+    }
+    var pictureKey = $('#show_picture_img').attr("key");
+    if(pictureKey==''){
+        layer.msg('请上传证照图片！', {icon: 2}); 
+        return false;
+    }
+    var item_str={};
+    item_str.userId=userId;
+    item_str.forever=forever;
+    item_str.vldtime=vldtime;
+    item_str.licenceType=licenceType;
+    item_str.pictureKey=pictureKey;
+
+    var js_str={};
+    js_str.data=new Array();    
+    js_str.data.push(item_str);
+    layer.confirm('确认要提交资质申请嘛？',function(){
+        $.post(url + '/manager/businessQualification/add',{'jsonStr':JSON.stringify(js_str)},function(res){
+                if(res.success){
+                    layer.msg('添加行业资质证照成功！', {icon: 1 ,time: 1500},function(){
+                        window.location.reload();
+                    });
+                }else{
+                    layer.msg('添加行业资质证照失败！', {icon: 2 ,time: 1500},function(){
+                        window.location.reload();
+                    });
+                }
+        },'json')
+    })
+ })
+
+//有效期永久改变事件
+$('input[type=checkbox]').change(function(){
+    if($(this).prop('checked')){
+        $('#inTime').val(""); 
+        $('#inTime').attr("disabled",true); 
+    }else{
+        $('#inTime').removeAttr("disabled");
+    }
+})
+
+// 图片点击事件
+ function imgclick(){
+     document.getElementById("fileToUpload").click(); 
+}
+
+//图片上传 
+ function maskshow() {
+    $("#mask").css({
+        display: "block",
+        height: $(document).height()
+    });
+    $(".dialog").css("display", "block");
+ }
+
+ function maskhide() {
+    $("#mask").css({
+        display: "none",
+        height: $(document).height()
+    });
+    $(".dialog").css("display", "none");
+ }
+
+//删除图片
+ $('#del_picture').click(function(){
+    $('#show_picture_div').hide();
+    $('#add_show_picture').show();
+ })
+
+//上传图片
+function uploadImg(a) {
+    var uri = url + '/manager/trade/uploadImg';
+    var img = new FormData();
+    var file = $(a)[0].files[0];
+
+    file_name = file.name;
+    var extStart=file_name.lastIndexOf("."); 
+    var ext=file_name.substring(extStart,file_name.length).toUpperCase(); 
+    if(ext!=".JPEG"&&ext!=".JPG"&&ext!=".BMP"&&ext!=".PNG"){ 
+        alert("文件选择错误,图片类型必须是jpeg,jpg,bmp,png中的一种"); 
+        return false; 
+    }
+
+    file_size = file.size;
+    var size = file_size / 1024;
+    if (size > 10240) {
+      return alert("上传的图片大小不能超过10M！");
+    }else{
+        if(size < 10){
+             return alert("图片太小！");
+        }else{
+            maskshow();
+        }
+    }
+    
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", uri, true);
+    xhr.onreadystatechange = function() {
+        if(xhr.readyState == 4 && xhr.status == 200) {
+            var keyval = $.parseJSON(xhr.responseText);
+            $('#show_picture_img').attr("key", keyval.key);
+            $('#show_picture_img').attr("src", keyval.keyUrl);
+            $('#show_picture_div').show();
+            $('#add_show_picture').hide();
+            layer.msg('图片上传成功！', {icon: 1,time:1500}); 
+            maskhide();            
+        }else{
+            maskhide();
+        }
+    };
+    img.append('file', file);
+    xhr.send(img);
+}
+</script>		

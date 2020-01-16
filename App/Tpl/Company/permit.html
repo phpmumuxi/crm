@@ -1,0 +1,227 @@
+<include file="Public:header" />
+<link rel="stylesheet" href="__PUBLIC__/css/permit.css" type="text/css" />
+<div class="container">
+    <div class="page-header">
+        <h4>经营许可</h4>
+    </div>
+    
+    <div class="row">
+        <div class="span2 knowledgecate">
+            <include file="Public:companynav" />
+        </div>
+        <div class="span10" style="margin-bottom: 100px;">
+
+           <div id="permit_nav_div" class="permit_nav_div">
+                <ul>
+                    <li class="permit_nav_active" va="select">选择申请类别</li>
+                    <li id="my_permit" va="my">我的资质申请</li>
+                </ul>
+                <p style="clear: both"></p>
+           </div>
+
+            <div id="permit_select_content" class="permit_select_content permit_select_my">
+                    <p class="permit_select_title">温馨提示：</p>
+                    <p class="permit_select_title">以下特殊行业，需要先提交相应的资质证照，只有资质证照审核通过后,才可以发布此行业的产品</p>
+                    <div class="permit_select_div"><span class="permit_select_title">请选择申请经营类型：</span></div>
+                    <div class="permit_list_content">
+
+                        <div class="permit_list_item">
+                            <div class="permit_item_header">
+                                医疗机械 <img src="__PUBLIC__/img/question.jpg" va="1">
+                            </div>
+                            <div class="permit_item_content">
+                                <p class="permit_item_content_p">您可以添加以下证照获得发布此类商品的资质：</p>
+                                <p class="">1. 营业执照<br/>
+                                2.“二类医疗器械经营备案凭证” 或“医疗器械经营许可证” 或“医疗器械生产许可证”</p>
+                            </div>                        
+                            <div class="permit_item_foot">
+                                <a href="{:U('Company/addbusiness',array('industry'=>'医疗机械'))}">立即添加</a>
+                            </div>
+                        </div>
+                        <div class="permit_list_item item_margin_left">
+                            <div class="permit_item_header">
+                                酒类 <img src="__PUBLIC__/img/question.jpg" va="2">
+                            </div>
+                            <div class="permit_item_content">
+                                <p class="permit_item_content_p">您可以添加以下证照获得发布此类商品的资质：</p>
+                                <p class="">1. 营业执照<br/>
+                                2.“食品流通许可证”或“食品经营许可证</p>
+                            </div>                        
+                            <div class="permit_item_foot">
+                                <a href="{:U('Company/addbusiness',array('industry'=>'酒类'))}">立即添加</a>
+                            </div>
+                        </div>
+                        <div class="permit_list_item item_margin_left">
+                            <div class="permit_item_header">
+                                预包装及散装食品 <img src="__PUBLIC__/img/question.jpg" va="3">
+                            </div>
+                            <div class="permit_item_content">
+                                <p class="permit_item_content_p">您可以添加以下证照获得发布此类商品的资质：</p>
+                                <p class="">1. 营业执照<br/>
+                                2.“食品流通许可证”或“食品经营许可证"，或“食品生产许可证” 或“全国工业生产许可证”</p>
+                            </div>                        
+                            <div class="permit_item_foot">
+                                <a href="{:U('Company/addbusiness',array('industry'=>'预包装及散装食品'))}">立即添加</a>
+                            </div>
+                        </div>
+                        <div class="permit_list_item item_margin_top">
+                            <div class="permit_item_header">
+                                乳制品（含婴儿奶粉） <img src="__PUBLIC__/img/question.jpg" va="4">
+                            </div>
+                            <div class="permit_item_content">
+                                <p class="permit_item_content_p">您可以添加以下证照获得发布此类商品的资质：</p>
+                                <p class="">1. 营业执照<br/>
+                                2.“食品流通许可证”或“食品经营许可证”， </p>
+                            </div>                        
+                            <div class="permit_item_foot">
+                                <a href="{:U('Company/addbusiness',array('industry'=>'乳制品（含婴儿奶粉）'))}">立即添加</a>
+                            </div>
+                        </div>
+                        <div class="permit_list_item item_margin_left item_margin_top">
+                            <div class="permit_item_header">
+                                保健食品 <img src="__PUBLIC__/img/question.jpg" va="5">
+                            </div>
+                            <div class="permit_item_content">
+                                <p class="permit_item_content_p">您可以添加以下证照获得发布此类商品的资质：</p>
+                                <p class="">1. 营业执照<br/>
+                                2.“食品流通许可证”或“食品经营许可证”</p>
+                            </div>                        
+                            <div class="permit_item_foot">
+                                <a href="{:U('Company/addbusiness',array('industry'=>'保健食品'))}">立即添加</a>
+                            </div>
+                        </div>
+                        <div class="permit_list_item item_margin_left item_margin_top">
+                            <div class="permit_item_header">
+                                餐饮 <img src="__PUBLIC__/img/question.jpg" va="6">
+                            </div>
+                            <div class="permit_item_content">
+                                <p class="permit_item_content_p">您可以添加以下证照获得发布此类商品的资质：</p>
+                                <p class="">1. 营业执照<br/>
+                                2.“食品流通许可证”或“食品经营许可证”</p>
+                            </div>                        
+                            <div class="permit_item_foot">
+                                <a href="{:U('Company/addbusiness',array('industry'=>'餐饮'))}">立即添加</a>
+                            </div>
+                        </div>
+                        <div class="permit_list_item item_margin_top">
+                            <div class="permit_item_header">
+                                书籍音像制品 <img src="__PUBLIC__/img/question.jpg" va="7">
+                            </div>
+                            <div class="permit_item_content">
+                                <p class="permit_item_content_p">您可以添加以下证照获得发布此类商品的资质：</p>
+                                <p class="">1. 营业执照<br/>
+                                2.“出版物经营许可证”</p>
+                            </div>                        
+                            <div class="permit_item_foot">
+                                <a href="{:U('Company/addbusiness',array('industry'=>'书籍音像制品'))}">立即添加</a>
+                            </div>
+                        </div>               
+                        
+                     </div>
+            </div> 
+                
+            <div id="permit_my_content" class="permit_my_content permit_select_my" style="display:none">
+                <div class="permit_my_header">
+                    我的资质申请：
+                    <div class="permit_my_header_right">
+                    <a href="{:U('Company/addbusiness')}">+立即添加</a>
+                    </div>
+                </div>
+                <table class="permit_table" border='1px'>
+                    <tr style="background: #CCCCCC;height: 70px;">
+                        <td style="width:20%">适用行业</td>
+                        <td style="width:15%">证照名称</td>
+                        <td style="width:13%">证照图片</td>
+                        <td style="width:15%">有效期至</td>
+                        <td style="width:15%">提交时间</td>
+                        <td style="width:8%">当前状态</td>
+                        <td style="width:14%">操作</td>
+                    </tr>
+                    <volist name="recordlist" id="vo" empty="$empty">
+                    <tr>
+                        <td>{$vo['industry']}</td>
+                        <td>{$vo['licenceType']}</td>
+                        <td><img src="{$vo['realPicUrl']}"/></td>
+                        <td>{$vo['vldTime']}</td>
+                        <td>{$vo['submitTime']}</td>
+                        <td>{$vo['checkStatus']}</td>
+                        <td>
+                            <span class="table_see"><a href="{:U('Company/seeevidence',array('sid'=>$vo['sid']))}">查看</a></span>
+                            <if condition="$vo['checkStatus'] neq '审核通过'"><span class="table_delete" data-sid="{$vo['sid']}">删除</span></if></td>
+                    </tr>
+                   </volist>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="__PUBLIC__/js/layer/layer.js" type="text/javascript" charset="utf-8"></script>
+<script>
+var url='{$Think.config.URL}';
+
+//删除证照事件
+$('.table_delete').click(function(){
+    var sid = $(this).data('sid');
+    if(sid){        
+        layer.confirm('确定要删除证照?', function(index){
+            $.post(url + '/manager/businessQualification/delete',{'sid':sid},function(res){
+                if(res.success){
+                    layer.msg('删除证照成功！', {icon: 1,time:2000},function(){
+                        window.location.reload();
+                    });
+                }else{
+                    layer.msg('删除证照失败！', {icon: 2});
+                }                
+            },'json')
+        });       
+    }
+})
+
+//导航栏切换事件
+$('#permit_nav_div li').click(function(){
+    var _vb=$(this).attr('va');
+    $(this).siblings().removeClass('permit_nav_active');
+    $(this).addClass('permit_nav_active');
+    $('.permit_select_my').hide();
+    $('#permit_'+_vb+'_content').show();
+})
+
+//点击“？”事件
+$('.permit_list_item img').click(function(){
+    var _va=$(this).attr('va');
+    var _title=$.trim($(this).parent().text());
+    show_category_list(_va,_title);
+})
+
+function show_category_list(ty,title){
+    var _list='';
+    if(ty==1){
+        _list='制药机械,医药卫生';
+    }else if(ty==2){
+        _list='酒类';
+    }else if(ty==3){
+        _list='婴儿食品，饮料，休闲食品，糖和糖制食品，食用油，食用菌和藻类，肉类及制品，粮油作物，坚果子仁，果肉/原浆，蜂产品，方便食品，豆类和制成品，蛋类及制品，冲调饮品';
+    }else if(ty==4){
+        _list='乳制品';
+    }else if(ty==5){
+        _list='保健食品';
+    }else if(ty==6){
+        _list='餐饮';
+    }else if(ty==7){
+        _list='音像制品，图书，画册，其他图书和音像制品';
+    }else{
+
+    }
+    var _html = '<div style="width: 100%;margin-top: 0em;"><div style="width: 100%;heihgt:300px""><div class="permit_item_header">'+title+'</div><div style="margin:15px;"><p class="permit_item_content_p">包含以下类别商品：</p><p>'+_list+'</p></div></div></div>';        
+        layer.open({
+            type: 1,
+            title: '',
+            skin: '', //加上边框
+            area: ['300px', '300px'], //宽高
+            content: _html
+        });                            
+}
+
+</script>
+<include file="Public:footer" />		

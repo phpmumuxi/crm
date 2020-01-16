@@ -1,0 +1,450 @@
+<include file="Public:header" />
+<script type="text/javascript" src="__PUBLIC__/js/jquery.validate.min.js" charset="UTF-8"></script>
+ <script type="text/javascript">
+  
+        	
+        	$(function(){
+        	    imgcode()
+        		
+        	})
+        	
+        	
+        function imgcode(){
+        	$.ajax({
+                url:"http://aps.eachonline.com:8002/manager/account/getVCodeUrl",
+                type:'GET',
+                dataType:'json',
+                async:false,
+                success:function(result) {
+                	$(".imgcodeurl img").attr("src",result.data.imgeUrl);
+                },
+                error:function(msg){
+                }
+            })
+            
+        	
+        }
+    </script>
+    <style>
+    .error {
+display: block;
+    overflow: hidden;
+    padding: 0 8px 0 0;
+    position: relative;
+    color:red;
+    margin-left:5px;
+}
+    </style>
+<link type="text/css" href="__PUBLIC__/css/dynamic.css" rel="stylesheet" />
+<div class="container">
+	<!-- Docs nav ================================================== -->
+	<div class="page-header">
+		<h4>{:L('USER_INFO')}</h4>
+	</div>
+	<div class="row">
+		<div class="span12">
+			<include file="Public:alert" />
+		</div>
+		<div class="span12">
+		<input type="hidden" class="url" value="{$url}">
+			<form class="form-horizontal" enctype="multipart/form-data" action="{:U('user/edit')}" method="post" >
+				<input type="hidden" name="user_id" value="{$user.user_id}"/>
+				<input type="hidden" name="r_url" value="{$r_url}">
+				<table class="table span7">
+					<thead>
+						<!--<tr>-->
+							<!--<td>&nbsp;</td>-->
+							<!--<td><input name="submit" class="btn btn-primary" type="submit" value="{:L('SAVE')}"/> &nbsp;<input class="btn" type="button" onclick="javascript:history.go(-1)" value="{:L('CANCEL')}"/></td>-->
+						<!--</tr>-->
+					</thead>
+					<tfoot>
+						<tr>
+							<td>&nbsp;</td>
+							<td><input name="submit" class="btn btn-primary" type="submit" value="{:L('SAVE')}"/> &nbsp;<input class="btn" type="button" onclick="javascript:history.go(-1)" value="{:L('CANCEL')}"/></td>
+						</tr>
+					</tfoot>
+					<if>
+						<tr>
+							<th colspan="2">{:L('BASIC_INFO')}</th>
+						</tr>
+						<tr>
+							<td class="tdleft">{:L('USER_LOGO')}</td>
+							<td>
+								<if condition="!empty($user['img'])">
+									<img src="{$user.img}" id="avatar" class="thumbnail img"/>
+								<else/>
+									<img id="avatar" src="__PUBLIC__/img/avatar_default.png" class="thumbnail img"/>
+								</if>
+							<input type="file" id="file_upload"> {:L('SUGGEST_SIZE')}
+							<input name="img" class="img" type="hidden">
+							</td>
+						<tr>
+						<tr>
+							<td class="tdleft">{:L('USER_NAME')}</td>
+							<td><if condition="session('?admin')"><input type="text" name="name" value="{$user['user_name']}"><else />{$user.user_name}</if></td>
+						</tr>
+						<!--<?php dump($user);?>-->
+						<tr>
+							<td class="tdleft">公司名称:</td>
+							<td><if condition="session('?admin')"><input type="text" name="company" value="{$user['company']}" readonly/><else />{$user.company}</if></td>
+						</tr>
+					<!-- 	<tr>
+							<td class="tdleft">{:L('MODIFY_PASSWORD')}</td>
+							<td><input class="text-input small-input" type="password" name="password" id="password" value=""/></td>
+						</tr> -->
+
+						<if condition="session('?admin')">
+						<tr>
+							<td class="tdleft">{:L('USER_CATEGORY')}</td>
+							<td><if condition="session('?admin')"><select name="category_id" id="category_id"><volist name="categoryList" id="temp"><option value="{$temp.category_id}" <if condition="$temp.category_id eq $user['category_id']">selected = "selected"</if>>{$temp.name}</option></volist></select><else />{$user.category}</if></td>
+						</tr>
+						<tr>
+							<td class="tdleft">{:L('ACCOUNT_STATUS')}</td>
+							<td><if condition="session('?admin')">
+								<select id="status" name="status">
+									<volist name="statuslist" id="temp" >
+										<option value="{$key}" <if condition="$key eq $user['status']">selected = "selected"</if>>{$temp}</option>
+									</volist>
+								</select><else />{$statuslist[$user['status']]}</if>
+							</td>
+						</tr>
+						<if condition="session('?admin')">
+							<tr>
+								<td class="tdleft">{:L('DEPARTMENT')}&nbsp;<span style="color:red;">*</span></td>  
+								<td>
+									<select id="department" name="department_id" onchange="changeRoleContent()">
+										<option value=""></option>
+										<volist name="department_list" id="temp">
+											<option value="{$temp.department_id}">{$temp.name}</option>
+										</volist>
+									</select><span class="required"></span>
+								</td>
+							</tr>
+							<tr>
+								<td class="tdleft">{:L('POSITION')}&nbsp;<span style="color:red;">*</span></td>
+								<td>
+									<select id="role" name="position_id">
+										<option value=""></option>
+										<volist name="position_list" id="temp">
+											<option value="{$temp.position_id}">{$temp.name}</option>
+										</volist>
+									</select><span class="required"></span>
+								</td>
+							</tr>
+						<else />
+							<input type="hidden" name="position_id" value="{$_SESSION['position_id']}"/>
+							<tr>
+								<td class="tdleft">{:L('DEPARTMENT')}&nbsp;<span style="color:red;">*</span></td>
+								<td>{$user.department_name}</td>
+							</tr>
+							<tr>
+								<td class="tdleft">{:L('POSITION')}&nbsp;<span style="color:red;">*</span></td>  
+								<td>{$user.role_name}</td>
+							</tr>
+						</if>
+					</if>
+						<tr>
+							<td class="tdleft">{:L('SEX')}</td>
+							<td><input type="radio"  name="sex" value="1" <if condition="$user['sex'] eq 1">checked="checked"</if>/>{:L('MALE')} 
+							<input type="radio"  name="sex" value="2" <if condition="$user['sex'] eq 2">checked="checked"</if>/>{:L('FEMALE')}</td>
+						</tr>
+				<!-- 	<tr>
+							<td class="tdleft">{:L('EMAIL')}&nbsp;<span style="color:red;">*</span></td>
+							<td><input class="text-input small-input" name="email" type="text" value="{$user.email}"><span class="required"></span></td>
+						</tr> -->
+						<tr>
+							<td class="tdleft">{:L('TELPHONE')}&nbsp;<span style="color:red;">*</span></td>
+							<td><input class="text-input small-input telphone" name="telephone" type="text" value="{$user.telephone}" readonly="readonly"><span class="required"></span></td>
+						</tr>
+						
+						
+						<tr>
+							<td class="tdleft">图片验证码&nbsp;</td>
+							<td>
+							<div style="float:left"><input type="text" name="imgcode" class="imgcode" value="" placeholder="请输入图形验证码"></div>
+							<div style="float:left"><label style="margin-left:30px;height:30px" class="imgcodeurl"><img class="imgurl" src="" /></label></div>
+							</td>
+						</tr>
+						
+						
+						<tr>
+							<td class="tdleft">短信验证码&nbsp;</td>
+							<td><div style="float:left"><input type="text" name="vercode" class="vercode" value="" placeholder="请输入短信验证码"> </div>
+								<div style="float:left"><button type="button" style="margin-left:30px;height:30px" class="getvercode">获取验证码</button> </div>
+								<div class="newsmessage" style="float:left"></div>
+							</td>
+						</tr>
+						
+							<tr>
+							<td class="tdleft">密码修改</td>
+							<td><div ><input type="password" placeholder="请输入密码" class="password" name="password" value=""></div></td>
+						</tr>
+						
+							<tr>
+							<td class="tdleft">密码确认</td>
+							<td><div><input type="password" placeholder="请再次输入密码" class="checkpassword" name="checkpassword" value=""></td>
+						</tr>
+						
+						<tr>
+							<td class="tdleft">{:L('ADDRESS')}</td>
+							<td><textarea name="address" >{$user.address}</textarea></td>
+						</tr>
+					</tbody>
+				</table>
+			</form>			
+		</div> <!-- End #tab1 -->		
+	</div> <!-- End #main-content -->	
+</div>
+<div class="hide" id="dialog-weixin" title="{:L('SCAN_QR_COD')}">loading...</div>
+<div class="hide" id="dialog_tips" title=""></div>
+<script type="text/javascript" src="__PUBLIC__/js/uploadPreview.js"></script>
+<script type="text/javascript">
+//初始化上传图片
+$("body").on('click','input[type="file"]', function(){
+	$('#file_upload').uploadPreview({ Img: 'avatar', Width: 80, Height: 80 });
+});
+</script>
+<script type="text/javascript">
+$("#dialog-weixin").dialog({
+    autoOpen: false,
+    modal: true,
+	width: 600,
+	Height: 600,
+	position: ["center",100]
+});
+function changeRoleContent(){
+	department_id = $('#department').val();
+	if(department_id == ''){
+		$("#role").html('');
+	}else{
+		$.ajax({
+			type:'get',
+			url:'index.php?m=user&a=getpositionlist&id='+department_id,
+			async:false,
+			success:function(data){
+				options = '';
+				if(data.data){
+					$.each(data.data, function(k, v){
+						options += '<option value="'+v.position_id+'">'+v.name+'</option>';
+					});
+				}
+				$("#role").html(options);
+			},
+			dataType:'json'
+		});		
+	}
+}
+$('#role').click(
+	function(){
+		department_id = $('#department').val();
+		if(department_id == ''){
+			alert("{:L('SELECT_DEPARTMENT_FIRST')}");
+		}
+	}
+);
+$(function(){
+	$("#weixin").click(function(){
+		$('#dialog-weixin').dialog('open');
+		$('#dialog-weixin').load('{:U("user/weixin")}');
+	});
+	
+	$("#department option[value='{$user['department_id']}']").prop("selected", true);
+	$("#role option[value='{$user['position_id']}']").prop("selected", true);
+});
+</script>
+<script type="text/javascript">
+//提交表单前进行数据校验
+$('input[name="submit"]').click(function(){
+ var null_data_flag = true;
+ var param={
+    'title' : "错误提示",
+    'content' : "",
+    'action' : function(){},
+   };
+ if(!check_submit()){
+  return false;
+ }else{
+	$("#form1").attr("action",location.href);
+	$("#form1").submit();
+ }
+});
+function check_submit(){
+	var password = $(".password").val();
+	if(password){
+		$(".form-horizontal").validate({
+			rules: {
+		     password: {
+	          required: true,
+	          minlength: 6,
+	          ispassword:true
+	          
+	      },
+	      checkpassword: {
+	          required: true,
+	          minlength: 6,
+	          equalTo: ".password"
+	      },	
+			},
+			messages: {
+		     password: {
+	          required: "*请输入密码",
+	          minlength: "*密码不能小于6个字符",
+	          ispassword:"*密码格式不正确"
+	      },
+	      checkpassword: {
+	          required: "*请确认密码",
+	          minlength: "*密码不能小于6个字符",
+	          equalTo: "*请再次输入相同的密码"
+	      },
+			}
+		});
+	}
+ var mark = false;
+ $(".required").each(function(){
+  if($(this).prev().val()){
+    if($(this).prev().attr("name")=="telephone"){
+	mark = check_phone();
+	if(!mark){
+		return false;
+	}
+   }
+   if($(this).prev().attr("name")=="email"){
+	mark = check_email();
+	if(!mark){
+		return false;
+	}
+   }
+  }else{
+   var empty_elem = $(this).prev();
+   var param={
+    'obj' : empty_elem,
+    'title' : "错误提示",
+    'content' : "<span style='color:rgb(255,0,0);margin-left:100px;'>"+$(this).parent().prev().html()+"必须填写</span>",
+    'action' : function(){
+        this.obj[0].focus();
+    },
+   }
+   Dialog(param);
+   window.scrollBy(0,-50);
+   mark = false;
+   return false;
+  }
+ });
+ return mark;
+}
+function Dialog(param){
+ param.action();
+ $("#dialog_tips").dialog({
+  autoOpen: false,
+  modal: true,
+  width: 400,
+  maxHeight: 800,
+  position: ["center",100],
+  title:param.title,
+  dialogClass: 'alert',
+  buttons:{
+   '{:L("OK")}':function(){
+    $(this).dialog('close');
+   },
+   '{:L("CANCEL")}':function(){
+    $(this).dialog('close');
+   }
+  }
+ });
+ $('#dialog_tips').dialog('open');
+ $("#dialog_tips").html('');
+ $("#dialog_tips").append(param.content);
+}
+function check_phone(){
+	var r,re;
+	var s = $("input[name = 'telephone']").val();
+	re=/^1[34758][0-9]{9}$/;
+	r = s.match(re);
+	if(!r){
+		alert("手机号码格式不对！");
+		return false;
+	}else{
+		return true;
+	}
+}
+/* function check_email(){
+	var r,re;
+	var s = $("input[name = 'email']").val();
+	re=/^[_\.0-9a-z-]+@([0-9a-zA-Z][0-9a-zA-Z_-]+\.)+[a-zA-Z]{2,4}$/;
+	r = s.match(re);
+	if(!r){
+		alert("邮箱格式不对！");
+		return false;
+	}else{
+		return true;
+	}
+} */
+
+$(function (){
+	//上传图片
+	$('#file_upload').change(function(event){
+		var file = event.target.files[0];
+		var url = URL.createObjectURL(file);
+		var consult_url = $('.url').val();
+		var form = new FormData();
+		var xhr = new XMLHttpRequest();
+		form.append("file", file);
+//xhr.open("post",'http://192.168.1.27:8080/manager/trade/uploadImg', true);
+		xhr.open("post",consult_url + '/manager/trade/uploadImg', true);
+		xhr.onreadystatechange = function() {
+			if(xhr.readyState == 4 && xhr.status == 200) {
+				var result = jQuery.parseJSON(xhr.responseText);
+				$('#avatar').attr('src',result.keyUrl);
+				$('.img').val(result.keyUrl);
+			}
+		};
+		xhr.send(form);	
+	})
+
+	
+	//更换验证码aps.eachonline.com  ==180.76.140.84
+	$(".imgurl").click(function(){
+		$.ajax({
+        url:"http://aps.eachonline.com:8002/manager/account/getVCodeUrl",
+        type:'GET',
+        dataType:'json',
+        async:false,
+        success:function(result) {
+        	$(".imgurl").attr("src",result.data.imgeUrl);
+        },
+        error:function(msg){
+        }
+    })
+	})
+		
+//http://aps.eachonline.com:8002
+	//获取短信验证码
+	 $(".getvercode").click(function(){
+		   var url = $(".url").val();
+		   var vCode = $(".imgcode").val();
+		   var telephone = $(".telphone").val();
+   			$.post("http://aps.eachonline.com:8002/manager/account/sendCode",{"vCode":vCode,"telephone":telephone},function(result){
+ 			   if(result.success){
+ 				$(".newsmessage").html("<font color='green'>验证码发送成功</font>");
+ 			   }else{
+ 				$(".newsmessage").html("<font color='red'>"+result.message+"</font>");
+ 			   }
+ 		   })
+
+	   })
+	
+	   
+	
+	  
+    //验证密码格式
+    $.validator.addMethod("ispassword", function(value, element) {
+	    var length = value.length;
+	    var password = /[-\da-zA-Z!@#$%^&*_]*/;
+	    return this.optional(element) || (length >= 6 && password.test(value));
+	}, "*请正确填写密码");
+	
+	
+		
+}); 
+</script>
+<include file="Public:footer" />	

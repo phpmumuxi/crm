@@ -1,0 +1,73 @@
+<include file="Public:header" />
+<script src="__PUBLIC__/js/layer/layer.js" type="text/javascript" charset="utf-8"></script>
+<style>
+    .tabtitle{font-size: 17.5px;font-weight:bold;margin: 20px auto;width:120px;}
+    .tdshop{vertical-align:middle;}
+    .price{font-size: 18px;margin-top: 5px;}
+    tr{font-size: 16px;}
+    .table th, .table td{text-align: center;vertical-align:middle;font-size: 16px;padding: 5px;border: 1px solid #EBF1F1;}
+    .btn-button{margin: 30px auto;font-size: 20px;}
+    .ems{border:1px solid #ccc;font-size: 18px;}
+    .orderno{background-color: #F4F4F4;font-size: 16px;height: 35px;margin-bottom: 30px;}
+    .ordernot{margin-left:10px;margin-right:60px;text-align: center; float: left;padding-top: 7px;}
+    .shopinfo{background-color: #F4F4F4;font-size: 16px;}
+    .tmoney{font-size: 16px;float:right;}
+    .tmoney2{margin: 10px;}
+    .orderinfo{font-size: 16px;font-weight: bold;background-color: #E8F1F6;height: 30px;padding-top: 8px;padding-left:30px;margin-top:35px;margin-bottom:25px;}
+    .message{font-size: 16px;margin-left:35px;margin-bottom:15px;margin-top:10px;}
+</style>
+
+<!-- 只写一个详情页面,详情页的信息根据状态判断来显示 -->
+
+<div class="container">
+    <form class="form-inline" id="searchForm" action="{:U('Shop/setshop')}" method="post">
+    <table id="table" border="" bordercolor="#CCCCCC" cellpadding="0" cellspacing="0" style="width:1100px;margin-left:0px">
+        <input type="hidden" name="userId" value="{$userId}">
+         <tr>
+            <td style="background-color:grey;" align="center" colspan="2">设置店铺等级</td>
+        </tr>
+        <if condition="$userShopType == 1">
+        <tr>
+            <td width="50%" align="center"><input type="radio" name="level" value="1" <if condition="$userShopLevel==1">checked</if></td>
+            <td width="50%" align="center">A级门店</td>
+        </tr>
+        <tr>
+            <td width="50%" align="center"><input type="radio" name="level" value="2" <if condition="$userShopLevel==2">checked</if>></td>
+            <td width="50%" align="center">B级门店</td>
+        </tr>
+        <tr>
+            <td width="50%" align="center"><input type="radio" name="level" value="0" <if condition="$userShopLevel==0">checked</if>></td>
+            <td width="50%" align="center">免费门店</td>
+        </tr>
+        </if>
+        <if condition="$userShopType == 2">
+            <tr>
+                <td width="50%" align="center"><input type="radio" name="level" value="3" <if condition="$userShopLevel==3">checked</if>></td>
+                <td width="50%" align="center">A级工厂</td>
+            </tr>
+            <tr>
+                <td width="50%" align="center"><input type="radio" name="level" value="4" <if condition="$userShopLevel==4">checked</if>></td>
+                <td width="50%" align="center">B级工厂</td>
+            </tr>
+        </if>
+        <if condition="$userShopType == 3">
+            <tr>
+                <td width="50%" align="center"><input type="radio" name="level" value="5" <if condition="$userShopLevel==5">checked</if>></td>
+                <td width="50%" align="center">A级贸易服务商</td>
+            </tr>
+            <tr>
+                <td width="50%" align="center"><input type="radio" name="level" value="6" <if condition="$userShopLevel==6">checked</if>></td>
+                <td width="50%" align="center">B级贸易服务商</td>
+            </tr>
+        </if>
+        <tr>
+            <td style="text-align:center;" colspan="4"><input name="submit" class="btn btn-primary" type="submit" value="保存" />&nbsp;<input class="btn" type="button" onclick="history.go(-1)" value="返回" /></td>
+        </tr>
+    </table>
+        </form>
+</div>
+<script>
+
+</script>
+
+<include file="Public:footer" />

@@ -1,0 +1,34 @@
+		<ul class="nav nav-list">
+			<if condition="$Think.session.position_id eq '18'">
+                    <li class='<if condition="($controll eq Company) AND ($action eq permit or $action eq addbusiness  or $action eq seeevidence or $action eq index)">active</if>'>
+                       <a href="{:U('Company/permit')}">经营许可</a>
+                   </li> 
+	          <else />
+	                <li class='<if condition="($controll eq Company) AND ($action eq index)">active</if>'>
+	                    <a href="{:U('Company/index')}">公司信息</a>
+	                </li>
+	                <in name="Think.session.position_id" value="17,22">
+	                    <li class='<if condition="($controll eq Company) AND ($action eq permit or $action eq addbusiness  or $action eq seeevidence)">active</if>'>
+	                       <a href="{:U('Company/permit')}">经营许可</a>
+	                   </li> 
+	                 </in>
+	                    <li class='<if condition="($controll eq Company) AND ($action eq staff)">active</if>'>
+	                        <a href="{:U('Company/staff')}">员工账号管理</a>
+	                    </li>
+	                 	<li class='<if condition="($controll eq Company) AND ($action eq cash)">active</if>'>
+	                        <a href="{:U('Company/cash')}">交易提现</a>
+	                    </li> 
+	                    <li class='<if condition="($controll eq Company) AND ($action eq banklist)">active</if>'>
+	                        <a href="{:U('Company/banklist')}">银行卡管理</a>
+	                    </li>
+	                    <li class='<if condition="($controll eq Company) AND ($action eq passwordreset)">active</if>'>
+	                        <a href="{:U('Company/passwordreset')}">交易密码设置</a>
+	                    </li>
+	            </if>
+                <in name="id" value="1,14,15,16">			    
+			    <else/>			    
+                    <li class='<if condition="($controll eq Company) AND ($action eq cashinfo)">active</if>'>
+                        <a href="{:U('Company/cashinfo')}">保证金</a>
+                    </li>
+			    </in>
+            </ul>

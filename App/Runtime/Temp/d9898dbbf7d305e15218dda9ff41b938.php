@@ -1,0 +1,3 @@
+<?php
+//000000000060a:1:{i:0;a:21:{s:11:"customer_id";s:32:"12810852E35B9FDAFA62746EF272D442";s:13:"owner_role_id";s:4:"1647";s:15:"creator_role_id";s:4:"1647";s:11:"contacts_id";s:1:"0";s:4:"name";s:1:"1";s:6:"origin";s:0:"";s:7:"address";s:0:"";s:8:"zip_code";s:0:"";s:8:"industry";s:0:"";s:14:"annual_revenue";s:0:"";s:9:"ownership";s:0:"";s:6:"rating";s:0:"";s:11:"create_time";s:10:"1527233467";s:11:"update_time";s:10:"1527233467";s:10:"is_deleted";s:1:"0";s:9:"is_locked";s:1:"0";s:14:"delete_role_id";s:1:"0";s:11:"delete_time";s:1:"0";s:10:"crm_mnpxte";s:0:"";s:7:"company";s:18:"红色工厂公司";s:10:"crm_uqqujl";s:0:"";}}
+?>
